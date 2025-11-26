@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>نتیجه آزمون</title>
+
+    <style>
+        @font-face {
+            font-family: "YekanBakh";
+            src: url("YekanBakh.woff2") format("woff2");
+        }
+        *{box-sizing:border-box}
+        body{
+            margin:0;
+            min-height:100vh;
+            font-family:"YekanBakh",sans-serif;
+            background:radial-gradient(circle at top,#222,#050509 50%,#000 100%);
+            color:#f5f5f5;
+            display:flex;justify-content:center;align-items:center;
+            padding:20px;
+        }
+
+        .card{
+            max-width:900px;
+            width:100%;
+            background:linear-gradient(145deg,#0d0d12,#050509);
+            border-radius:24px;
+            padding:30px 24px;
+            box-shadow:0 18px 60px rgba(0,0,0,.9);
+            position:relative;overflow:hidden;
+        }
+        .card::before{
+            content:"";position:absolute;inset:-40%;
+            background:
+                radial-gradient(circle at 0 0,rgba(245,200,66,.08),transparent 55%),
+                radial-gradient(circle at 100% 100%,rgba(255,255,255,.06),transparent 55%);
+            opacity:.6;
+        }
+
+        .inside{position:relative;z-index:2}
+        h1{text-align:center;margin:0 0 20px;font-size:22px;color:#f5c842;}
+
+        .summary{
+            background:#111;padding:20px;border-radius:18px;
+            border:1px solid rgba(255,255,255,.06);
+            margin-bottom:20px;
+        }
+        .summary-item{font-size:15px;margin:8px 0;}
+
+        .percent{
+            font-size:45px;
+            font-weight:700;
+            text-align:center;
+            margin:15px 0;
+            color:#f5c842;
+        }
+
+        .analysis{
+            margin-top:20px;padding:18px;
+            background:#1a1a1a;border-radius:18px;
+            border:1px solid rgba(255,255,255,.08);
+            font-size:14px;line-height:1.9;
+        }
+
+        .btn{
+            border:none;border-radius:999px;
+            padding:10px 18px;font-size:14px;
+            font-family:inherit;cursor:pointer;
+            margin:10px 5px;
+        }
+        .btn-primary{
+            background:linear-gradient(135deg,#f5c842,#f0a900);
+            color:#1d1203;font-weight:700;
+        }
+        .btn-secondary{
+            background:#222;color:#ddd;
+        }
+        .btn-tertiary{
+            background:transparent;color:#bbb;font-size:12px;
+        }
+
+        .bottom-meta{text-align:center;margin-top:18px;font-size:12px;opacity:.7;}
+        .designer{margin-top:5px;font-weight:600;}
+
+    </style>
+
+</head>
+<body>
+
+<div class="card">
+    <div class="inside">
+
+        <h1>نتیجه آزمون شما</h1>
+
+        <div class="summary">
+            <div class="summary-item">تعداد درست: <span id="correctCount"></span></div>
+            <div class="summary-item">تعداد غلط: <span id="wrongCount"></span></div>
+            <div class="summary-item">زمان آزمون: <span id="timeSpent"></span></div>
+        </div>
+
+        <div class="percent" id="percentBox">0%</div>
+
+        <div class="analysis" id="analysisBox"></div>
+
+        <div style="text-align:center;">
+            <button id="retryBtn" class="btn btn-primary">دوباره آزمون همین درس</button>
+            <button id="wrongBtn" class="btn btn-secondary">فقط سوالات غلط</button>
+            <button id="backBtn" class="btn btn-tertiary">برگشت به لیست درس‌ها</button>
+        </div>
+
+        <div class="bottom-meta">
+            <div>نتایج آزمون ذخیره شده و برای تحلیل‌های بعدی استفاده می‌شود.</div>
+            <div class="designer">طراح: محمدمهدی دیناروند</div>
+        </div>
+
+    </div>
+</div>
+
+
+<script>
+
+    const username = localStorage.getItem("konkur_username");
+    const field = localStorage.getItem("konkur_field");
+    const examType = localStorage.getItem("konkur_examType");
+    const subject = localStorage.getItem("konkur_subject");
+
+    const correct = Number(localStorage.getItem("quiz_correct"));
+    const wrong = Number(localStorage.getItem("quiz_wrong"));
+    const time = Number(localStorage.getItem("quiz_time"));
+
+    if (!username || subject === null){
+        window.location.href = "index.html";
+    }
+
+    document.getElementById("correctCount").textContent = correct;
+    document.getElementById("wrongCount").textContent = wrong;
+
+    // تبدیل زمان
+    let m = String(Math.floor(time / 60)).padStart(2, "0");
+    let s = String(time % 60).padStart(2, "0");
+    document.getElementById("timeSpent").textContent = `${m}:${s}`;
+
+    // محاسبه درصد
+    const total = correct + wrong;
+    const percent = Math.round((correct / total) * 100);
+
+    document.getElementById("percentBox").textContent = percent + "%";
+
+
+    /* -----------------------
+       تحلیل سطح عملکرد
+    ----------------------- */
+
+    const analysisBox = document.getElementById("analysisBox");
+
+    let analysis = "";
+
+    if (percent >= 85) {
+        analysis += "عالی! 👏 عملکردت نشون می‌ده کاملاً روی این درس مسلطی. ";
+        analysis += "فقط ادامه بده و همین روند رو نگه دار. ";
+    } 
+    else if (percent >= 60) {
+        analysis += "خوب بود! 🤝 تو مسیر درستی هستی. ";
+        analysis += "چندتا نکته کوچیک داری که با مرور دوباره حل میشه. ";
+    } 
+    else if (percent >= 40) {
+        analysis += "متوسط. بهتر از این‌ها می‌تونی بزنی. ";
+        analysis += "یه مقدار روی نکات پایه‌ای وقت بذار و تست‌های ساده‌تر رو اول بزن. ";
+    } 
+    else {
+        analysis += "نیاز به کار بیشتری داری. ولی ناامید نشو! ";
+        analysis += "این نتایج اول راه هست و با تمرین درست بهتر میشی. ";
+    }
+
+    // تحلیل اضافه بر اساس تعداد غلط
+    if (wrong >= total * 0.5) {
+        analysis += "به نظر می‌رسه مدیریت زمان و تحلیل گزینه‌ها می‌تونه کمکت
