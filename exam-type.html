@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>انتخاب نوع کنکور</title>
+    <style>
+        @font-face {
+            font-family: "YekanBakh";
+            src: url("YekanBakh.woff2") format("woff2");
+        }
+        *{box-sizing:border-box}
+        body{
+            margin:0;
+            min-height:100vh;
+            font-family:"YekanBakh",sans-serif;
+            background:radial-gradient(circle at top,#222 0,#050509 45%,#000 100%);
+            color:#f5f5f5;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+        }
+        .wrapper{width:100%;max-width:900px;padding:20px;}
+        .card{
+            background:linear-gradient(145deg,#0d0d12,#050509);
+            border-radius:24px;
+            padding:28px 24px 18px;
+            box-shadow:0 18px 60px rgba(0,0,0,.9);
+            position:relative;overflow:hidden;
+        }
+        .card::before{
+            content:"";position:absolute;inset:-40%;
+            background:
+                radial-gradient(circle at 10% 0,rgba(245,200,66,.08),transparent 55%),
+                radial-gradient(circle at 90% 100%,rgba(255,255,255,.05),transparent 55%);
+            opacity:.6;
+        }
+        .inner{position:relative;z-index:1}
+        header{
+            display:flex;align-items:center;justify-content:space-between;
+            gap:16px;margin-bottom:18px;
+        }
+        .logo-area{display:flex;align-items:center;gap:10px;}
+        .logo-img{width:42px;height:auto;}
+        .badge{
+            font-size:11px;
+            padding:4px 10px;
+            border-radius:999px;
+            border:1px solid rgba(255,255,255,.16);
+        }
+        h1{margin:0 0 10px;font-size:20px;}
+        .subtitle{font-size:13px;opacity:.8;margin-bottom:18px;}
+        .type-grid{
+            display:flex;gap:20px;justify-content:center;margin-top:10px;
+        }
+        .type-card{
+            width:200px;height:130px;
+            border-radius:18px;
+            background:radial-gradient(circle at top,#1b1b25,#050509);
+            border:1px solid rgba(255,255,255,.08);
+            display:flex;align-items:center;justify-content:center;
+            cursor:pointer;color:#f0f0f0;font-size:17px;font-weight:600;
+            position:relative;overflow:hidden;
+            transition:.2s;
+        }
+        .type-card:hover{
+            transform:translateY(-6px);
+            box-shadow:0 14px 32px rgba(0,0,0,.8);
+            border-color:rgba(245,200,66,.8);
+            color:#ffe88c;
+        }
+        .type-card.selected{
+            border-color:#f5c842;
+            background:radial-gradient(circle at top,#3b320a,#050509);
+            color:#f5c842;
+            box-shadow:0 0 0 1px rgba(245,200,66,.4),
+                        0 14px 34px rgba(245,200,66,.22);
+        }
+        .btn{
+            border:none;border-radius:999px;padding:9px 18px;
+            font-size:13px;cursor:pointer;font-family:inherit;margin-top:22px;
+        }
+        .btn-primary{
+            background:linear-gradient(135deg,#f5c842,#f0a900);
+            color:#17130a;font-weight:700;
+        }
+        .btn-secondary{
+            background:transparent;color:#ddd;font-size:11px;margin-right:8px;
+        }
+        .bottom-meta{
+            margin-top:18px;font-size:11px;text-align:center;opacity:.7;
+        }
+        .designer{margin-top:4px;font-weight:600;}
+    </style>
+</head>
+<body>
+<div class="wrapper">
+    <div class="card">
+        <div class="inner">
+
+            <header>
+                <div class="logo-area">
+                    <img src="Farhangian_Uni.png" class="logo-img">
+                    <div>
+                        <div style="font-size:15px;font-weight:700;">انتخاب نوع کنکور</div>
+                        <div style="font-size:11px;opacity:.8;">مرحله سوم</div>
+                    </div>
+                </div>
+                <div id="badge" class="badge"></div>
+            </header>
+
+            <h1>نوع کنکورت چیه؟</h1>
+            <div class="subtitle">
+                بر اساس رشته‌ای که انتخاب کردی، یکی از این دو مدل رو انتخاب کن.
+            </div>
+
+            <div class="type-grid">
+                <div class="type-card" data-type="normal">
+                    کنکور عادی
+                </div>
+                <div class="type-card" data-type="farhangian">
+                    کنکور دانشگاه فرهنگیان
+                </div>
+            </div>
+
+            <button id="nextBtn" class="btn btn-primary" style="display:none;">
+                تایید نوع کنکور و رفتن به انتخاب درس‌ها
+            </button>
+            <button id="backBtn" class="btn btn-secondary">
+                برگشت به انتخاب رشته
+            </button>
+
+            <div class="bottom-meta">
+                <div>هر نوع کنکور دروس خاص خودش رو داره.</div>
+                <div class="designer">طراح: محمدمهدی دیناروند</div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    const username = localStorage.getItem("konkur_username");
+    const role = localStorage.getItem("konkur_role");
+    const field = localStorage.getItem("konkur_field");
+    const typeCards = document.querySelectorAll(".type-card");
+    const nextBtn = document.getElementById("nextBtn");
+    const backBtn = document.getElementById("backBtn");
+    const badge = document.getElementById("badge");
+
+    // اگر قبلاً لاگین نکرده → برگرد عقب
+    if (!username || !field) {
+        window.location.href = "index.html";
+    }
+
+    badge.textContent = role === "admin"
+        ? `مدیر: ${username}`
+        : `کاربر: ${username}`;
+
+    let selectedType = null;
+
+    typeCards.forEach(card=>{
+        card.addEventListener("click", ()=>{
+            typeCards.forEach(c=>c.classList.remove("selected"));
+            card.classList.add("selected");
+
+            selectedType = card.dataset.type;
+            nextBtn.style.display = "inline-flex";
+
+            // ذخیره
+            localStorage.setItem("konkur_examType", selectedType);
+        });
+    });
+
+    nextBtn.addEventListener("click", ()=>{
+        if (!selectedType) return;
+
+        // مرحله ۴: انتخاب درس‌ها → فایل بعدی: subjects.html
+        window.location.href = "subjects.html";
+    });
+
+    backBtn.addEventListener("click", ()=>{
+        window.location.href = "field.html";
+    });
+</script>
+</body>
+</html>
