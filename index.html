@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>سامانه تمرین کنکور خیریه</title>
+    <style>
+        /* فونت – بعداً فایل فونت رو اضافه می‌کنی */
+        @font-face {
+            font-family: "YekanBakh";
+            src: url("assets/fonts/YekanBakh.woff2") format("woff2");
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: "YekanBakh", sans-serif;
+            background: radial-gradient(circle at top, #222222 0, #050509 45%, #000000 100%);
+            color: #f5f5f5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .app-shell {
+            width: 100%;
+            max-width: 1100px;
+            padding: 20px;
+        }
+
+        .card {
+            position: relative;
+            background: linear-gradient(145deg, #0d0d12, #050509);
+            border-radius: 24px;
+            padding: 32px 24px 20px;
+            box-shadow:
+                0 0 0 1px rgba(255, 255, 255, 0.02),
+                0 18px 60px rgba(0, 0, 0, 0.9);
+            overflow: hidden;
+            animation: cardIn 0.7s ease-out;
+        }
+
+        .card::before {
+            content: "";
+            position: absolute;
+            inset: -40%;
+            background:
+                radial-gradient(circle at 10% 0, rgba(245, 200, 66, 0.08), transparent 55%),
+                radial-gradient(circle at 90% 100%, rgba(255, 255, 255, 0.05), transparent 55%);
+            opacity: 0.7;
+            z-index: 0;
+        }
+
+        .card-inner {
+            position: relative;
+            z-index: 1;
+        }
+
+        header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-circle {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            border: 2px solid #f5c842;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            text-align: center;
+            padding: 4px;
+        }
+
+        .logo-text {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .logo-text-main {
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 0.03em;
+        }
+
+        .logo-text-sub {
+            font-size: 11px;
+            opacity: 0.8;
+        }
+
+        .badge {
+            padding: 4px 10px;
+            border-radius: 999px;
+            border: 1px solid rgba(245, 200, 66, 0.5);
+            font-size: 11px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .badge-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 999px;
+            background: #f5c842;
+            box-shadow: 0 0 8px rgba(245, 200, 66, 0.9);
+        }
+
+        h1 {
+            margin: 0 0 6px;
+            font-size: 20px;
+        }
+
+        .subtitle {
+            font-size: 13px;
+            opacity: 0.8;
+            margin-bottom: 24px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+            gap: 24px;
+        }
+
+        .panel {
+            padding: 18px 16px;
+            border-radius: 18px;
+            background: rgba(0, 0, 0, 0.28);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            backdrop-filter: blur(14px);
+        }
+
+        .panel-title {
+            font-size: 14px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .panel-title span.icon {
+            width: 18px;
+            height: 18px;
+            border-radius: 999px;
+            border: 1px solid rgba(245, 200, 66, 0.6);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+        }
+
+        label {
+            display: block;
+            font-size: 13px;
+            margin-bottom: 6px;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 9px 11px;
+            border-radius: 999px;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            background: rgba(10, 10, 15, 0.9);
+            color: #f5f5f5;
+            outline: none;
+            font-size: 13px;
+            transition: border 0.2s ease, box-shadow 0.2s ease, transform 0.1s ease;
+        }
+
+        input[type="text"]:focus {
+            border-color: #f5c842;
+            box-shadow: 0 0 0 1px rgba(245, 200, 66, 0.4);
+            transform: translateY(-1px);
+        }
+
+        .helper {
+            font-size: 11px;
+            opacity: 0.7;
+            margin-top: 4px;
+        }
+
+        .error {
+            font-size: 11px;
+            color: #ff6e6e;
+            margin-top: 6px;
+            display: none;
+        }
+
+        .actions {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 14px;
+            gap: 10px;
+        }
+
+        .btn {
+            border: none;
+            border-radius: 999px;
+            padding: 9px 18px;
+            font-size: 13px;
+            cursor: pointer;
+            font-family: inherit;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: transform 0.1s ease, box-shadow 0.2s ease, background 0.2s ease;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #f5c842, #f0a900);
+            color: #17130a;
+            font-weight: 700;
+            box-shadow:
+                0 8px 22px rgba(0, 0, 0, 0.7),
+                0 0 14px rgba(245, 200, 66, 0.7);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow:
+                0 10px 26px rgba(0, 0, 0, 0.8),
+                0 0 18px rgba(245, 200, 66, 0.9);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+            box-shadow:
+                0 6px 16px rgba(0, 0, 0, 0.6),
+                0 0 10px rgba(245, 200, 66, 0.6);
+        }
+
+        .btn-ghost {
+            background: transparent;
+            color: #f5f5f5;
+            font-size: 11px;
+            opacity: 0.8;
+        }
+
+        .status {
+            font-size: 12px;
+            margin-top: 8px;
+            min-height: 18px;
+        }
+
+        .status.ok {
+            color: #8bc34a;
+        }
+
+        .status.warn {
+            color: #ffb300;
+        }
+
+        .status.bad {
+            color: #ff6e6e;
+        }
+
+        .side-highlight {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            gap: 16px;
+        }
+
+        .pill-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .pill {
+            font-size: 11px;
+            padding: 4px 9px;
+            border-radius: 999px;
+            background: rgba(245, 200, 66, 0.1);
+            border: 1px solid rgba(245, 200, 66, 0.35);
+        }
+
+        .meter {
+            width: 100%;
+            height: 6px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.06);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .meter-fill {
+            position: absolute;
+            inset: 0;
+            width: 35%;
+            background: linear-gradient(90deg, #f5c842, #ffea00);
+            animation: pulseMeter 2s ease-in-out infinite;
+        }
+
+        .bottom-meta {
+            margin-top: 20px;
+            font-size: 11px;
+            text-align: center;
+            opacity: 0.7;
+        }
+
+        .designer {
+            margin-top: 4px;
+            font-weight: 600;
+        }
+
+        @keyframes cardIn {
+            from {
+                opacity: 0;
+                transform: translateY(14px) scale(0.98);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        @keyframes pulseMeter {
+            0% { transform: translateX(-40%); }
+            50% { transform: translateX(-5%); }
+            100% { transform: translateX(40%); }
+        }
+
+        @media (max-width: 768px) {
+            .grid {
+                grid-template-columns: minmax(0, 1fr);
+            }
+            .card {
+                padding: 24px 16px 16px;
+            }
+            header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="app-shell">
+    <div class="card">
+        <div class="card-inner">
+            <header>
+                <div class="logo-area">
+                    <div class="logo-circle">
+                        <span style="font-size:9px; line-height:1.4;">
+                            دانشگاه<br>فرهنگیان
+                        </span>
+                    </div>
+                    <div class="logo-text">
+                        <div class="logo-text-main">سامانه تمرین کنکور</div>
+                        <div class="logo-text-sub">برای بچه‌هایی که آرزوهاشون بزرگه، نه جیب‌شون 🌱</div>
+                    </div>
+                </div>
+                <div class="badge">
+                    <span class="badge-dot"></span>
+                    نسخه آزمایشی • فقط برای استفاده آموزشی
+                </div>
+            </header>
+
+            <h1>ورود به سامانه</h1>
+            <div class="subtitle">
+                نام کاربری‌ای که بهت دادن رو وارد کن تا بریم سراغ انتخاب رشته و آزمون‌ها.
+            </div>
+
+            <div class="grid">
+                <!-- پنل ورود -->
+                <div class="panel" id="login-panel">
+                    <div class="panel-title">
+                        <span class="icon">1</span>
+                        <span>ورود با نام کاربری</span>
+                    </div>
+                    <label for="usernameInput">نام کاربری</label>
+                    <input id="usernameInput" type="text" placeholder="مثلاً: student1401 یا admin">
+                    <div class="helper">
+                        نام کاربری‌ها داخل فایل <code>data/usernames.json</code> تعریف می‌شن.
+                    </div>
+                    <div id="loginError" class="error">لطفاً نام کاربری معتبر وارد کن.</div>
+
+                    <div class="actions">
+                        <button class="btn btn-primary" id="loginBtn">
+                            <span>ورود به سامانه</span>
+                        </button>
+                        <button class="btn btn-ghost" type="button">
+                            فعلاً فقط تست ورود پیاده‌سازی شده
+                        </button>
+                    </div>
+
+                    <div id="loginStatus" class="status"></div>
+                </div>
+
+                <!-- پنل توضیح و هایلایت -->
+                <div class="panel side-highlight">
+                    <div>
+                        <div class="panel-title">
+                            <span class="icon">★</span>
+                            <span>ویژگی‌ها</span>
+                        </div>
+                        <div class="pill-row">
+                            <div class="pill">رشته‌های انسانی، تجربی، ریاضی</div>
+                            <div class="pill">کنکور عادی و فرهنگیان</div>
+                            <div class="pill">سوالات تستی ۴ گزینه‌ای</div>
+                            <div class="pill">تحلیل پیشرفته نتیجه</div>
+                            <div class="pill">تایمر و مدیریت زمان</div>
+                            <div class="pill">مرور سوالات غلط</div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="panel-title">
+                            <span class="icon">⏱</span>
+                            <span>آماده برای مرحله بعد</span>
+                        </div>
+                        <div class="meter">
+                            <div class="meter-fill"></div>
+                        </div>
+                        <div class="helper" style="margin-top:8px;">
+                            این فقط مرحلهٔ ورود بود؛ تو مراحل بعد، انتخاب رشته، نوع کنکور، دروس و خود آزمون
+                            رو با همین استایل تیره و خفن ادامه می‌دیم.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bottom-meta">
+                <div>این سامانه برای حمایت از دانش‌آموزان کم‌برخوردار طراحی شده است.</div>
+                <div class="designer">طراح: محمدمهدی دیناروند</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const loginBtn = document.getElementById("loginBtn");
+    const usernameInput = document.getElementById("usernameInput");
+    const loginError = document.getElementById("loginError");
+    const loginStatus = document.getElementById("loginStatus");
+
+    let currentUser = null;
+
+    async function handleLogin() {
+        const username = usernameInput.value.trim();
+        loginError.style.display = "none";
+        loginStatus.textContent = "";
+        loginStatus.className = "status";
+
+        if (!username) {
+            loginError.textContent = "لطفاً نام کاربری رو خالی نذار 🙂";
+            loginError.style.display = "block";
+            return;
+        }
+
+        try {
+            const res = await fetch("data/usernames.json?_=" + Date.now());
+            if (!res.ok) {
+                throw new Error("خطا در خواندن فایل کاربران");
+            }
+            const data = await res.json();
+            const users = data.users || [];
+            const found = users.find(u => u.username === username);
+
+            if (!found) {
+                loginError.textContent = "چنین نام کاربری‌ای ثبت نشده. اگر مطمئنی درسته، با مسئول سامانه چک کن.";
+                loginError.style.display = "block";
+                loginStatus.textContent = "";
+                return;
+            }
+
+            currentUser = {
+                username: found.username,
+                role: found.role || "student"
+            };
+
+            loginStatus.classList.add("ok");
+            loginStatus.textContent =
+                `ورود موفق 👌 خوش اومدی ${currentUser.username}` +
+                (currentUser.role === "admin" ? " (حالت مدیر فعال است)" : "");
+
+            // اینجا بعداً می‌ریم سراغ مرحله بعد (انتخاب رشته)
+            // فعلاً فقط لاگ می‌کنیم:
+            console.log("Logged in user:", currentUser);
+
+        } catch (err) {
+            console.error(err);
+            loginError.textContent = "یه مشکلی در خواندن فایل کاربران پیش اومد. آدرس و نام فایل رو دوباره چک کن.";
+            loginError.style.display = "block";
+        }
+    }
+
+    loginBtn.addEventListener("click", handleLogin);
+    usernameInput.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") {
+            handleLogin();
+        }
+    });
+</script>
+</body>
+</html>
