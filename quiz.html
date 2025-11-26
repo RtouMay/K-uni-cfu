@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>آزمون</title>
+
+    <style>
+        @font-face {
+            font-family: "YekanBakh";
+            src: url("YekanBakh.woff2") format("woff2");
+        }
+
+        *{box-sizing:border-box}
+        body{
+            margin:0;
+            min-height:100vh;
+            font-family:"YekanBakh",sans-serif;
+            background:radial-gradient(circle at top,#222,#050509 50%,#000 100%);
+            color:#f5f5f5;
+            display:flex;align-items:center;justify-content:center;
+            padding:20px;
+        }
+
+        .card{
+            width:100%;
+            max-width:900px;
+            background:linear-gradient(145deg,#0d0d12,#050509);
+            border-radius:24px;
+            padding:28px 24px;
+            box-shadow:0 18px 60px rgba(0,0,0,.9);
+            position:relative;
+            overflow:hidden;
+        }
+        .card::before{
+            content:"";position:absolute;inset:-40%;
+            background:
+              radial-gradient(circle at 0 0,rgba(245,200,66,.08),transparent 55%),
+              radial-gradient(circle at 100% 100%,rgba(255,255,255,.06),transparent 55%);
+            opacity:.6;
+        }
+        .inside{position:relative;z-index:2}
+
+        h1{margin-top:0;text-align:center;font-size:20px;}
+
+        /* تایمر */
+        .timer{
+            font-size:18px;
+            text-align:center;
+            margin-bottom:20px;
+            color:#f5c842;
+            font-weight:bold;
+        }
+
+        .question-box{
+            background:#111;
+            border-radius:18px;
+            padding:20px;
+            margin-top:10px;
+            border:1px solid rgba(255,255,255,.05);
+        }
+
+        .question-text{
+            font-size:17px;
+            line-height:1.8;
+            margin-bottom:20px;
+            text-align:right;
+        }
+
+        .options{
+            display:flex;
+            flex-direction:column;
+            gap:12px;
+        }
+
+        .option{
+            padding:12px 18px;
+            background:#1a1a1a;
+            border-radius:12px;
+            cursor:pointer;
+            border:1px solid rgba(255,255,255,.08);
+            transition:.2s;
+        }
+        .option:hover{
+            border-color:#f5c842;
+            color:#ffe88c;
+            transform:translateY(-3px);
+        }
+
+        .btn{
+            padding:10px 18px;
+            border-radius:999px;
+            border:none;
+            cursor:pointer;
+            font-family:inherit;
+            margin-top:25px;
+            font-size:14px;
+        }
+        .btn-next{
+            background:linear-gradient(135deg,#f5c842,#f0a900);
+            color:#1d1203;
+            font-weight:700;
+            display:block;
+            margin:25px auto 0;
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <div class="inside">
+
+        <h1>آزمون</h1>
+
+        <div class="timer" id="timerBox">00:00</div>
+
+        <div class="question-box">
+            <div id="questionText" class="question-text"></div>
+            <div id="optionsBox" class="options"></div>
+        </div>
+
+        <button id="nextBtn" class="btn btn-next">سوال بعد</button>
+
+    </div>
+</div>
+
+<script>
+
+    /* -------------------------
+       لود اطلاعات از localStorage
+    ------------------------- */
+    const username = localStorage.getItem("konkur_username");
+    const field = localStorage.getItem("konkur_field");
+    const examType = localStorage.getItem("konkur_examType");
+    const subject = localStorage.getItem("konkur_subject");
+    const questionCount = Number(localStorage.getItem("konkur_questionCount"));
+
+    if (!username || !field || !examType || !subject || !questionCount) {
+        window.location.href = "index.html";
+    }
+
+    /* -------------------------
+         مسیر فایل سوالات
+    ------------------------- */
+
+    // مثال:
+    // data/tajrobi/normal/zist.json
+    const questionFile = `data/${field}/${examType}/${subject}.json`;
+
+    /* -------------------------
+            متغیرهای آزمون
+    ------------------------- */
+    let questions = [];
+    let selectedQuestions = [];
+    let currentIndex = 0;
+    let correct = 0;
+    let wrong = 0;
+
+    /* ------------------------- 
+           تایمر آزمون
+    ------------------------- */
+    let totalSeconds = 0;
+    const timerBox = document.getElementById("timerBox");
+
+    setInterval(()=>{
+        totalSeconds++;
+        let m = String(Math.floor(totalSeconds / 60)).padStart(2,"0");
+        let s = String(totalSeconds % 60).padStart(2,"0");
+        timerBox.textContent = `${m}:${s}`;
+    },1000);
+
+    /* -------------------------
+       لود سوالات از JSON
+    ------------------------- */
+    fetch(questionFile)
+        .then(res=>res.json())
+        .then(data=>{
+            questions = data.questions;
+
+            // انتخاب رندوم
+            shuffleArray(questions);
+            selectedQuestions = questions.slice(0, questionCount);
+
+            showQuestion();
+        })
+        .catch(err=>{
+            alert("مشکل در لود سوالات. مسیر JSON اشتباه است.");
+            console.log(err);
+        });
+
+    /* -------------------------
+        نمایش سوال
+    ------------------------- */
+    const questionText = document.getElementById("questionText");
+    const optionsBox = document.getElementById("optionsBox");
+    const nextBtn = document.getElementById("nextBtn");
+
+    function showQuestion(){
+        const q = selectedQuestions[currentIndex];
+
+        questionText.textContent = `(${currentIndex+1}) ${q.text}`;
+
+        optionsBox.innerHTML = "";
+
+        q.options.forEach((op, i)=>{
+            let div = document.createElement("div");
+            div.className = "option";
+            div.textContent = op;
+
+            div.addEventListener("click", ()=>{
+                handleAnswer(i);
+            });
+
+            optionsBox.appendChild(div);
+        });
+
+        if (currentIndex === selectedQuestions.length - 1){
+            nextBtn.textContent = "پایان آزمون";
+        }
+    }
+
+    /* -------------------------
+        بررسی پاسخ
+    ------------------------- */
+    function handleAnswer(selectedIndex){
+
+        const q = selectedQuestions[currentIndex];
+
+        if (selectedIndex === q.correctIndex){
+            correct++;
+        } else {
+            wrong++;
+
+            // ذخیره سوال غلط برای مرور
+            saveWrongQuestion(q.id);
+        }
+
+        currentIndex++;
+
+        if (currentIndex >= selectedQuestions.length){
+            finishQuiz();
+        } else {
+            showQuestion();
+        }
+    }
+
+    /* -------------------------
+        دکمه "سوال بعد"
+    ------------------------- */
+    nextBtn.addEventListener("click", ()=>{
+        // فقط اگر هیچ گزینه‌ای انتخاب نشده، میره سوال بعد (بدون پاسخ)
+        wrong++;
+        saveWrongQuestion(selectedQuestions[currentIndex].id);
+        currentIndex++;
+
+        if (currentIndex >= selectedQuestions.length){
+            finishQuiz();
+        } else {
+            showQuestion();
+        }
+    });
+
+    /* -------------------------
+        ذخیره سوال غلط
+    ------------------------- */
+    function saveWrongQuestion(id){
+        const key = `wrong_${username}_${field}_${examType}_${subject}`;
+        let arr = JSON.parse(localStorage.getItem(key) || "[]");
+        if (!arr.includes(id)) arr.push(id);
+        localStorage.setItem(key, JSON.stringify(arr));
+    }
+
+    /* -------------------------
+         پایان آزمون
+    ------------------------- */
+    function finishQuiz(){
+        localStorage.setItem("quiz_correct", correct);
+        localStorage.setItem("quiz_wrong", wrong);
+        localStorage.setItem("quiz_time", totalSeconds);
+
+        window.location.href = "result.html";
+    }
+
+    /* -------------------------
+        تابع شافل
+    ------------------------- */
+    function shuffleArray(array){
+        for(let i=array.length-1; i>0; i--){
+            const j = Math.floor(Math.random() * (i+1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+    }
+
+</script>
+
+</body>
+</html>
