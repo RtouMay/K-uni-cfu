@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>ورود به سامانه</title>
+
+<style>
+@font-face {
+    font-family: "YekanBakh";
+    src: url("YekanBakh.woff2") format("woff2");
+}
+
+*{box-sizing:border-box;}
+
+:root{
+    --gold:#f5c842;
+    --bg:radial-gradient(circle at top,#1d1d27,#050509 60%,#000);
+    --text:#fff;
+}
+
+body{
+    margin:0;
+    font-family:"YekanBakh";
+    background:var(--bg);
+    color:var(--text);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    min-height:100vh;
+    overflow:hidden;
+    padding:20px;
+}
+
+/* نور پس زمینه */
+body::before{
+    content:"";
+    position:absolute;
+    width:600px;height:600px;
+    background:radial-gradient(circle,rgba(245,200,66,.15),transparent 70%);
+    top:-250px;left:-250px;
+    animation:glow 8s infinite alternate ease-in-out;
+}
+@keyframes glow{
+    0%{transform:scale(1) translate(0,0);}
+    100%{transform:scale(1.25) translate(40px,40px);}
+}
+
+/* کارت */
+.card{
+    width:100%;
+    max-width:480px;
+    text-align:center;
+    position:relative;
+    z-index:5;
+    opacity:0;
+    transform:translateY(20px);
+    animation:fadeIn .9s forwards;
+}
+@keyframes fadeIn{
+    to{opacity:1;transform:translateY(0);}
+}
+
+/* لوگو */
+.logo{
+    width:160px;
+    height:auto;
+    margin:0 auto 25px auto;
+    filter:drop-shadow(0 0 18px rgba(245,200,66,.4));
+    animation:logoFloat 4s infinite ease-in-out;
+}
+@keyframes logoFloat{
+    0%,100%{transform:translateY(0);}
+    50%{transform:translateY(-10px);}
+}
+
+/* عنوان */
+.title{
+    font-size:26px;
+    font-weight:700;
+    margin-bottom:14px;
+    color:var(--gold);
+}
+
+/* توضیح */
+.subtitle{
+    font-size:15px;
+    opacity:.9;
+    line-height:2;
+    margin-bottom:30px;
+}
+
+/* دکمه شروع */
+.btn{
+    display:inline-block;
+    padding:13px 26px;
+    border-radius:18px;
+    background:linear-gradient(135deg,var(--gold),#c79a00);
+    color:#1d1203;
+    font-size:15px;
+    font-weight:700;
+    cursor:pointer;
+    border:none;
+    position:relative;
+    overflow:hidden;
+    box-shadow:0 18px 35px rgba(0,0,0,.45);
+}
+
+/* Ripple */
+.btn::after{
+    content:"";
+    position:absolute;
+    width:20px;height:20px;
+    background:rgba(255,255,255,.45);
+    border-radius:50%;
+    transform:scale(0);
+    opacity:0;
+    left:var(--x);
+    top:var(--y);
+    transition:transform .6s,opacity 1s;
+}
+.btn.ripple::after{
+    transform:scale(10);
+    opacity:0;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="card">
+
+    <img src="Farhangian_Uni.png" class="logo">
+
+    <div class="title">سامانه پشتیبانی علمی دانش‌آموزان</div>
+
+    <div class="subtitle">
+        اینجا نقطه شروع پیشرفت توست 🌱  
+        با تست‌های هدفمند، تحلیل پیشرفت و مشاوره دوستانه همراهت هستیم.
+    </div>
+
+    <button id="startBtn" class="btn">شروع</button>
+
+</div>
+
+<script>
+const btn=document.getElementById("startBtn");
+
+/* Ripple */
+btn.onclick = e=>{
+    const x=e.clientX-btn.getBoundingClientRect().left;
+    const y=e.clientY-btn.getBoundingClientRect().top;
+    btn.style.setProperty("--x",x+"px");
+    btn.style.setProperty("--y",y+"px");
+    btn.classList.add("ripple");
+
+    setTimeout(()=>{
+        window.location.href="login.html";
+    },350);
+
+    setTimeout(()=>btn.classList.remove("ripple"),700);
+};
+</script>
+
+</body>
+</html>
