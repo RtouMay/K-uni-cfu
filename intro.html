@@ -4,6 +4,8 @@
 <meta charset="UTF-8">
 <title>ورود به سامانه</title>
 
+<link rel="stylesheet" href="header.css">
+
 <style>
 @font-face {
     font-family: "YekanBakh";
@@ -28,7 +30,7 @@ body{
     align-items:center;
     min-height:100vh;
     overflow:hidden;
-    padding:20px;
+    padding:120px 20px 20px; /* این 120px برای جا دادن هدر بالاست */
 }
 
 /* نور پس زمینه */
@@ -45,7 +47,7 @@ body::before{
     100%{transform:scale(1.25) translate(40px,40px);}
 }
 
-/* کارت */
+/* کارت وسط صفحه */
 .card{
     width:100%;
     max-width:480px;
@@ -60,8 +62,8 @@ body::before{
     to{opacity:1;transform:translateY(0);}
 }
 
-/* لوگو */
-.logo{
+/* لوگوی بزرگ */
+.logo-big{
     width:160px;
     height:auto;
     margin:0 auto 25px auto;
@@ -122,15 +124,18 @@ body::before{
     transform:scale(10);
     opacity:0;
 }
-
 </style>
 </head>
 
 <body>
 
+<!-- ✅ هدر شیشه‌ای -->
+<div id="header"></div>
+
+<!-- محتوای اصلی اینترو -->
 <div class="card">
 
-    <img src="Farhangian_Uni.png" class="logo">
+    <img src="Farhangian_Uni.png" class="logo-big">
 
     <div class="title">سامانه پشتیبانی علمی دانش‌آموزان</div>
 
@@ -143,10 +148,11 @@ body::before{
 
 </div>
 
+<script src="header.js"></script>
 <script>
 const btn=document.getElementById("startBtn");
 
-/* Ripple */
+/* Ripple و رفتن به لاگین */
 btn.onclick = e=>{
     const x=e.clientX-btn.getBoundingClientRect().left;
     const y=e.clientY-btn.getBoundingClientRect().top;
