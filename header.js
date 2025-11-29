@@ -1,64 +1,62 @@
-/* محل قرارگیری هدر */
-const headerContainer = document.getElementById("header");
+document.addEventListener("DOMContentLoaded", () => {
 
-/* لود هدر */
-fetch("header.html")
-    .then(res => res.text())
-    .then(html => {
-        headerContainer.innerHTML = html;
-        initHeader();
-    });
-
-function initHeader() {
-
-    const themeKey = "konkur_theme";
-
-    /* دکمه ها */
-    const themeBtn  = document.getElementById("headerTheme");
+    const themeKey   = "konkur_theme";
+    const themeBtn   = document.getElementById("headerTheme");
     const profileBtn = document.getElementById("headerProfile");
+    const titleEl    = document.getElementById("headerTitle");
+    const header     = document.querySelector(".main-header");
 
-    /* ---------- تم ---------- */
+    if (!header) return; // اگر صفحه هدر نداشت، هیچی انجام نده
+
+    /* --- تم --- */
     function applyTheme(mode){
         document.body.setAttribute("data-theme", mode);
-        themeBtn.textContent = mode === "dark" ? "☀️" : "🌙";
+        if (themeBtn) themeBtn.textContent = (mode === "dark" ? "☀️" : "🌙");
     }
 
     applyTheme(localStorage.getItem(themeKey) || "dark");
 
-    themeBtn.onclick = ()=>{
-        const now = document.body.getAttribute("data-theme");
-        const next = now === "dark" ? "light" : "dark";
-        localStorage.setItem(themeKey, next);
-        applyTheme(next);
-    };
+    if (themeBtn){
+        themeBtn.onclick = () => {
+            const now  = document.body.getAttribute("data-theme");
+            const next = now === "dark" ? "light" : "dark";
+            localStorage.setItem(themeKey, next);
+            applyTheme(next);
+        };
+    }
 
-    /* ---------- پروفایل ---------- */
-    profileBtn.onclick = ()=>{
-        window.location.href = "profile.html";
-    };
+    /* --- پروفایل --- */
+    if (profileBtn){
+        profileBtn.onclick = () => {
+            window.location.href = "profile.html";
+        };
+    }
 
-    /* ---------- عنوان داینامیک ---------- */
-    const titleMap = {
-        "intro.html": "آغاز مسیر",
-        "login.html": "ورود",
-        "dashboard.html": "داشبورد",
-        "field.html": "انتخاب رشته",
-        "subjects.html": "انتخاب درس",
-        "exam-type.html": "نوع کنکور",
-        "questions-count.html": "تعداد سوال",
-        "quiz.html": "آزمون",
-        "result.html": "نتیجه آزمون",
-        "profile.html": "پروفایل"
-    };
+    /* --- عنوان داینامیک --- */
+    if (titleEl){
+        const titles = {
+            "index.html": "خانه",
+            "intro.html": "آغاز مسیر",
+            "login.html": "ورود",
+            "dashboard.html": "داشبورد",
+            "field.html": "انتخاب رشته",
+            "exam-type.html": "نوع کنکور",
+            "subjects.html": "انتخاب درس",
+            "questions-count.html": "تعداد سوال",
+            "quiz.html": "آزمون",
+            "result.html": "نتیجه آزمون",
+            "profile.html": "پروفایل"
+        };
 
-    const file = window.location.pathname.split("/").pop();
-    document.getElementById("headerTitle").textContent = titleMap[file] || "";
+        let file = window.location.pathname.split("/").pop();
+        if (file === "" ) file = "index.html";
 
-    /* ---------- کوچک شدن هنگام اسکرول ---------- */
-    const header = document.querySelector(".main-header");
+        titleEl.textContent = titles[file] || "";
+    }
 
-    window.addEventListener("scroll", ()=>{
-        if(window.scrollY > 20) header.classList.add("shrink");
+    /* --- کوچک شدن موقع اسکرول --- */
+    window.addEventListener("scroll", () => {
+        if (window.scrollY > 20) header.classList.add("shrink");
         else header.classList.remove("shrink");
     });
-}
+});
