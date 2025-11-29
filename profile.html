@@ -1,453 +1,454 @@
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <title>پروفایل کاربر</title>
+<meta charset="UTF-8"/>
+<title>پروفایل کاربر</title>
 
-    <style>
-        @font-face {
-            font-family: "YekanBakh";
-            src: url("YekanBakh.woff2") format("woff2");
-        }
+<style>
+@font-face {
+    font-family: "YekanBakh";
+    src: url("YekanBakh.woff2") format("woff2");
+}
 
-        * { box-sizing: border-box; }
+*{box-sizing:border-box;}
 
-        :root {
-            --bg-body: radial-gradient(circle at top, #222, #050509 50%, #000 100%);
-            --text-main: #f6f6f6;
-            --card-bg: linear-gradient(145deg, #0d0d12, #050509);
-            --card-shadow: 0 18px 60px rgba(0,0,0,.9);
-            --box-bg: #111;
-            --soft-border: rgba(255,255,255,.07);
-        }
+:root {
+    --bg-body: radial-gradient(circle at top, #1d1d27, #050509 60%, #000);
+    --text-main:#f6f6f6;
+    --card-bg:#0f0f15;
+    --card-shadow:0 40px 95px rgba(0,0,0,.85);
+    --box-bg:#111;
+    --border:rgba(255,255,255,.1);
+    --gold:#f5c842;
+    --soft:#ccc;
+}
 
-        body[data-theme="light"] {
-            --bg-body: radial-gradient(circle at top, #ffffff, #f4f4f4 55%, #e0e0e0 100%);
-            --text-main: #222;
-            --card-bg: #ffffff;
-            --card-shadow: 0 14px 40px rgba(0,0,0,.12);
-            --box-bg: #f7f7f7;
-            --soft-border: rgba(0,0,0,.06);
-        }
+body[data-theme="light"]{
+    --bg-body: radial-gradient(circle at top,#ffffff,#e9e9e9 60%, #dcdcdc);
+    --text-main:#222;
+    --card-bg:#ffffff;
+    --card-shadow:0 28px 60px rgba(0,0,0,.14);
+    --box-bg:#f5f5f5;
+    --border:rgba(0,0,0,.1);
+    --gold:#c59500;
+    --soft:#444;
+}
 
-        body {
-            margin: 0;
-            min-height: 100vh;
-            font-family: "YekanBakh", sans-serif;
-            background: var(--bg-body);
-            color: var(--text-main);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-            transition: background .3s ease, color .3s ease;
-        }
+body {
+    margin:0;
+    font-family:"YekanBakh";
+    background:var(--bg-body);
+    color:var(--text-main);
+    min-height:100vh;
+    padding:20px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    transition:background .3s ease,color .3s ease;
+    overflow-x:hidden;
+}
 
-        .card {
-            max-width: 1000px;
-            width: 100%;
-            background: var(--card-bg);
-            border-radius: 24px;
-            padding: 24px 20px 26px;
-            box-shadow: var(--card-shadow);
-            position: relative;
-            overflow: hidden;
-        }
+/* کارت اصلی */
+.card {
+    width:100%;
+    max-width:900px;
+    background:var(--card-bg);
+    border-radius:32px;
+    padding:30px 26px;
+    box-shadow:var(--card-shadow);
+    position:relative;
+    overflow:hidden;
+    opacity:0;
+    transform:translateY(25px);
+    animation:cardIn .9s ease forwards;
+}
+@keyframes cardIn {
+    to { opacity:1; transform:translateY(0); }
+}
 
-        .card::before {
-            content: "";
-            position: absolute;
-            inset: -40%;
-            background:
-                radial-gradient(circle at 0 0, rgba(245,200,66,.08), transparent 55%),
-                radial-gradient(circle at 100% 100%, rgba(255,255,255,.06), transparent 55%);
-            opacity: .6;
-        }
+/* نور طلایی پس‌زمینه */
+.card::before {
+    content:"";
+    position:absolute;
+    width:520px;
+    height:520px;
+    top:-240px;
+    left:-240px;
+    background: radial-gradient(circle,rgba(245,200,66,.18),transparent 70%);
+    animation:glowMove 8s infinite alternate ease-in-out;
+}
+@keyframes glowMove {
+    0% { transform:translate(0,0) scale(1); }
+    100% { transform:translate(50px,50px) scale(1.25); }
+}
 
-        .inside {
-            position: relative;
-            z-index: 2;
-        }
+.inside{ position:relative; z-index:10; }
 
-        .top-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 16px;
-        }
+/* بالا */
+.top-row {
+    display:flex;
+    justify-content:space-between;
+    margin-bottom:20px;
+}
+h1 {
+    margin:0;
+    font-size:26px;
+    color:var(--gold);
+}
+.theme-toggle {
+    padding:6px 14px;
+    border-radius:999px;
+    border:1px solid var(--border);
+    background:transparent;
+    font-size:12px;
+    cursor:pointer;
+}
 
-        .theme-toggle {
-            border: 1px solid var(--soft-border);
-            background: transparent;
-            color: inherit;
-            border-radius: 999px;
-            padding: 6px 12px;
-            cursor: pointer;
-            font-size: 11px;
-        }
+/* آواتار */
+.avatar-box {
+    display:flex;
+    align-items:center;
+    gap:16px;
+    margin-bottom:18px;
+}
+.avatar {
+    width:90px;
+    height:90px;
+    border-radius:50%;
+    background:var(--box-bg);
+    border:2px solid var(--gold);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:42px;
+    font-weight:700;
+    animation:avatarPop 1s ease forwards;
+}
+@keyframes avatarPop {
+    0%{ transform:scale(.6); opacity:0; }
+    80%{ transform:scale(1.1); opacity:1; }
+    100%{ transform:scale(1); }
+}
+.username {
+    font-size:20px;
+    font-weight:600;
+}
+.rank {
+    font-size:16px;
+    color:var(--gold);
+    margin-top:4px;
+    opacity:0;
+    animation:fadeUp .8s ease forwards .3s;
+}
 
-        h1 {
-            margin: 0;
-            font-size: 22px;
-            color: #f5c842;
-        }
+/* باکس آمار */
+.stats-row {
+    display:flex;
+    gap:12px;
+    margin-bottom:18px;
+    flex-wrap:wrap;
+}
+.stat-box {
+    flex:1;
+    min-width:170px;
+    background:var(--box-bg);
+    border:1px solid var(--border);
+    border-radius:18px;
+    padding:16px;
+    opacity:0;
+    transform:translateY(14px);
+    animation:fadeUp .7s forwards .3s;
+}
+.stat-label {
+    font-size:14px;
+    opacity:.85;
+}
+.stat-value {
+    margin-top:6px;
+    font-size:20px;
+    font-weight:700;
+}
 
-        body[data-theme="light"] h1 {
-            color: #c59500;
-        }
+/* عنوان مدال‌ها */
+.medals-title {
+    font-size:18px;
+    font-weight:600;
+    margin-bottom:10px;
+    opacity:0;
+    animation:fadeUp .7s forwards .4s;
+}
 
-        .profile-header {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            margin-bottom: 16px;
-        }
+/* گرید مدال‌ها */
+.medals-grid {
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:14px;
+}
+@media(max-width:768px){
+    .medals-grid { grid-template-columns:repeat(2,1fr); }
+}
 
-        .avatar {
-            width: 64px;
-            height: 64px;
-            border-radius: 50%;
-            border: 2px solid #f5c842;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 26px;
-            background: rgba(0,0,0,.3);
-        }
+.medal-item {
+    background:var(--box-bg);
+    border:1px solid var(--border);
+    border-radius:16px;
+    padding:14px 8px;
+    text-align:center;
+    opacity:0;
+    transform:translateY(12px);
+    animation:fadeUpMedal .6s ease forwards;
+}
+@keyframes fadeUpMedal {
+    to { opacity:1; transform:translateY(0); }
+}
+.medal-item:hover {
+    transform:translateY(-4px) scale(1.03);
+    box-shadow:0 12px 35px rgba(0,0,0,.4);
+}
+.medal-icon svg {
+    width:34px;
+    height:34px;
+    stroke:var(--gold);
+    fill:none;
+    stroke-width:4;
+    margin-bottom:6px;
+}
+.medal-name {
+    font-size:14px;
+    font-weight:600;
+}
+.medal-desc {
+    font-size:11px;
+    opacity:.8;
+}
+.medal-locked {
+    opacity:.35;
+    filter:grayscale(.7);
+}
 
-        body[data-theme="light"] .avatar {
-            background: #fff7dd;
-        }
+/* دکمه‌ها */
+.buttons {
+    text-align:center;
+    margin-top:20px;
+}
+.btn {
+    padding:12px 18px;
+    border:none;
+    border-radius:999px;
+    margin:6px;
+    cursor:pointer;
+    font-size:14px;
+    position:relative;
+    overflow:hidden;
+}
+.btn-primary {
+    background:var(--gold);
+    color:#1d1203;
+    font-weight:700;
+}
+.btn-secondary {
+    background:#222;
+    color:#eee;
+}
+body[data-theme="light"] .btn-secondary {
+    background:#e9e9e9;
+    color:#222;
+}
 
-        .profile-info-main {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-        }
+/* Ripple */
+.btn::after {
+    content:"";
+    position:absolute;
+    width:22px;
+    height:22px;
+    background:rgba(255,255,255,.5);
+    border-radius:50%;
+    transform:scale(0);
+    opacity:0;
+    left:var(--x);
+    top:var(--y);
+    transition:transform .5s,opacity .8s;
+}
+.btn.ripple::after {
+    transform:scale(10);
+    opacity:0;
+}
 
-        .username {
-            font-size: 18px;
-            font-weight: 600;
-        }
+/* صفحه ترنزیشن */
+.page-transition {
+    position:fixed;
+    inset:0;
+    background:black;
+    opacity:0;
+    pointer-events:none;
+    transition:.4s;
+    z-index:9999;
+}
+.page-transition.active {
+    opacity:1;
+    pointer-events:all;
+}
 
-        .rank {
-            font-size: 14px;
-            color: #ffd86b;
-        }
+/* انیمیشن FadeUp عمومی */
+@keyframes fadeUp {
+    to { opacity:1; transform:translateY(0); }
+}
 
-        body[data-theme="light"] .rank {
-            color: #c59500;
-        }
-
-        .stats-row {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-bottom: 16px;
-        }
-
-        .stat-box {
-            flex: 1;
-            min-width: 160px;
-            background: var(--box-bg);
-            border-radius: 16px;
-            border: 1px solid var(--soft-border);
-            padding: 12px 14px;
-            font-size: 13px;
-        }
-
-        .stat-label {
-            opacity: .85;
-            margin-bottom: 4px;
-        }
-
-        .stat-value {
-            font-weight: 600;
-            font-size: 16px;
-        }
-
-        .medals-section {
-            margin-top: 10px;
-        }
-
-        .medals-title {
-            font-size: 15px;
-            font-weight: 600;
-            margin-bottom: 10px;
-        }
-
-        .medals-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 10px;
-        }
-
-        @media (max-width: 768px) {
-            .medals-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-
-        .medal-item {
-            background: var(--box-bg);
-            border-radius: 16px;
-            border: 1px solid var(--soft-border);
-            padding: 10px 8px;
-            text-align: center;
-            font-size: 11px;
-        }
-
-        .medal-icon {
-            margin-bottom: 6px;
-        }
-
-        .medal-icon svg {
-            width: 32px;
-            height: 32px;
-        }
-
-        .medal-name {
-            font-weight: 600;
-            margin-bottom: 2px;
-        }
-
-        .medal-desc {
-            opacity: .8;
-            font-size: 10px;
-            line-height: 1.5;
-        }
-
-        .medal-locked {
-            opacity: .35;
-            filter: grayscale(0.8);
-        }
-
-        .buttons-bottom {
-            text-align: center;
-            margin-top: 20px;
-        }
-
-        .btn {
-            padding: 9px 16px;
-            border-radius: 999px;
-            border: none;
-            cursor: pointer;
-            font-family: inherit;
-            margin: 6px 5px;
-            font-size: 13px;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, #f5c842, #f0a900);
-            color: #1d1203;
-            font-weight: 700;
-        }
-
-        .btn-secondary {
-            background: #222;
-            color: #ddd;
-        }
-
-        body[data-theme="light"] .btn-secondary {
-            background: #f0f0f0;
-            color: #222;
-        }
-
-    </style>
+</style>
 </head>
+
 <body>
+
+<div id="transitionLayer" class="page-transition"></div>
 
 <div class="card">
     <div class="inside">
 
         <div class="top-row">
             <h1>پروفایل کاربر</h1>
-            <button id="themeToggle" class="theme-toggle">☀️ حالت روشن</button>
+            <button id="themeToggle" class="theme-toggle">☀️ روشن</button>
         </div>
 
-        <div class="profile-header">
-            <div class="avatar" id="avatarBox">👤</div>
-            <div class="profile-info-main">
-                <div class="username" id="usernameBox"></div>
-                <div class="rank" id="rankBox"></div>
+        <div class="avatar-box">
+            <div id="avatar" class="avatar">?</div>
+            <div>
+                <div id="username" class="username"></div>
+                <div id="rank" class="rank"></div>
             </div>
         </div>
 
         <div class="stats-row">
             <div class="stat-box">
-                <div class="stat-label">تعداد کل تست‌های حل‌شده</div>
-                <div class="stat-value" id="totalTestsBox">0</div>
+                <div class="stat-label">تعداد کل تست‌ها</div>
+                <div id="statTotal" class="stat-value">0</div>
             </div>
+
             <div class="stat-box">
-                <div class="stat-label">بهترین درصد تا الان</div>
-                <div class="stat-value" id="bestPercentBox">0%</div>
+                <div class="stat-label">بهترین درصد</div>
+                <div id="statBest" class="stat-value">0%</div>
             </div>
         </div>
 
-        <div class="medals-section">
-            <div class="medals-title">مدال‌ها</div>
-            <div id="medalsGrid" class="medals-grid"></div>
-        </div>
+        <div class="medals-title">مدال‌ها</div>
+        <div id="medalsGrid" class="medals-grid"></div>
 
-        <div class="buttons-bottom">
-            <button id="backToResultBtn" class="btn btn-secondary">بازگشت به نتیجه آخرین آزمون</button>
-            <button id="goToSubjectsBtn" class="btn btn-primary">شروع یا ادامه آزمون‌ها</button>
+        <div class="buttons">
+            <button id="gotoTests" class="btn btn-primary">ورود به تست‌ها</button>
+            <button id="gotoResult" class="btn btn-secondary">مشاهده نتیجه آخر</button>
         </div>
 
     </div>
 </div>
 
 <script>
-    /* تم */
-    const THEME_KEY = "konkur_theme";
-    const themeToggleBtn = document.getElementById("themeToggle");
+/* === تم === */
+const themeKey="konkur_theme";
+const themeBtn=document.getElementById("themeToggle");
 
-    function applyTheme(theme) {
-        document.body.setAttribute("data-theme", theme);
-        themeToggleBtn.textContent =
-            theme === "light" ? "🌙 حالت تیره" : "☀️ حالت روشن";
-    }
+function applyTheme(t){
+    document.body.setAttribute("data-theme",t);
+    themeBtn.textContent = t==="light" ? "🌙 تیره" : "☀️ روشن";
+}
 
-    const savedTheme = localStorage.getItem(THEME_KEY) || "dark";
-    applyTheme(savedTheme);
+applyTheme(localStorage.getItem(themeKey)||"dark");
 
-    themeToggleBtn.addEventListener("click", () => {
-        const current = document.body.getAttribute("data-theme") || "dark";
-        const next = current === "dark" ? "light" : "dark";
-        localStorage.setItem(THEME_KEY, next);
-        applyTheme(next);
-    });
+themeBtn.onclick=()=>{
+    const now=document.body.getAttribute("data-theme");
+    const next=now==="dark"?"light":"dark";
+    localStorage.setItem(themeKey,next);
+    applyTheme(next);
+};
 
-    /* داده‌های کاربر */
-    const username = localStorage.getItem("konkur_username");
-    if (!username) {
-        window.location.href = "index.html";
-    }
+/* === اطلاعات کاربر === */
+const username=localStorage.getItem("konkur_username");
+if(!username) window.location.href="index.html";
 
-    const totalKey = `total_tests_${username}`;
-    const bestKey = `best_percent_${username}`;
+document.getElementById("username").textContent=username;
+document.getElementById("avatar").textContent=username[0].toUpperCase();
 
-    const totalTests = Number(localStorage.getItem(totalKey) || "0");
-    const bestPercent = Number(localStorage.getItem(bestKey) || "0");
+/* آمار */
+const totalKey=`total_tests_${username}`;
+const bestKey=`best_percent_${username}`;
 
-    document.getElementById("usernameBox").textContent = username;
-    document.getElementById("totalTestsBox").textContent = totalTests;
-    document.getElementById("bestPercentBox").textContent = bestPercent + "%";
+const totalTests=Number(localStorage.getItem(totalKey)||"0");
+const bestPercent=Number(localStorage.getItem(bestKey)||"0");
 
-    /* اول حرف نام کاربری در آواتار */
-    const avatarBox = document.getElementById("avatarBox");
-    const firstChar = username.trim().charAt(0) || "👤";
-    if (firstChar && firstChar !== "👤") {
-        avatarBox.textContent = firstChar.toUpperCase();
-    }
+document.getElementById("statTotal").textContent=totalTests;
+document.getElementById("statBest").textContent=bestPercent+"%";
 
-    /* لقب */
-    function getRank(t) {
-        if (t >= 1000) return "افسانه تست‌زنی 🔥";
-        if (t >= 600) return "بزرگ تست‌زن 💛";
-        if (t >= 400) return "تست‌زن قهار ⚡";
-        if (t >= 200) return "تست‌زن حرفه‌ای 🎯";
-        if (t >= 100) return "تست‌زن فعال 🚀";
-        if (t >= 50)  return "در مسیر تست‌زنی ✨";
-        if (t >= 20)  return "شروع قدرتمند 💪";
-        return "تازه‌وارد تست‌زن 🌱";
-    }
-    document.getElementById("rankBox").textContent = getRank(totalTests);
+/* لقب */
+function getRank(t){
+    if(t>=600) return "بزرگ تست‌زن 💛";
+    if(t>=400) return "تست‌زن قهار ⚡";
+    if(t>=200) return "تست‌زن حرفه‌ای 🎯";
+    if(t>=100) return "تست‌زن فعال 🚀";
+    if(t>=50) return "در مسیر پیشرفت ✨";
+    if(t>=20) return "شروع قدرتمند 💪";
+    return "تازه‌وارد تست‌زن 🌱";
+}
+document.getElementById("rank").textContent=getRank(totalTests);
 
-    /* مدال‌ها */
-    const medals = [
-        {
-            id: "first_step",
-            name: "اولین قدم",
-            desc: "اولین باری که وارد دنیای تست‌زنی شدی.",
-            condition: stats => stats.totalTests >= 1
-        },
-        {
-            id: "ten_tests",
-            name: "ده‌تایی",
-            desc: "حداقل ۱۰ تست حل کرده‌ای.",
-            condition: stats => stats.totalTests >= 10
-        },
-        {
-            id: "fifty_tests",
-            name: "پرانرژی",
-            desc: "بیش از ۵۰ تست حل کرده‌ای.",
-            condition: stats => stats.totalTests >= 50
-        },
-        {
-            id: "hundred_tests",
-            name: "تست‌زن جدی",
-            desc: "بیش از ۱۰۰ تست حل کرده‌ای.",
-            condition: stats => stats.totalTests >= 100
-        },
-        {
-            id: "good_percent",
-            name: "درصد خوب",
-            desc: "حداقل یک بار به بالای ۷۰٪ رسیده‌ای.",
-            condition: stats => stats.bestPercent >= 70
-        },
-        {
-            id: "great_percent",
-            name: "درصد عالی",
-            desc: "حداقل یک بار به بالای ۸۵٪ رسیده‌ای.",
-            condition: stats => stats.bestPercent >= 85
-        },
-        {
-            id: "pro_percent",
-            name: "درصد رویایی",
-            desc: "حداقل یک بار به ۹۵٪ یا بیشتر رسیده‌ای.",
-            condition: stats => stats.bestPercent >= 95
-        },
-        {
-            id: "marathon",
-            name: "نفس‌بلند",
-            desc: "بیش از ۳۰۰ تست حل کرده‌ای.",
-            condition: stats => stats.totalTests >= 300
-        }
-    ];
+/* مدال‌ها */
+const medals=[
+    {name:"اولین قدم",desc:"اولین تست ثبت‌شده",cond:totalTests>=1},
+    {name:"ده‌تایی",desc:"۱۰ تست حل شده",cond:totalTests>=10},
+    {name:"فعال",desc:"۵۰ تست حل شده",cond:totalTests>=50},
+    {name:"جدی",desc:"۱۰۰ تست حل شده",cond:totalTests>=100},
+    {name:"پیشرفته",desc:"۲۰۰ تست حل شده",cond:totalTests>=200},
+    {name:"قهار",desc:"۴۰۰ تست حل شده",cond:totalTests>=400},
+    {name:"افسانه‌ای",desc:"۶۰۰ تست حل شده",cond:totalTests>=600},
+    {name:"درصد عالی",desc:"بیش از ۸۵٪",cond:bestPercent>=85}
+];
 
-    const stats = { totalTests, bestPercent };
-    const medalsGrid = document.getElementById("medalsGrid");
+const medalGrid=document.getElementById("medalsGrid");
 
-    medals.forEach(m => {
-        const earned = m.condition(stats);
+medals.forEach((m,i)=>{
+    const div=document.createElement("div");
+    div.className="medal-item";
+    div.style.animationDelay=(0.3 + i*0.08)+"s";
 
-        const div = document.createElement("div");
-        div.className = "medal-item" + (earned ? "" : " medal-locked");
+    if(!m.cond) div.classList.add("medal-locked");
 
-        const icon = document.createElement("div");
-        icon.className = "medal-icon";
-        icon.innerHTML = `
+    div.innerHTML=`
+        <div class="medal-icon">
             <svg viewBox="0 0 100 100">
-                <circle cx="50" cy="40" r="18" fill="none" stroke-width="4"/>
-                <path d="M38 58 L32 80" fill="none" stroke-width="4"/>
-                <path d="M62 58 L68 80" fill="none" stroke-width="4"/>
+                <circle cx="50" cy="35" r="18"/>
+                <path d="M38 54 L30 80"/>
+                <path d="M62 54 L70 80"/>
             </svg>
-        `;
+        </div>
+        <div class="medal-name">${m.name}</div>
+        <div class="medal-desc">${m.desc}</div>
+    `;
 
-        const name = document.createElement("div");
-        name.className = "medal-name";
-        name.textContent = m.name;
+    medalGrid.appendChild(div);
+});
 
-        const desc = document.createElement("div");
-        desc.className = "medal-desc";
-        desc.textContent = m.desc;
+/* === دکمه‌ها: Ripple + Transition === */
+const layer=document.getElementById("transitionLayer");
 
-        div.appendChild(icon);
-        div.appendChild(name);
-        div.appendChild(desc);
+function ripple(btn,e){
+    const x=e.clientX - btn.getBoundingClientRect().left;
+    const y=e.clientY - btn.getBoundingClientRect().top;
+    btn.style.setProperty("--x",x+"px");
+    btn.style.setProperty("--y",y+"px");
+    btn.classList.add("ripple");
+    setTimeout(()=>btn.classList.remove("ripple"),500);
+}
+function go(url){
+    layer.classList.add("active");
+    setTimeout(()=>window.location.href=url,400);
+}
 
-        medalsGrid.appendChild(div);
-    });
+document.getElementById("gotoTests").onclick = e=>{
+    ripple(e.target,e);
+    go("subjects.html");
+};
 
-    /* دکمه‌ها */
-    document.getElementById("backToResultBtn").addEventListener("click", () => {
-        window.location.href = "result.html";
-    });
-
-    document.getElementById("goToSubjectsBtn").addEventListener("click", () => {
-        window.location.href = "subjects.html";
-    });
+document.getElementById("gotoResult").onclick = e=>{
+    ripple(e.target,e);
+    go("result.html");
+};
 </script>
 
 </body>
