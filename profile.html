@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>پروفایل کاربر</title>
+
+    <style>
+        @font-face {
+            font-family: "YekanBakh";
+            src: url("YekanBakh.woff2") format("woff2");
+        }
+
+        * { box-sizing: border-box; }
+
+        :root {
+            --bg-body: radial-gradient(circle at top, #222, #050509 50%, #000 100%);
+            --text-main: #f6f6f6;
+            --card-bg: linear-gradient(145deg, #0d0d12, #050509);
+            --card-shadow: 0 18px 60px rgba(0,0,0,.9);
+            --box-bg: #111;
+            --soft-border: rgba(255,255,255,.07);
+        }
+
+        body[data-theme="light"] {
+            --bg-body: radial-gradient(circle at top, #ffffff, #f4f4f4 55%, #e0e0e0 100%);
+            --text-main: #222;
+            --card-bg: #ffffff;
+            --card-shadow: 0 14px 40px rgba(0,0,0,.12);
+            --box-bg: #f7f7f7;
+            --soft-border: rgba(0,0,0,.06);
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: "YekanBakh", sans-serif;
+            background: var(--bg-body);
+            color: var(--text-main);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            transition: background .3s ease, color .3s ease;
+        }
+
+        .card {
+            max-width: 1000px;
+            width: 100%;
+            background: var(--card-bg);
+            border-radius: 24px;
+            padding: 24px 20px 26px;
+            box-shadow: var(--card-shadow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: "";
+            position: absolute;
+            inset: -40%;
+            background:
+                radial-gradient(circle at 0 0, rgba(245,200,66,.08), transparent 55%),
+                radial-gradient(circle at 100% 100%, rgba(255,255,255,.06), transparent 55%);
+            opacity: .6;
+        }
+
+        .inside {
+            position: relative;
+            z-index: 2;
+        }
+
+        .top-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .theme-toggle {
+            border: 1px solid var(--soft-border);
+            background: transparent;
+            color: inherit;
+            border-radius: 999px;
+            padding: 6px 12px;
+            cursor: pointer;
+            font-size: 11px;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 22px;
+            color: #f5c842;
+        }
+
+        body[data-theme="light"] h1 {
+            color: #c59500;
+        }
+
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 16px;
+        }
+
+        .avatar {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            border: 2px solid #f5c842;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+            background: rgba(0,0,0,.3);
+        }
+
+        body[data-theme="light"] .avatar {
+            background: #fff7dd;
+        }
+
+        .profile-info-main {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .username {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .rank {
+            font-size: 14px;
+            color: #ffd86b;
+        }
+
+        body[data-theme="light"] .rank {
+            color: #c59500;
+        }
+
+        .stats-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+
+        .stat-box {
+            flex: 1;
+            min-width: 160px;
+            background: var(--box-bg);
+            border-radius: 16px;
+            border: 1px solid var(--soft-border);
+            padding: 12px 14px;
+            font-size: 13px;
+        }
+
+        .stat-label {
+            opacity: .85;
+            margin-bottom: 4px;
+        }
+
+        .stat-value {
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        .medals-section {
+            margin-top: 10px;
+        }
+
+        .medals-title {
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .medals-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .medals-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        .medal-item {
+            background: var(--box-bg);
+            border-radius: 16px;
+            border: 1px solid var(--soft-border);
+            padding: 10px 8px;
+            text-align: center;
+            font-size: 11px;
+        }
+
+        .medal-icon {
+            margin-bottom: 6px;
+        }
+
+        .medal-icon svg {
+            width: 32px;
+            height: 32px;
+        }
+
+        .medal-name {
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .medal-desc {
+            opacity: .8;
+            font-size: 10px;
+            line-height: 1.5;
+        }
+
+        .medal-locked {
+            opacity: .35;
+            filter: grayscale(0.8);
+        }
+
+        .buttons-bottom {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .btn {
+            padding: 9px 16px;
+            border-radius: 999px;
+            border: none;
+            cursor: pointer;
+            font-family: inherit;
+            margin: 6px 5px;
+            font-size: 13px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #f5c842, #f0a900);
+            color: #1d1203;
+            font-weight: 700;
+        }
+
+        .btn-secondary {
+            background: #222;
+            color: #ddd;
+        }
+
+        body[data-theme="light"] .btn-secondary {
+            background: #f0f0f0;
+            color: #222;
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <div class="inside">
+
+        <div class="top-row">
+            <h1>پروفایل کاربر</h1>
+            <button id="themeToggle" class="theme-toggle">☀️ حالت روشن</button>
+        </div>
+
+        <div class="profile-header">
+            <div class="avatar" id="avatarBox">👤</div>
+            <div class="profile-info-main">
+                <div class="username" id="usernameBox"></div>
+                <div class="rank" id="rankBox"></div>
+            </div>
+        </div>
+
+        <div class="stats-row">
+            <div class="stat-box">
+                <div class="stat-label">تعداد کل تست‌های حل‌شده</div>
+                <div class="stat-value" id="totalTestsBox">0</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-label">بهترین درصد تا الان</div>
+                <div class="stat-value" id="bestPercentBox">0%</div>
+            </div>
+        </div>
+
+        <div class="medals-section">
+            <div class="medals-title">مدال‌ها</div>
+            <div id="medalsGrid" class="medals-grid"></div>
+        </div>
+
+        <div class="buttons-bottom">
+            <button id="backToResultBtn" class="btn btn-secondary">بازگشت به نتیجه آخرین آزمون</button>
+            <button id="goToSubjectsBtn" class="btn btn-primary">شروع یا ادامه آزمون‌ها</button>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    /* تم */
+    const THEME_KEY = "konkur_theme";
+    const themeToggleBtn = document.getElementById("themeToggle");
+
+    function applyTheme(theme) {
+        document.body.setAttribute("data-theme", theme);
+        themeToggleBtn.textContent =
+            theme === "light" ? "🌙 حالت تیره" : "☀️ حالت روشن";
+    }
+
+    const savedTheme = localStorage.getItem(THEME_KEY) || "dark";
+    applyTheme(savedTheme);
+
+    themeToggleBtn.addEventListener("click", () => {
+        const current = document.body.getAttribute("data-theme") || "dark";
+        const next = current === "dark" ? "light" : "dark";
+        localStorage.setItem(THEME_KEY, next);
+        applyTheme(next);
+    });
+
+    /* داده‌های کاربر */
+    const username = localStorage.getItem("konkur_username");
+    if (!username) {
+        window.location.href = "index.html";
+    }
+
+    const totalKey = `total_tests_${username}`;
+    const bestKey = `best_percent_${username}`;
+
+    const totalTests = Number(localStorage.getItem(totalKey) || "0");
+    const bestPercent = Number(localStorage.getItem(bestKey) || "0");
+
+    document.getElementById("usernameBox").textContent = username;
+    document.getElementById("totalTestsBox").textContent = totalTests;
+    document.getElementById("bestPercentBox").textContent = bestPercent + "%";
+
+    /* اول حرف نام کاربری در آواتار */
+    const avatarBox = document.getElementById("avatarBox");
+    const firstChar = username.trim().charAt(0) || "👤";
+    if (firstChar && firstChar !== "👤") {
+        avatarBox.textContent = firstChar.toUpperCase();
+    }
+
+    /* لقب */
+    function getRank(t) {
+        if (t >= 1000) return "افسانه تست‌زنی 🔥";
+        if (t >= 600) return "بزرگ تست‌زن 💛";
+        if (t >= 400) return "تست‌زن قهار ⚡";
+        if (t >= 200) return "تست‌زن حرفه‌ای 🎯";
+        if (t >= 100) return "تست‌زن فعال 🚀";
+        if (t >= 50)  return "در مسیر تست‌زنی ✨";
+        if (t >= 20)  return "شروع قدرتمند 💪";
+        return "تازه‌وارد تست‌زن 🌱";
+    }
+    document.getElementById("rankBox").textContent = getRank(totalTests);
+
+    /* مدال‌ها */
+    const medals = [
+        {
+            id: "first_step",
+            name: "اولین قدم",
+            desc: "اولین باری که وارد دنیای تست‌زنی شدی.",
+            condition: stats => stats.totalTests >= 1
+        },
+        {
+            id: "ten_tests",
+            name: "ده‌تایی",
+            desc: "حداقل ۱۰ تست حل کرده‌ای.",
+            condition: stats => stats.totalTests >= 10
+        },
+        {
+            id: "fifty_tests",
+            name: "پرانرژی",
+            desc: "بیش از ۵۰ تست حل کرده‌ای.",
+            condition: stats => stats.totalTests >= 50
+        },
+        {
+            id: "hundred_tests",
+            name: "تست‌زن جدی",
+            desc: "بیش از ۱۰۰ تست حل کرده‌ای.",
+            condition: stats => stats.totalTests >= 100
+        },
+        {
+            id: "good_percent",
+            name: "درصد خوب",
+            desc: "حداقل یک بار به بالای ۷۰٪ رسیده‌ای.",
+            condition: stats => stats.bestPercent >= 70
+        },
+        {
+            id: "great_percent",
+            name: "درصد عالی",
+            desc: "حداقل یک بار به بالای ۸۵٪ رسیده‌ای.",
+            condition: stats => stats.bestPercent >= 85
+        },
+        {
+            id: "pro_percent",
+            name: "درصد رویایی",
+            desc: "حداقل یک بار به ۹۵٪ یا بیشتر رسیده‌ای.",
+            condition: stats => stats.bestPercent >= 95
+        },
+        {
+            id: "marathon",
+            name: "نفس‌بلند",
+            desc: "بیش از ۳۰۰ تست حل کرده‌ای.",
+            condition: stats => stats.totalTests >= 300
+        }
+    ];
+
+    const stats = { totalTests, bestPercent };
+    const medalsGrid = document.getElementById("medalsGrid");
+
+    medals.forEach(m => {
+        const earned = m.condition(stats);
+
+        const div = document.createElement("div");
+        div.className = "medal-item" + (earned ? "" : " medal-locked");
+
+        const icon = document.createElement("div");
+        icon.className = "medal-icon";
+        icon.innerHTML = `
+            <svg viewBox="0 0 100 100">
+                <circle cx="50" cy="40" r="18" fill="none" stroke-width="4"/>
+                <path d="M38 58 L32 80" fill="none" stroke-width="4"/>
+                <path d="M62 58 L68 80" fill="none" stroke-width="4"/>
+            </svg>
+        `;
+
+        const name = document.createElement("div");
+        name.className = "medal-name";
+        name.textContent = m.name;
+
+        const desc = document.createElement("div");
+        desc.className = "medal-desc";
+        desc.textContent = m.desc;
+
+        div.appendChild(icon);
+        div.appendChild(name);
+        div.appendChild(desc);
+
+        medalsGrid.appendChild(div);
+    });
+
+    /* دکمه‌ها */
+    document.getElementById("backToResultBtn").addEventListener("click", () => {
+        window.location.href = "result.html";
+    });
+
+    document.getElementById("goToSubjectsBtn").addEventListener("click", () => {
+        window.location.href = "subjects.html";
+    });
+</script>
+
+</body>
+</html>
