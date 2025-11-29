@@ -3,6 +3,7 @@
     src: url("YekanBakh.woff2") format("woff2");
 }
 
+/* هدر اصلی */
 .main-header {
     width: 100%;
     position: fixed;
@@ -19,7 +20,7 @@
     transition: padding 0.35s ease, background 0.35s ease;
 }
 
-/* حالت کوچک‌شده */
+/* حالت کوچک‌شده با اسکرول */
 .main-header.shrink {
     padding: 8px 30px;
     background: rgba(0,0,0,0.45);
@@ -33,7 +34,7 @@
     align-items: center;
 }
 
-/* لوگوی وسط */
+/* لوگوی فرهنگیان وسط هدر */
 .header-logo {
     width: 95px;
     transition: width .35s ease;
@@ -44,7 +45,7 @@
     width: 65px;
 }
 
-/* آیکون‌ها */
+/* آیکن پروفایل و تم */
 .header-icon {
     cursor: pointer;
     width: 38px;
@@ -70,22 +71,32 @@
     stroke-width: 5;
 }
 
-/* عنوان صفحه */
+/* عنوان صفحه زیر هدر */
 .header-title {
     margin-top: 6px;
-    font-family: YekanBakh;
+    font-family: "YekanBakh";
     font-size: 17px;
     color: #f5c842;
     opacity: .9;
     transition: opacity .3s;
 }
 
-/* برای اسکرول */
-body {
-    padding-top: 110px; /* جا برای هدر */
+/* موبایل */
+@media (max-width: 768px) {
+    .main-header {
+        padding: 14px 14px;
+    }
+    .main-header.shrink {
+        padding: 8px 14px;
+    }
+    .header-logo {
+        width: 80px;
+    }
+    .main-header.shrink .header-logo {
+        width: 60px;
+    }
+    .header-icon {
+        width: 34px;
+        height: 34px;
+    }
 }
-
-.main-header.shrink ~ body {
-    padding-top: 80px;
-}
-
