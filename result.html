@@ -12,27 +12,47 @@
 
         * { box-sizing: border-box; }
 
+        :root {
+            --bg-body: radial-gradient(circle at top, #222, #050509 50%, #000 100%);
+            --text-main: #f6f6f6;
+            --card-bg: linear-gradient(145deg, #0d0d12, #050509);
+            --card-shadow: 0 18px 60px rgba(0,0,0,.9);
+            --box-bg: #111;
+            --soft-border: rgba(255,255,255,.06);
+        }
+
+        body[data-theme="light"] {
+            --bg-body: radial-gradient(circle at top, #ffffff, #f4f4f4 55%, #e0e0e0 100%);
+            --text-main: #222;
+            --card-bg: #ffffff;
+            --card-shadow: 0 14px 40px rgba(0,0,0,.12);
+            --box-bg: #f7f7f7;
+            --soft-border: rgba(0,0,0,.06);
+        }
+
         body {
             margin: 0;
             min-height: 100vh;
             font-family: "YekanBakh", sans-serif;
-            background: radial-gradient(circle at top, #222, #050509 50%, #000 100%);
-            color: #f6f6f6;
+            background: var(--bg-body);
+            color: var(--text-main);
             display: flex;
             justify-content: center;
             align-items: center;
             padding: 20px;
+            transition: background .3s ease, color .3s ease;
         }
 
         .card {
             max-width: 900px;
             width: 100%;
-            background: linear-gradient(145deg, #0d0d12, #050509);
+            background: var(--card-bg);
             border-radius: 24px;
-            padding: 30px 24px;
-            box-shadow: 0 18px 60px rgba(0,0,0,.9);
+            padding: 24px 20px;
+            box-shadow: var(--card-shadow);
             position: relative;
             overflow: hidden;
+            transition: background .3s ease, box-shadow .3s ease;
         }
 
         .card::before {
@@ -50,81 +70,111 @@
             z-index: 2;
         }
 
+        .top-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
         h1 {
-            text-align: center;
-            margin: 0 0 18px;
-            font-size: 22px;
+            text-align: left;
+            margin: 0;
+            font-size: 20px;
             color: #f5c842;
+        }
+
+        body[data-theme="light"] h1 {
+            color: #c59500;
+        }
+
+        .theme-toggle {
+            border: 1px solid var(--soft-border);
+            background: transparent;
+            color: inherit;
+            border-radius: 999px;
+            padding: 6px 12px;
+            font-family: inherit;
+            font-size: 11px;
+            cursor: pointer;
         }
 
         .summary {
-            background: #111;
-            padding: 20px;
+            background: var(--box-bg);
+            padding: 16px;
             border-radius: 16px;
-            border: 1px solid rgba(255,255,255,.06);
-            margin-bottom: 20px;
+            border: 1px solid var(--soft-border);
+            margin-bottom: 18px;
         }
 
         .summary-item {
-            font-size: 15px;
-            margin: 8px 0;
+            font-size: 14px;
+            margin: 6px 0;
         }
 
         .percent {
-            font-size: 48px;
+            font-size: 42px;
             font-weight: 700;
             text-align: center;
-            margin: 20px 0;
+            margin: 14px 0 16px;
             color: #f5c842;
-            opacity: 0;          /* برای انیمیشن */
-            transform: scale(0.8);
+            opacity: 0;
+            transform: scale(.8);
         }
 
-        .psychology {
-            margin-top: 20px;
-            padding: 18px;
-            background: #1a1a1a;
-            border-radius: 14px;
-            border: 1px solid rgba(255,255,255,.08);
-            font-size: 15px;
-            line-height: 1.8;
-        }
-
-        .title-small {
-            font-size: 15px;
-            font-weight: 600;
-            margin: 0 0 8px;
+        body[data-theme="light"] .percent {
+            color: #c59500;
         }
 
         .badge-box {
-            margin-top: 20px;
-            background: #151515;
-            padding: 14px 20px;
+            margin-top: 6px;
+            background: var(--box-bg);
+            padding: 12px 16px;
             border-radius: 14px;
-            border: 1px solid rgba(255,255,255,.08);
+            border: 1px solid var(--soft-border);
             display: flex;
             align-items: center;
             gap: 10px;
         }
 
         .badge-icon {
-            font-size: 28px;
+            font-size: 26px;
         }
 
         .badge-title {
-            font-size: 17px;
+            font-size: 16px;
             font-weight: 600;
             color: #ffd86b;
         }
 
+        body[data-theme="light"] .badge-title {
+            color: #c28a00;
+        }
+
+        .psychology {
+            margin-top: 16px;
+            padding: 14px;
+            background: var(--box-bg);
+            border-radius: 14px;
+            border: 1px solid var(--soft-border);
+            font-size: 14px;
+            line-height: 1.8;
+        }
+
+        .buttons-center {
+            text-align: center;
+            margin-top: 20px;
+        }
+
         .btn {
-            padding: 10px 18px;
+            padding: 9px 16px;
             border-radius: 999px;
             border: none;
             cursor: pointer;
             font-family: inherit;
-            margin: 10px 5px;
-            font-size: 14px;
+            margin: 8px 5px;
+            font-size: 13px;
         }
 
         .btn-primary {
@@ -138,25 +188,40 @@
             color: #ddd;
         }
 
+        body[data-theme="light"] .btn-secondary {
+            background: #f0f0f0;
+            color: #222;
+        }
+
         .btn-tertiary {
             background: transparent;
             color: #bbb;
             font-size: 12px;
         }
 
-        .buttons-center {
-            text-align: center;
-            margin-top: 20px;
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            .card {
+                padding: 18px 14px;
+                border-radius: 18px;
+            }
+            h1 {
+                font-size: 18px;
+            }
         }
     </style>
 </head>
-
 <body>
 
 <div class="card">
     <div class="inside">
 
-        <h1>نتیجه آزمون</h1>
+        <div class="top-row">
+            <h1>نتیجه آزمون</h1>
+            <button id="themeToggle" class="theme-toggle">☀️ حالت روشن</button>
+        </div>
 
         <div class="summary">
             <div class="summary-item">تعداد درست: <span id="correctBox"></span></div>
@@ -166,16 +231,13 @@
 
         <div id="percentBox" class="percent">0%</div>
 
-        <!-- لقب -->
         <div class="badge-box">
             <div class="badge-icon">🏅</div>
             <div class="badge-title" id="userRank">...</div>
         </div>
 
-        <!-- تحلیل روانشناسی -->
         <div class="psychology" id="psychologyBox"></div>
 
-        <!-- دکمه‌ها -->
         <div class="buttons-center">
             <button id="retryBtn" class="btn btn-primary">دوباره آزمون همین درس</button>
             <button id="wrongBtn" class="btn btn-secondary">فقط سوالات غلط</button>
@@ -186,8 +248,28 @@
 </div>
 
 <script>
-    const username = localStorage.getItem("konkur_username");
+    /* تم تاریک / روشن */
+    const THEME_KEY = "konkur_theme";
+    const themeToggleBtn = document.getElementById("themeToggle");
 
+    function applyTheme(theme) {
+        document.body.setAttribute("data-theme", theme);
+        themeToggleBtn.textContent =
+            theme === "light" ? "🌙 حالت تیره" : "☀️ حالت روشن";
+    }
+
+    const savedTheme = localStorage.getItem(THEME_KEY) || "dark";
+    applyTheme(savedTheme);
+
+    themeToggleBtn.addEventListener("click", () => {
+        const current = document.body.getAttribute("data-theme") || "dark";
+        const next = current === "dark" ? "light" : "dark";
+        localStorage.setItem(THEME_KEY, next);
+        applyTheme(next);
+    });
+
+    /* داده‌های آزمون */
+    const username = localStorage.getItem("konkur_username");
     const correct = Number(localStorage.getItem("quiz_correct"));
     const wrong = Number(localStorage.getItem("quiz_wrong"));
     const time = Number(localStorage.getItem("quiz_time"));
@@ -195,7 +277,6 @@
     document.getElementById("correctBox").textContent = correct;
     document.getElementById("wrongBox").textContent = wrong;
 
-    // تبدیل زمان
     let m = String(Math.floor(time / 60)).padStart(2,"0");
     let s = String(time % 60).padStart(2,"0");
     document.getElementById("timeBox").textContent = `${m}:${s}`;
@@ -203,9 +284,8 @@
     const percent = Math.round((correct / (correct + wrong)) * 100);
     const percentBox = document.getElementById("percentBox");
 
-    // انیمیشن درصد
     let p = 0;
-    let anim = setInterval(() => {
+    const anim = setInterval(() => {
         p++;
         percentBox.textContent = p + "%";
         percentBox.style.opacity = "1";
@@ -213,9 +293,7 @@
         if (p >= percent) clearInterval(anim);
     }, 15);
 
-    /* ------------------------------------
-       لقب‌ها — بر اساس تعداد کل تست‌ها
-    ------------------------------------ */
+    /* لقب‌ها */
     const totalKey = `total_tests_${username}`;
     const totalTests = Number(localStorage.getItem(totalKey) || "0");
 
@@ -233,43 +311,38 @@
     const rankName = getRank(totalTests);
     document.getElementById("userRank").textContent = rankName;
 
-    /* ------------------------------------
-       تحلیل روانشناسی مهربان + نیمه رسمی
-    ------------------------------------ */
+    /* تحلیل روانشناسی مهربان + نیمه‌ رسمی */
     const psychologyBox = document.getElementById("psychologyBox");
 
     function psychText(percent) {
+        if (!Number.isFinite(percent)) {
+            return "آزمون به درستی ثبت نشده است، لطفاً یک آزمون جدید اجرا کن.";
+        }
         if (percent >= 85) {
-            return "عملکردت فوق‌العاده‌س! 👏 تسلط خوبی روی این درس داری. ادامه همین روند باعث می‌شه نتیجه‌های خیلی بهتری بگیری.";
+            return "عملکردت بسیار عالی بوده است 👏 تسلط خوبی روی این درس داری. ادامه‌ی همین روند می‌تواند تو را به نتایج بسیار خوبی برساند.";
         }
         if (percent >= 60) {
-            return "خیلی خوب بود! 🙂 پایه‌ت قویه و فقط کمی تمرین بیشتر می‌تونه تو رو به سطح بالاتر برسونه. همین مسیر رو برو.";
+            return "عملکردت خوب و امیدوارکننده است 🙂 پایه‌ی مناسبی داری و با کمی تمرین و مرور بیشتر، می‌توانی سطح خودت را بالاتر ببری.";
         }
         if (percent >= 40) {
-            return "عملکردت متوسطه ولی نشونه‌های خوبی دیده می‌شه. با تکرار تست‌ها و مرور نکات، خیلی سریع رشد می‌کنی. ناامید نشو 🌱";
+            return "عملکردت در حد متوسط است، اما نشانه‌های پیشرفت در کارت دیده می‌شود. با تکرار تست‌ها و تمرین منظم، به‌مرور نتیجه‌هایت بهتر می‌شود 🌱";
         }
-        return "نتیجه‌ت قابل بهتر شدنه، ولی جای نگرانی نیست. هر آزمون یک قدمه به سمت پیشرفت. با تمرین‌های منظم خیلی سریع بهتر می‌شی 🙌";
+        return "این بار نتیجه‌ات کمتر از چیزی است که توان واقعی‌ات نشان می‌دهد، اما جای نگرانی نیست. هر آزمون یک قدم به سمت پیشرفت است. با تمرین بیشتر و مرور آرام، به‌تدریج پیشرفت را حس می‌کنی 🙌";
     }
 
     psychologyBox.textContent = psychText(percent);
 
-    /* ------------------------------------
-         دکمه‌ها
-    ------------------------------------ */
-
-    // دوباره آزمون
+    /* دکمه‌ها */
     document.getElementById("retryBtn").addEventListener("click", () => {
         localStorage.removeItem("review_wrong_mode");
         window.location.href = "questions-count.html";
     });
 
-    // فقط غلط‌ها
     document.getElementById("wrongBtn").addEventListener("click", () => {
         localStorage.setItem("review_wrong_mode", "yes");
         window.location.href = "quiz.html";
     });
 
-    // بازگشت به درس‌ها
     document.getElementById("backBtn").addEventListener("click", () => {
         window.location.href = "subjects.html";
     });
