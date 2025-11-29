@@ -2,7 +2,7 @@
 <html lang="fa" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>تعداد سوالات</title>
+    <title>تعداد سؤالات</title>
 
     <style>
         @font-face {
@@ -13,158 +13,224 @@
         * { box-sizing: border-box; }
 
         :root {
-            --bg-body: radial-gradient(circle at top, #222, #050509 50%, #000 100%);
+            --bg-body: radial-gradient(circle at top, #222, #050509 50%, #000);
             --text-main: #f6f6f6;
             --card-bg: linear-gradient(145deg, #0d0d12, #050509);
-            --card-shadow: 0 18px 60px rgba(0,0,0,.9);
-
-            --input-bg: #111;
-            --input-border: rgba(255,255,255,.15);
-
-            --btn-bg: linear-gradient(135deg, #f5c842, #f0a900);
-            --btn-text: #1d1203;
+            --card-shadow: 0 35px 90px rgba(0,0,0,.9);
+            --box-bg: #111;
+            --soft-border: rgba(255,255,255,.12);
+            --gold: #f5c842;
+            --highlight: rgba(245,200,66,.15);
         }
 
         body[data-theme="light"] {
-            --bg-body: radial-gradient(circle at top, #ffffff, #f4f4f4 55%, #e0e0e0 100%);
+            --bg-body: radial-gradient(circle at top, #ffffff, #f4f4f4 55%, #e0e0e0);
             --text-main: #222;
             --card-bg: #ffffff;
-            --card-shadow: 0 14px 40px rgba(0,0,0,.12);
-
-            --input-bg: #f0f0f0;
-            --input-border: rgba(0,0,0,.10);
-
-            --btn-bg: linear-gradient(135deg, #ffe178, #e5b200);
-            --btn-text: #222;
+            --card-shadow: 0 20px 50px rgba(0,0,0,.15);
+            --box-bg: #f0f0f0;
+            --soft-border: rgba(0,0,0,.12);
+            --gold: #c59500;
+            --highlight: rgba(200,160,30,.18);
         }
 
         body {
             margin: 0;
             min-height: 100vh;
-            font-family: "YekanBakh", sans-serif;
+            font-family: "YekanBakh";
             background: var(--bg-body);
             color: var(--text-main);
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 20px;
+            overflow-x: hidden;
             transition: background .3s ease, color .3s ease;
         }
 
+        /* کارت اصلی */
         .card {
             width: 100%;
-            max-width: 500px;
+            max-width: 550px;
             background: var(--card-bg);
-            border-radius: 24px;
-            padding: 26px 22px;
+            border-radius: 28px;
+            padding: 30px 26px;
             box-shadow: var(--card-shadow);
             position: relative;
             overflow: hidden;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeCard .9s ease forwards;
         }
 
+        @keyframes fadeCard {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* هاله نور */
         .card::before {
             content: "";
             position: absolute;
-            inset: -40%;
-            background:
-                radial-gradient(circle at 0 0, rgba(245,200,66,.08), transparent 55%),
-                radial-gradient(circle at 100% 100%, rgba(255,255,255,.06), transparent 55%);
-            opacity: .5;
+            width: 420px;
+            height: 420px;
+            top: -200px;
+            left: -200px;
+            background: radial-gradient(circle, rgba(245,200,66,.17), transparent 70%);
+            animation: glowMove 7s infinite alternate ease-in-out;
         }
 
-        .inside {
-            position: relative;
-            z-index: 2;
+        @keyframes glowMove {
+            0%   { transform: translate(0,0) scale(1); }
+            100% { transform: translate(40px,40px) scale(1.25); }
         }
 
+        .inside { position: relative; z-index: 2; }
+
+        /* عنوان */
         .top-row {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 18px;
-        }
-
-        .theme-toggle {
-            border: 1px solid var(--input-border);
-            background: transparent;
-            color: inherit;
-            border-radius: 999px;
-            padding: 6px 12px;
-            cursor: pointer;
-            font-size: 11px;
+            margin-bottom: 24px;
         }
 
         h1 {
+            font-size: 24px;
             margin: 0;
-            font-size: 21px;
-            color: #f5c842;
+            color: var(--gold);
         }
 
-        body[data-theme="light"] h1 {
-            color: #c59500;
+        .theme-toggle {
+            padding: 6px 14px;
+            border-radius: 999px;
+            background: transparent;
+            border: 1px solid var(--soft-border);
+            font-size: 12px;
+            cursor: pointer;
+            transition: .2s;
         }
+        .theme-toggle:hover { background: var(--highlight); }
 
+        /* BOX */
         .box {
-            background: var(--input-bg);
-            border-radius: 16px;
-            padding: 20px;
-            border: 1px solid var(--input-border);
+            background: var(--box-bg);
+            padding: 22px;
+            border-radius: 20px;
+            border: 1px solid var(--soft-border);
+            animation: fadeUp .6s ease forwards .15s;
+            opacity: 0;
+            transform: translateY(18px);
+        }
+
+        @keyframes fadeUp {
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .label {
-            font-size: 14px;
-            margin-bottom: 12px;
+            margin-bottom: 14px;
+            font-size: 15px;
             opacity: .9;
         }
 
         /* اسلایدر */
         input[type=range] {
             width: 100%;
-            margin-top: 10px;
+            margin: 14px 0 10px;
             -webkit-appearance: none;
             background: transparent;
         }
 
         input[type=range]::-webkit-slider-runnable-track {
             height: 8px;
-            background: #888;
-            border-radius: 5px;
+            background: #777;
+            border-radius: 4px;
+            transition: .3s;
+        }
+
+        body[data-theme="light"] input[type=range]::-webkit-slider-runnable-track {
+            background: #bbb;
         }
 
         input[type=range]::-webkit-slider-thumb {
             -webkit-appearance: none;
-            width: 22px;
-            height: 22px;
-            background: #f5c842;
+            width: 24px;
+            height: 24px;
+            margin-top: -8px;
+            background: var(--gold);
             border-radius: 50%;
+            border: 2px solid #222;
             cursor: pointer;
-            margin-top: -7px;
+            transition: .2s;
         }
 
-        body[data-theme="light"] input[type=range]::-webkit-slider-thumb {
-            background: #c59500;
+        input[type=range]::-webkit-slider-thumb:hover {
+            transform: scale(1.12);
+            background: var(--gold);
         }
 
         .value {
-            margin-top: 14px;
+            margin-top: 12px;
             text-align: center;
-            font-weight: bold;
-            font-size: 16px;
-            color: #f5c842;
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--gold);
         }
 
+        /* دکمه شروع */
         .btn {
             width: 100%;
-            margin-top: 16px;
-            padding: 12px 14px;
-            border-radius: 16px;
-            border: none;
-            background: var(--btn-bg);
-            color: var(--btn-text);
-            cursor: pointer;
-            font-family: inherit;
-            font-size: 15px;
+            padding: 14px;
+            border-radius: 18px;
+            margin-top: 20px;
+            font-size: 16px;
             font-weight: 700;
-            box-shadow: 0 8px 22px rgba(0,0,0,.4);
+            border: none;
+            cursor: pointer;
+            color: #1d1203;
+            background: linear-gradient(135deg, var(--gold), #b98c00);
+            box-shadow: 0 15px 35px rgba(0,0,0,.5);
+            position: relative;
+            overflow: hidden;
+            transition: transform .2s;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px) scale(1.02);
+        }
+
+        /* Ripple */
+        .btn::after {
+            content: "";
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: rgba(255,255,255,.5);
+            border-radius: 50%;
+            transform: scale(0);
+            opacity: 0;
+            pointer-events: none;
+            transition: transform .5s, opacity .8s;
+            left: var(--x);
+            top: var(--y);
+        }
+
+        .btn.ripple::after {
+            transform: scale(10);
+            opacity: 0;
+        }
+
+        /* صفحه ترنزیشن */
+        .page-transition {
+            position: fixed;
+            inset: 0;
+            background: black;
+            opacity: 0;
+            pointer-events: none;
+            transition: .4s ease;
+            z-index: 9999;
+        }
+        .page-transition.active {
+            opacity: 1;
+            pointer-events: all;
         }
 
     </style>
@@ -172,11 +238,13 @@
 
 <body>
 
+<div class="page-transition" id="transitionLayer"></div>
+
 <div class="card">
     <div class="inside">
 
         <div class="top-row">
-            <h1>تعداد سوال</h1>
+            <h1>تعداد سؤالات</h1>
             <button id="themeToggle" class="theme-toggle">☀️ حالت روشن</button>
         </div>
 
@@ -195,36 +263,54 @@
 <script>
     /* تم */
     const THEME_KEY = "konkur_theme";
-    const themeToggleBtn = document.getElementById("themeToggle");
+    const themeToggle = document.getElementById("themeToggle");
 
-    function applyTheme(theme) {
-        document.body.setAttribute("data-theme", theme);
-        themeToggleBtn.textContent =
-            theme === "light" ? "🌙 حالت تیره" : "☀️ حالت روشن";
+    function setTheme(t) {
+        document.body.setAttribute("data-theme", t);
+        themeToggle.textContent =
+            t === "light" ? "🌙 حالت تیره" : "☀️ حالت روشن";
     }
 
-    const savedTheme = localStorage.getItem(THEME_KEY) || "dark";
-    applyTheme(savedTheme);
+    setTheme(localStorage.getItem(THEME_KEY) || "dark");
 
-    themeToggleBtn.addEventListener("click", () => {
-        const current = document.body.getAttribute("data-theme") || "dark";
-        const next = current === "dark" ? "light" : "dark";
+    themeToggle.onclick = () => {
+        const now = document.body.getAttribute("data-theme");
+        const next = now === "dark" ? "light" : "dark";
         localStorage.setItem(THEME_KEY, next);
-        applyTheme(next);
-    });
+        setTheme(next);
+    };
 
     /* اسلایدر */
     const range = document.getElementById("rangeInput");
     const valueBox = document.getElementById("valueBox");
 
-    range.addEventListener("input", () => {
+    range.oninput = () => {
         valueBox.textContent = range.value + " تست";
-    });
+    };
 
-    document.getElementById("goBtn").addEventListener("click", () => {
+    /* Ripple و رفتن به آزمون */
+    const goBtn = document.getElementById("goBtn");
+    const layer = document.getElementById("transitionLayer");
+
+    goBtn.onclick = e => {
+        /* Ripple */
+        const x = e.clientX - goBtn.getBoundingClientRect().left;
+        const y = e.clientY - goBtn.getBoundingClientRect().top;
+        goBtn.style.setProperty("--x", x + "px");
+        goBtn.style.setProperty("--y", y + "px");
+        goBtn.classList.add("ripple");
+
+        /* ذخیره تعداد سوال */
         localStorage.setItem("konkur_questionCount", range.value);
-        window.location.href = "quiz.html";
-    });
+
+        /* رفتن به صفحه */
+        setTimeout(() => {
+            layer.classList.add("active");
+            setTimeout(() => { window.location.href = "quiz.html"; }, 350);
+        }, 150);
+
+        setTimeout(() => goBtn.classList.remove("ripple"), 600);
+    };
 </script>
 
 </body>
