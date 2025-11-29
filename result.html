@@ -241,6 +241,7 @@
         <div class="buttons-center">
             <button id="retryBtn" class="btn btn-primary">دوباره آزمون همین درس</button>
             <button id="wrongBtn" class="btn btn-secondary">فقط سوالات غلط</button>
+            <button id="profileBtn" class="btn btn-secondary">مشاهده پروفایل</button>
             <button id="backBtn" class="btn btn-tertiary">بازگشت به درس‌ها</button>
         </div>
 
@@ -281,17 +282,30 @@
     let s = String(time % 60).padStart(2,"0");
     document.getElementById("timeBox").textContent = `${m}:${s}`;
 
-    const percent = Math.round((correct / (correct + wrong)) * 100);
-    const percentBox = document.getElementById("percentBox");
+    const totalQuestions = correct + wrong;
+    const percent = totalQuestions > 0
+        ? Math.round((correct / totalQuestions) * 100)
+        : 0;
 
+    const percentBox = document.getElementById("percentBox");
     let p = 0;
     const anim = setInterval(() => {
         p++;
+        if (p > percent) p = percent;
         percentBox.textContent = p + "%";
         percentBox.style.opacity = "1";
         percentBox.style.transform = "scale(1)";
         if (p >= percent) clearInterval(anim);
     }, 15);
+
+    /* ذخیره رکورد بهترین درصد */
+    if (username) {
+        const bestKey = `best_percent_${username}`;
+        const prevBest = Number(localStorage.getItem(bestKey) || "0");
+        if (percent > prevBest) {
+            localStorage.setItem(bestKey, String(percent));
+        }
+    }
 
     /* لقب‌ها */
     const totalKey = `total_tests_${username}`;
@@ -341,6 +355,10 @@
     document.getElementById("wrongBtn").addEventListener("click", () => {
         localStorage.setItem("review_wrong_mode", "yes");
         window.location.href = "quiz.html";
+    });
+
+    document.getElementById("profileBtn").addEventListener("click", () => {
+        window.location.href = "profile.html";
     });
 
     document.getElementById("backBtn").addEventListener("click", () => {
