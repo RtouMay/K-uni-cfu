@@ -1,590 +1,382 @@
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <title>آزمون</title>
+<meta charset="UTF-8">
+<title>آزمون</title>
 
-    <style>
-        @font-face {
-            font-family: "YekanBakh";
-            src: url("YekanBakh.woff2") format("woff2");
-        }
+<style>
+@font-face {
+    font-family: "YekanBakh";
+    src: url("YekanBakh.woff2") format("woff2");
+}
 
-        * { box-sizing: border-box; }
+* { box-sizing: border-box; }
 
-        :root {
-            /* پیش‌فرض: تاریک */
-            --bg-body: radial-gradient(circle at top, #222, #050509 50%, #000 100%);
-            --text-main: #f5f5f5;
-            --card-bg: linear-gradient(145deg, #0d0d12, #050509);
-            --card-shadow: 0 18px 60px rgba(0, 0, 0, .9);
-            --question-bg: #111;
-            --option-bg: #1a1a1a;
-            --border-soft: rgba(255, 255, 255, .08);
-            --timer-border: rgba(245, 200, 66, 0.4);
-        }
+:root {
+    --bg-body: radial-gradient(circle at top, #1d1d27, #050509 60%, #000 100%);
+    --text-main: #f6f6f6;
+    --card-bg: #0f0f15;
+    --card-shadow: 0 30px 90px rgba(0,0,0,.9);
+    --item-bg: #111;
+    --item-hover: rgba(245,200,66,.15);
+    --border: rgba(255,255,255,.1);
+    --gold: #f5c842;
+    --right: #38d468;
+    --wrong: #ff4a4a;
+}
 
-        body[data-theme="light"] {
-            --bg-body: radial-gradient(circle at top, #ffffff, #f0f0f0 55%, #e0e0e0 100%);
-            --text-main: #222;
-            --card-bg: #ffffff;
-            --card-shadow: 0 14px 40px rgba(0, 0, 0, 0.15);
-            --question-bg: #f7f7f7;
-            --option-bg: #fbfbfb;
-            --border-soft: rgba(0, 0, 0, 0.08);
-            --timer-border: rgba(245, 200, 66, 0.6);
-        }
+body[data-theme="light"] {
+    --bg-body: radial-gradient(circle at top, #ffffff, #e9e9e9 60%, #dcdcdc);
+    --text-main: #222;
+    --card-bg: #ffffff;
+    --card-shadow: 0 25px 60px rgba(0,0,0,.14);
+    --item-bg: #f5f5f5;
+    --item-hover: rgba(240,200,90,.18);
+    --border: rgba(0,0,0,.1);
+    --gold: #c59500;
+    --right: #1eb650;
+    --wrong: #e74343;
+}
 
-        body {
-            margin: 0;
-            min-height: 100vh;
-            font-family: "YekanBakh", sans-serif;
-            background: var(--bg-body);
-            color: var(--text-main);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            transition: background .3s ease, color .3s ease;
-        }
+body {
+    margin: 0;
+    background: var(--bg-body);
+    color: var(--text-main);
+    font-family: "YekanBakh";
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    overflow-x: hidden;
+    transition: background .3s ease, color .3s ease;
+}
 
-        .card {
-            width: 100%;
-            max-width: 900px;
-            background: var(--card-bg);
-            border-radius: 24px;
-            padding: 18px 18px 22px;
-            box-shadow: var(--card-shadow);
-            position: relative;
-            overflow: hidden;
-            transition: background .3s ease, box-shadow .3s ease;
-        }
+/* کارت اصلی */
+.card {
+    width: 100%;
+    max-width: 850px;
+    background: var(--card-bg);
+    border-radius: 28px;
+    padding: 30px;
+    box-shadow: var(--card-shadow);
+    text-align: center;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: cardIn .7s ease forwards;
+    position: relative;
+    overflow: hidden;
+}
+@keyframes cardIn {
+    to { opacity:1; transform: translateY(0); }
+}
 
-        .card::before {
-            content: "";
-            position: absolute;
-            inset: -40%;
-            background:
-                radial-gradient(circle at 0 0, rgba(245, 200, 66, .08), transparent 55%),
-                radial-gradient(circle at 100% 100%, rgba(255, 255, 255, .06), transparent 55%);
-            opacity: .6;
-            pointer-events: none;
-        }
+/* نور پشت کارت */
+.card::before {
+    content: "";
+    position: absolute;
+    width: 500px;
+    height: 500px;
+    top: -260px;
+    left: -260px;
+    background: radial-gradient(circle, rgba(245,200,66,.15), transparent 70%);
+    animation: glowMove 8s infinite alternate ease-in-out;
+    z-index: 0;
+}
+@keyframes glowMove {
+    0% { transform: translate(0,0) scale(1); }
+    100% { transform: translate(50px,50px) scale(1.25); }
+}
 
-        .inside {
-            position: relative;
-            z-index: 2;
-        }
+.inside {
+    position: relative;
+    z-index: 5;
+}
 
-        .top-row {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 10px;
-            margin-bottom: 6px;
-        }
+/* شمارنده سؤال */
+.counter {
+    font-size: 15px;
+    margin-bottom: 16px;
+    opacity: .9;
+}
 
-        h1 {
-            margin: 0;
-            font-size: 20px;
-        }
+/* تایمر */
+.timer-bar {
+    width: 100%;
+    height: 8px;
+    border-radius: 999px;
+    background: rgba(255,255,255,.15);
+    margin-bottom: 22px;
+    overflow: hidden;
+}
+.timer-fill {
+    height: 100%;
+    width: 100%;
+    background: var(--gold);
+    border-radius: 999px;
+    transition: width .5s linear;
+}
 
-        .theme-toggle {
-            border: 1px solid var(--border-soft);
-            background: transparent;
-            color: inherit;
-            border-radius: 999px;
-            padding: 6px 12px;
-            font-family: inherit;
-            font-size: 11px;
-            cursor: pointer;
-        }
+/* متن سؤال */
+.question-box {
+    font-size: 20px;
+    line-height: 1.9;
+    margin-bottom: 28px;
+    min-height: 90px;
+    opacity: 0;
+    transform: translateY(12px);
+    animation: fadeIn .5s forwards;
+}
+@keyframes fadeIn {
+    to { opacity:1; transform: translateY(0); }
+}
 
-        .timer-row {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 10px;
-        }
+/* گزینه‌ها */
+.options {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-top: 20px;
+}
 
-        .timer {
-            font-size: 16px;
-            text-align: center;
-            margin: 0 auto 6px;
-            color: #f5c842;
-            font-weight: 600;
-            padding: 6px 12px;
-            border-radius: 999px;
-            border: 1px solid var(--timer-border);
-            display: inline-block;
-            min-width: 90px;
-        }
+.option {
+    background: var(--item-bg);
+    border: 1px solid var(--border);
+    padding: 16px;
+    border-radius: 18px;
+    font-size: 16px;
+    text-align: right;
+    cursor: pointer;
+    transition: .2s ease;
+    opacity: 0;
+    transform: translateY(14px);
+}
+.option:nth-child(1) { animation: fadeOption .5s ease forwards .1s; }
+.option:nth-child(2) { animation: fadeOption .5s ease forwards .2s; }
+.option:nth-child(3) { animation: fadeOption .5s ease forwards .3s; }
+.option:nth-child(4) { animation: fadeOption .5s ease forwards .4s; }
 
-        .question-box {
-            background: var(--question-bg);
-            border-radius: 18px;
-            padding: 16px 14px 18px;
-            margin-top: 4px;
-            border: 1px solid var(--border-soft);
-            animation: fadeInUp 0.4s ease;
-        }
+@keyframes fadeOption {
+    to { opacity:1; transform: translateY(0); }
+}
 
-        .question-text {
-            font-size: 17px;
-            line-height: 1.8;
-            margin-bottom: 16px;
-            text-align: right;
-            min-height: 52px;
-        }
+.option:hover {
+    background: var(--item-hover);
+    transform: translateY(-3px);
+    box-shadow: 0 12px 35px rgba(0,0,0,.35);
+}
 
-        .options {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
+/* صحیح */
+.correct {
+    background: var(--right) !important;
+    color: #fff;
+    animation: pulseRight .5s ease;
+}
+@keyframes pulseRight {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.04); }
+    100% { transform: scale(1); }
+}
 
-        .option {
-            padding: 10px 12px;
-            background: var(--option-bg);
-            border-radius: 14px;
-            cursor: pointer;
-            border: 1px solid var(--border-soft);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            transition:
-                transform .18s ease,
-                box-shadow .18s ease,
-                border .18s ease,
-                background .18s ease,
-                color .18s ease;
-            position: relative;
-            overflow: hidden;
-        }
+/* غلط */
+.wrong {
+    background: var(--wrong) !important;
+    color: #fff;
+    animation: shake .45s ease;
+}
+@keyframes shake {
+    0%,100% { transform: translateX(0); }
+    20% { transform: translateX(-6px); }
+    40% { transform: translateX(6px); }
+    60% { transform: translateX(-5px); }
+    80% { transform: translateX(5px); }
+}
 
-        .option:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 12px 20px rgba(0, 0, 0, 0.7);
-            border-color: rgba(245, 200, 66, .8);
-            color: #ffe88c;
-        }
+/* صفحه ترنزیشن */
+.page-transition {
+    position: fixed;
+    inset: 0;
+    background: black;
+    opacity: 0;
+    pointer-events:none;
+    transition: .4s ease;
+    z-index: 9999;
+}
+.page-transition.active {
+    opacity: 1;
+    pointer-events: all;
+}
 
-        body[data-theme="light"] .option:hover {
-            box-shadow: 0 10px 18px rgba(0, 0, 0, 0.08);
-            color: #c28a00;
-        }
-
-        .option.disabled {
-            pointer-events: none;
-            opacity: .9;
-        }
-
-        .option-svg {
-            width: 26px;
-            height: 26px;
-            flex-shrink: 0;
-        }
-
-        .option-label {
-            flex: 1;
-            font-size: 15px;
-        }
-
-        .option.selected {
-            border-color: #f5c842;
-            background: radial-gradient(circle at top, #3b320a, #111);
-        }
-        body[data-theme="light"] .option.selected {
-            background: #fff7dd;
-        }
-
-        .option.correct {
-            border-color: #66bb6a;
-            background: radial-gradient(circle at top, #224422, #111);
-            color: #c8f7c5;
-            animation: pulseCorrect .4s ease;
-        }
-        body[data-theme="light"] .option.correct {
-            background: #e5f7e5;
-            color: #145c1f;
-        }
-
-        .option.wrong {
-            border-color: #ff6e6e;
-            background: radial-gradient(circle at top, #441b1b, #111);
-            color: #ffdede;
-            animation: shakeWrong .35s ease;
-        }
-        body[data-theme="light"] .option.wrong {
-            background: #fde4e4;
-            color: #a02020;
-        }
-
-        .btn {
-            padding: 10px 18px;
-            border-radius: 999px;
-            border: none;
-            cursor: pointer;
-            font-family: inherit;
-            margin-top: 18px;
-            font-size: 14px;
-        }
-
-        .btn-next {
-            background: linear-gradient(135deg, #f5c842, #f0a900);
-            color: #1d1203;
-            font-weight: 700;
-            display: block;
-            margin: 18px auto 0;
-            box-shadow: 0 8px 22px rgba(0, 0, 0, 0.7);
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(8px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes pulseCorrect {
-            0%   { transform: scale(1);   box-shadow: 0 0 0 rgba(102, 187, 106, 0.0);}
-            50%  { transform: scale(1.03);box-shadow: 0 0 16px rgba(102, 187, 106, 0.7);}
-            100% { transform: scale(1);   box-shadow: 0 0 0 rgba(102, 187, 106, 0.0);}
-        }
-
-        @keyframes shakeWrong {
-            0% { transform: translateX(0); }
-            20% { transform: translateX(-4px); }
-            40% { transform: translateX(4px); }
-            60% { transform: translateX(-3px); }
-            80% { transform: translateX(3px); }
-            100% { transform: translateX(0); }
-        }
-
-        @media (max-width: 768px) {
-            body {
-                padding: 10px;
-            }
-            .card {
-                padding: 14px 12px 18px;
-                border-radius: 18px;
-            }
-            .top-row {
-                flex-direction: row;
-                align-items: center;
-            }
-            .question-text {
-                font-size: 15px;
-            }
-            .option {
-                padding: 10px 10px;
-            }
-            .option-label {
-                font-size: 14px;
-            }
-            .btn-next {
-                width: 100%;
-                position: sticky;
-                bottom: 0;
-            }
-        }
-    </style>
+</style>
 </head>
+
 <body>
+
+<div id="transitionLayer" class="page-transition"></div>
 
 <div class="card">
     <div class="inside">
 
-        <div class="top-row">
-            <h1>آزمون</h1>
-            <button id="themeToggle" class="theme-toggle">☀️ حالت روشن</button>
+        <div id="counter" class="counter">سؤال 1</div>
+
+        <div class="timer-bar">
+            <div id="timerFill" class="timer-fill"></div>
         </div>
 
-        <div class="timer-row">
-            <div class="timer" id="timerBox">00:00</div>
-        </div>
+        <div id="questionBox" class="question-box"></div>
 
-        <div class="question-box">
-            <div id="questionText" class="question-text"></div>
-            <div id="optionsBox" class="options"></div>
-        </div>
-
-        <button id="nextBtn" class="btn btn-next">سوال بعد (بدون پاسخ)</button>
+        <div id="optionsBox" class="options"></div>
 
     </div>
 </div>
 
+
 <script>
-    /* -------------------------
-       مدیریت تم (تاریک/روشن)
-    ------------------------- */
-    const THEME_KEY = "konkur_theme";
-    const themeToggleBtn = document.getElementById("themeToggle");
+/* تم */
+const theme = localStorage.getItem("konkur_theme") || "dark";
+document.body.setAttribute("data-theme", theme);
 
-    function applyTheme(theme) {
-        document.body.setAttribute("data-theme", theme);
-        themeToggleBtn.textContent =
-            theme === "light" ? "🌙 حالت تیره" : "☀️ حالت روشن";
-    }
+/* داده‌ها */
+const questionCount = Number(localStorage.getItem("konkur_questionCount")) || 10;
+const subject = localStorage.getItem("konkur_subject");
 
-    const savedTheme = localStorage.getItem(THEME_KEY) || "dark";
-    applyTheme(savedTheme);
+/* فرض می‌کنیم JSON سوالات قبلاً لود شده */
+let questionsData = []; 
+let currentIndex = 0;
+let correctCount = 0;
+let wrongCount = 0;
 
-    themeToggleBtn.addEventListener("click", () => {
-        const current = document.body.getAttribute("data-theme") || "dark";
-        const next = current === "dark" ? "light" : "dark";
-        localStorage.setItem(THEME_KEY, next);
-        applyTheme(next);
+/* شبیه‌سازی لود سوالات (تو واقعی PDF parse می‌کنیم) */
+for (let i = 1; i <= questionCount; i++) {
+    questionsData.push({
+        question: "این یک سؤال نمونه است شماره " + i,
+        options: [
+            "گزینه اول",
+            "گزینه دوم",
+            "گزینه سوم",
+            "گزینه چهارم"
+        ],
+        answer: Math.floor(Math.random() * 4)
+    });
+}
+
+const qBox = document.getElementById("questionBox");
+const optBox = document.getElementById("optionsBox");
+const timerFill = document.getElementById("timerFill");
+const counter = document.getElementById("counter");
+
+/* زمان هر سؤال */
+let timer = 18;
+let timerInterval;
+
+/* شروع سؤال */
+function loadQuestion() {
+    const q = questionsData[currentIndex];
+
+    /* شمارنده */
+    counter.textContent = `سؤال ${currentIndex+1} از ${questionCount}`;
+
+    /* تایمر */
+    resetTimer();
+
+    /* انیمیشن سوال */
+    qBox.style.opacity = 0;
+    qBox.style.transform = "translateY(12px)";
+    setTimeout(() => {
+        qBox.textContent = q.question;
+        qBox.style.animation = "none";
+        void qBox.offsetWidth;
+        qBox.style.animation = "fadeIn .5s forwards";
+    }, 20);
+
+    /* گزینه‌ها */
+    optBox.innerHTML = "";
+    q.options.forEach((opt, i) => {
+        const div = document.createElement("div");
+        div.className = "option";
+        div.textContent = opt;
+
+        div.onclick = () => selectAnswer(i);
+
+        optBox.appendChild(div);
+    });
+}
+
+/* انتخاب پاسخ */
+let locked = false;
+function selectAnswer(i) {
+    if (locked) return;
+    locked = true;
+
+    const q = questionsData[currentIndex];
+    const opts = document.querySelectorAll(".option");
+
+    /* صحیح یا غلط */
+    opts.forEach((el, idx) => {
+        if (idx === q.answer) {
+            el.classList.add("correct");
+        }
+        if (idx === i && idx !== q.answer) {
+            el.classList.add("wrong");
+        }
     });
 
-    /* -------------------------
-       لود اطلاعات از localStorage
-    ------------------------- */
-    const username = localStorage.getItem("konkur_username");
-    const field = localStorage.getItem("konkur_field");
-    const examType = localStorage.getItem("konkur_examType");
-    const subject = localStorage.getItem("konkur_subject");
-    const questionCount = Number(localStorage.getItem("konkur_questionCount"));
-
-    if (!username || !field || !examType || !subject || !questionCount) {
-        window.location.href = "index.html";
+    if (i === q.answer) {
+        correctCount++;
+    } else {
+        wrongCount++;
     }
 
-    const reviewMode = localStorage.getItem("review_wrong_mode") === "yes";
-
-    const questionFile = `data/${field}/${examType}/${subject}.json`;
-
-    let questions = [];
-    let selectedQuestions = [];
-    let currentIndex = 0;
-    let correct = 0;
-    let wrong = 0;
-    let answeringLocked = false;
-
-    let totalSeconds = 0;
-    const timerBox = document.getElementById("timerBox");
-
-    setInterval(() => {
-        totalSeconds++;
-        let m = String(Math.floor(totalSeconds / 60)).padStart(2,"0");
-        let s = String(totalSeconds % 60).padStart(2,"0");
-        timerBox.textContent = `${m}:${s}`;
-    }, 1000);
-
-    fetch(questionFile)
-        .then(res => res.json())
-        .then(data => {
-            questions = data.questions || [];
-            if (!questions.length) {
-                alert("سوالی برای این درس ثبت نشده است.");
-                window.location.href = "subjects.html";
-                return;
-            }
-
-            if (reviewMode) {
-                const key = `wrong_${username}_${field}_${examType}_${subject}`;
-                const wrongIds = JSON.parse(localStorage.getItem(key) || "[]");
-                const filtered = questions.filter(q => wrongIds.includes(q.id));
-                if (!filtered.length) {
-                    alert("سوالی برای مرور غلط‌ها یافت نشد.");
-                    localStorage.removeItem("review_wrong_mode");
-                    window.location.href = "subjects.html";
-                    return;
-                }
-                selectedQuestions = filtered;
-            } else {
-                shuffleArray(questions);
-                selectedQuestions = questions.slice(0, questionCount);
-            }
-
-            showQuestion();
-        })
-        .catch(err => {
-            alert("مشکل در لود سوالات. مسیر JSON یا ساختار فایل را بررسی کنید.");
-            console.error(err);
-        });
-
-    const questionTextEl = document.getElementById("questionText");
-    const optionsBox = document.getElementById("optionsBox");
-    const nextBtn = document.getElementById("nextBtn");
-
-    let typingIntervalId = null;
-
-    function showQuestion() {
-        answeringLocked = false;
-
-        const q = selectedQuestions[currentIndex];
-        const fullText = `(${currentIndex + 1} از ${selectedQuestions.length}) ` + q.text;
-
-        typeQuestion(fullText);
-
-        optionsBox.innerHTML = "";
-        q.options.forEach((op, i) => {
-            const optionDiv = document.createElement("div");
-            optionDiv.className = "option";
-
-            const svgWrapper = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-            svgWrapper.setAttribute("class", "option-svg");
-            svgWrapper.setAttribute("viewBox", "0 0 40 40");
-
-            let shape;
-            if (i === 0) {
-                shape = document.createElementNS("http://www.w3.org/2000/svg","circle");
-                shape.setAttribute("cx","20");
-                shape.setAttribute("cy","20");
-                shape.setAttribute("r","9");
-            } else if (i === 1) {
-                shape = document.createElementNS("http://www.w3.org/2000/svg","rect");
-                shape.setAttribute("x","11");
-                shape.setAttribute("y","11");
-                shape.setAttribute("width","18");
-                shape.setAttribute("height","18");
-                shape.setAttribute("rx","4");
-            } else if (i === 2) {
-                shape = document.createElementNS("http://www.w3.org/2000/svg","polygon");
-                shape.setAttribute("points","20,10 29,26 11,26");
-            } else {
-                shape = document.createElementNS("http://www.w3.org/2000/svg","polygon");
-                shape.setAttribute("points","20,9 30,20 20,31 10,20");
-            }
-
-            shape.setAttribute("fill","none");
-            shape.setAttribute("stroke","#f5c842");
-            shape.setAttribute("stroke-width","2");
-
-            const glow = document.createElementNS("http://www.w3.org/2000/svg","circle");
-            glow.setAttribute("cx","20");
-            glow.setAttribute("cy","20");
-            glow.setAttribute("r","14");
-            glow.setAttribute("fill","none");
-            glow.setAttribute("stroke","rgba(245,200,66,0.5)");
-            glow.setAttribute("stroke-width","1.2");
-            glow.style.opacity = "0";
-
-            svgWrapper.appendChild(glow);
-            svgWrapper.appendChild(shape);
-
-            const labelSpan = document.createElement("span");
-            labelSpan.className = "option-label";
-            labelSpan.textContent = op;
-
-            optionDiv.appendChild(svgWrapper);
-            optionDiv.appendChild(labelSpan);
-
-            optionDiv.addEventListener("mouseenter", () => {
-                glow.style.opacity = "1";
-            });
-            optionDiv.addEventListener("mouseleave", () => {
-                glow.style.opacity = "0";
-            });
-
-            optionDiv.addEventListener("click", () => {
-                if (answeringLocked) return;
-                handleAnswer(i, optionDiv);
-            });
-
-            optionsBox.appendChild(optionDiv);
-        });
-
-        if (currentIndex === selectedQuestions.length - 1) {
-            nextBtn.textContent = "پایان آزمون (بدون پاسخ این سوال)";
-        } else {
-            nextBtn.textContent = "سوال بعد (بدون پاسخ)";
-        }
-    }
-
-    function typeQuestion(text) {
-        if (typingIntervalId) clearInterval(typingIntervalId);
-        questionTextEl.textContent = "";
-        let index = 0;
-        typingIntervalId = setInterval(() => {
-            if (index >= text.length) {
-                clearInterval(typingIntervalId);
-                return;
-            }
-            questionTextEl.textContent += text.charAt(index);
-            index++;
-        }, 20);
-    }
-
-    function handleAnswer(selectedIndex, optionDiv) {
-        answeringLocked = true;
-
-        const q = selectedQuestions[currentIndex];
-        const optionsDivs = Array.from(document.querySelectorAll(".option"));
-
-        optionsDivs.forEach(o => o.classList.add("disabled"));
-
-        if (selectedIndex === q.correctIndex) {
-            correct++;
-            optionDiv.classList.add("correct");
-        } else {
-            wrong++;
-            optionDiv.classList.add("wrong");
-            saveWrongQuestion(q.id);
-            if (q.correctIndex != null && optionsDivs[q.correctIndex]) {
-                optionsDivs[q.correctIndex].classList.add("correct");
-            }
-        }
-
-        setTimeout(() => {
-            currentIndex++;
-            if (currentIndex >= selectedQuestions.length) {
-                finishQuiz();
-            } else {
-                showQuestion();
-            }
-        }, 700);
-    }
-
-    nextBtn.addEventListener("click", () => {
-        if (currentIndex >= selectedQuestions.length) {
-            finishQuiz();
-            return;
-        }
-
-        const q = selectedQuestions[currentIndex];
-        wrong++;
-        if (q && q.id) saveWrongQuestion(q.id);
-
+    /* بعد از یک لحظه → سوال بعدی */
+    setTimeout(() => {
         currentIndex++;
-        if (currentIndex >= selectedQuestions.length) {
+        if (currentIndex >= questionsData.length) {
             finishQuiz();
         } else {
-            showQuestion();
+            locked = false;
+            loadQuestion();
         }
-    });
+    }, 950);
+}
 
-    function saveWrongQuestion(id) {
-        if (!id) return;
-        const key = `wrong_${username}_${field}_${examType}_${subject}`;
-        let arr = JSON.parse(localStorage.getItem(key) || "[]");
-        if (!arr.includes(id)) arr.push(id);
-        localStorage.setItem(key, JSON.stringify(arr));
-    }
+/* تایمر */
+function resetTimer() {
+    clearInterval(timerInterval);
+    timer = 18;
+    timerFill.style.width = "100%";
 
-    function finishQuiz() {
-        localStorage.setItem("quiz_correct", String(correct));
-        localStorage.setItem("quiz_wrong", String(wrong));
-        localStorage.setItem("quiz_time", String(totalSeconds));
+    timerInterval = setInterval(() => {
+        timer--;
+        const percent = (timer / 18) * 100;
+        timerFill.style.width = percent + "%";
 
-        const totalSoFarKey = `total_tests_${username}`;
-        const prevTotal = Number(localStorage.getItem(totalSoFarKey) || "0");
-        const thisTotal = correct + wrong;
-        localStorage.setItem(totalSoFarKey, String(prevTotal + thisTotal));
+        if (timer <= 0) {
+            clearInterval(timerInterval);
+            wrongCount++;
+            currentIndex++;
+            if (currentIndex >= questionsData.length) finishQuiz();
+            else loadQuestion();
+        }
+    }, 1000);
+}
 
+/* پایان آزمون */
+function finishQuiz() {
+    clearInterval(timerInterval);
+
+    /* ذخیره در localStorage */
+    localStorage.setItem("quiz_correct", correctCount);
+    localStorage.setItem("quiz_wrong", wrongCount);
+
+    const layer = document.getElementById("transitionLayer");
+    layer.classList.add("active");
+
+    setTimeout(() => {
         window.location.href = "result.html";
-    }
+    }, 400);
+}
 
-    function shuffleArray(array) {
-        for (let i = array.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [array[i], array[j]] = [array[j], array[i]];
-        }
-    }
+loadQuestion();
 </script>
 
 </body>
