@@ -2,232 +2,227 @@
 <html lang="fa" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>سامانه تمرین کنکور - انتخاب رشته</title>
+    <title>انتخاب رشته</title>
+
     <style>
         @font-face {
             font-family: "YekanBakh";
             src: url("YekanBakh.woff2") format("woff2");
         }
-        *{box-sizing:border-box}
-        body{
-            margin:0;
-            min-height:100vh;
-            font-family:"YekanBakh",sans-serif;
-            background:radial-gradient(circle at top,#222 0,#050509 45%,#000 100%);
-            color:#f5f5f5;
-            display:flex;
-            align-items:center;
-            justify-content:center;
+
+        * { box-sizing: border-box; }
+
+        :root {
+            --bg-body: radial-gradient(circle at top, #222, #050509 50%, #000 100%);
+            --text-main: #f6f6f6;
+            --card-bg: linear-gradient(145deg, #0d0d12, #050509);
+            --card-shadow: 0 18px 60px rgba(0,0,0,.9);
+            --item-bg: #111;
+            --item-border: rgba(255,255,255,.08);
+            --item-hover: rgba(245,200,66,.12);
         }
-        .wrapper{width:100%;max-width:900px;padding:20px;}
-        .card{
-            background:linear-gradient(145deg,#0d0d12,#050509);
-            border-radius:24px;
-            padding:26px 22px 18px;
-            box-shadow:0 18px 60px rgba(0,0,0,.9);
-            position:relative;
-            overflow:hidden;
+
+        body[data-theme="light"] {
+            --bg-body: radial-gradient(circle at top, #ffffff, #f4f4f4 55%, #e0e0e0 100%);
+            --text-main: #222;
+            --card-bg: #ffffff;
+            --card-shadow: 0 14px 40px rgba(0,0,0,.12);
+            --item-bg: #f7f7f7;
+            --item-border: rgba(0,0,0,.08);
+            --item-hover: rgba(255,225,140,.25);
         }
-        .card::before{
-            content:"";position:absolute;inset:-40%;
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: "YekanBakh", sans-serif;
+            background: var(--bg-body);
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            transition: background .3s ease, color .3s ease;
+        }
+
+        .card {
+            width: 100%;
+            max-width: 900px;
+            background: var(--card-bg);
+            border-radius: 24px;
+            padding: 26px 22px;
+            box-shadow: var(--card-shadow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: "";
+            position: absolute;
+            inset: -40%;
             background:
-                radial-gradient(circle at 10% 0,rgba(245,200,66,.08),transparent 55%),
-                radial-gradient(circle at 90% 100%,rgba(255,255,255,.05),transparent 55%);
-            opacity:.7;
+                radial-gradient(circle at 0 0, rgba(245,200,66,.08), transparent 55%),
+                radial-gradient(circle at 100% 100%, rgba(255,255,255,.06), transparent 55%);
+            opacity: .6;
         }
-        .inner{position:relative;z-index:1}
-        header{
-            display:flex;align-items:center;justify-content:space-between;
-            gap:16px;margin-bottom:18px;
+
+        .inside {
+            position: relative;
+            z-index: 2;
         }
-        .logo-area{display:flex;align-items:center;gap:10px;}
-        .logo-img{width:40px;height:auto;}
-        .logo-text-main{font-size:15px;font-weight:700;}
-        .logo-text-sub{font-size:11px;opacity:.8;}
-        .user-badge{
-            font-size:11px;
-            padding:4px 10px;
-            border-radius:999px;
-            border:1px solid rgba(255,255,255,.16);
+
+        .top-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 18px;
         }
-        h1{margin:0 0 6px;font-size:19px;}
-        .subtitle{font-size:13px;opacity:.85;margin-bottom:18px;}
-        .field-grid{
-            display:flex;flex-wrap:wrap;
-            gap:16px;justify-content:center;margin-top:10px;
+
+        h1 {
+            margin: 0;
+            font-size: 22px;
+            color: #f5c842;
         }
-        .field-card{
-            width:160px;height:110px;
-            border-radius:18px;
-            background:radial-gradient(circle at top,#1b1b25,#050509);
-            border:1px solid rgba(255,255,255,.08);
-            display:flex;align-items:center;justify-content:center;
-            cursor:pointer;color:#f0f0f0;font-size:16px;font-weight:600;
-            position:relative;overflow:hidden;
-            transition:.2s;
+
+        body[data-theme="light"] h1 {
+            color: #c59500;
         }
-        .field-card::before{
-            content:"";position:absolute;inset:-40%;
-            background:radial-gradient(circle at top,rgba(245,200,66,.16),transparent 55%);
-            opacity:0;transition:.2s;
+
+        .theme-toggle {
+            border: 1px solid var(--item-border);
+            background: transparent;
+            color: inherit;
+            border-radius: 999px;
+            padding: 6px 12px;
+            cursor: pointer;
+            font-size: 11px;
         }
-        .field-card:hover{
-            transform:translateY(-6px);
-            box-shadow:0 14px 32px rgba(0,0,0,.8);
-            border-color:rgba(245,200,66,.8);
-            color:#ffe88c;
+
+        .fields-container {
+            display: flex;
+            gap: 16px;
+            margin-top: 14px;
         }
-        .field-card:hover::before{opacity:1;}
-        .field-card.selected{
-            border-color:#f5c842;
-            background:radial-gradient(circle at top,#3b320a,#050509);
-            color:#f5c842;
-            box-shadow:0 0 0 1px rgba(245,200,66,.4),
-                       0 14px 34px rgba(245,200,66,.22);
+
+        @media (max-width: 768px) {
+            .fields-container {
+                flex-direction: column;
+            }
         }
-        .selected-box{
-            margin-top:16px;font-size:13px;
-            padding:10px 12px;border-radius:999px;
-            background:rgba(0,0,0,.35);
-            border:1px solid rgba(255,255,255,.08);
-            display:none;align-items:center;gap:6px;
+
+        .field-item {
+            flex: 1;
+            background: var(--item-bg);
+            padding: 18px;
+            border-radius: 18px;
+            border: 1px solid var(--item-border);
+            cursor: pointer;
+            transition: .2s ease;
+            text-align: center;
         }
-        .selected-name{
-            padding:3px 9px;border-radius:999px;
-            background:rgba(245,200,66,.14);
-            border:1px solid rgba(245,200,66,.6);
-            color:#ffe88c;font-size:13px;
+
+        .field-item:hover {
+            transform: translateY(-4px);
+            background: var(--item-hover);
         }
-        .btn{
-            border:none;border-radius:999px;padding:9px 18px;
-            font-size:13px;cursor:pointer;font-family:inherit;
-            margin-top:18px;
+
+        .field-item svg {
+            width: 64px;
+            height: 64px;
+            margin-bottom: 12px;
+            stroke: #f5c842;
         }
-        .btn-primary{
-            background:linear-gradient(135deg,#f5c842,#f0a900);
-            color:#17130a;font-weight:700;
-            box-shadow:0 8px 22px rgba(0,0,0,.7),
-                       0 0 14px rgba(245,200,66,.7);
+
+        body[data-theme="light"] .field-item svg {
+            stroke: #c59500;
         }
-        .btn-secondary{
-            background:transparent;
-            color:#ddd;font-size:11px;margin-right:8px;
+
+        .field-label {
+            font-size: 17px;
+            font-weight: 600;
         }
-        .bottom-meta{
-            margin-top:18px;font-size:11px;text-align:center;opacity:.7;
-        }
-        .designer{margin-top:4px;font-weight:600;}
-        @media(max-width:768px){
-            .card{padding:22px 16px;}
-            header{flex-direction:column;align-items:flex-start;}
-        }
+
     </style>
 </head>
+
 <body>
-<div class="wrapper">
-    <div class="card">
-        <div class="inner">
-            <header>
-                <div class="logo-area">
-                    <img src="Farhangian_Uni.png" alt="دانشگاه فرهنگیان" class="logo-img">
-                    <div>
-                        <div class="logo-text-main">انتخاب رشته</div>
-                        <div class="logo-text-sub">قدم اول برای هدف‌گذاری درست کنکور</div>
-                    </div>
-                </div>
-                <div id="userBadge" class="user-badge"></div>
-            </header>
 
-            <h1>رشته‌ات رو انتخاب کن</h1>
-            <div class="subtitle">
-                بگو تو کدوم رشته برای کنکور آماده می‌شی؛ بعدش می‌ریم سراغ نوع کنکور و دروس همون رشته.
-            </div>
+<div class="card">
+    <div class="inside">
 
-            <div class="field-grid">
-                <div class="field-card" data-field="ensani">
-                    انسانی
-                </div>
-                <div class="field-card" data-field="tajrobi">
-                    تجربی
-                </div>
-                <div class="field-card" data-field="riazi">
-                    ریاضی
-                </div>
-            </div>
-
-            <div id="selectedBox" class="selected-box">
-                رشته‌ی انتخابی شما:
-                <span id="selectedName" class="selected-name"></span>
-            </div>
-
-            <button id="nextBtn" class="btn btn-primary" style="display:none;">
-                تایید رشته و رفتن به انتخاب نوع کنکور
-            </button>
-            <button id="backBtn" class="btn btn-secondary">
-                برگشت به صفحه ورود
-            </button>
-
-            <div class="bottom-meta">
-                <div>رشته‌ای که اینجا انتخاب می‌کنی، روی لیست دروس و آزمون‌هایی که می‌بینی تاثیر می‌ذاره.</div>
-                <div class="designer">طراح: محمدمهدی دیناروند</div>
-            </div>
+        <div class="top-row">
+            <h1>انتخاب رشته</h1>
+            <button id="themeToggle" class="theme-toggle">☀️ حالت روشن</button>
         </div>
+
+        <div class="fields-container">
+
+            <!-- انسانی -->
+            <div class="field-item" data-field="ensani">
+                <svg viewBox="0 0 100 100">
+                    <circle cx="50" cy="35" r="16" fill="none" stroke-width="4"/>
+                    <path d="M50 55 Q30 70 30 88" fill="none" stroke-width="4"/>
+                    <path d="M50 55 Q70 70 70 88" fill="none" stroke-width="4"/>
+                </svg>
+                <div class="field-label">رشته انسانی</div>
+            </div>
+
+            <!-- تجربی -->
+            <div class="field-item" data-field="tajrobi">
+                <svg viewBox="0 0 100 100">
+                    <path d="M30 75 L50 20 L70 75 Z" fill="none" stroke-width="4"/>
+                    <circle cx="50" cy="55" r="12" fill="none" stroke-width="4"/>
+                </svg>
+                <div class="field-label">رشته تجربی</div>
+            </div>
+
+            <!-- ریاضی -->
+            <div class="field-item" data-field="riazi">
+                <svg viewBox="0 0 100 100">
+                    <rect x="30" y="25" width="40" height="50" fill="none" rx="6" stroke-width="4"/>
+                    <path d="M40 40 H60" stroke-width="4"/>
+                    <path d="M40 55 H60" stroke-width="4"/>
+                </svg>
+                <div class="field-label">رشته ریاضی</div>
+            </div>
+
+        </div>
+
     </div>
 </div>
 
 <script>
-    const username = localStorage.getItem("konkur_username");
-    const role = localStorage.getItem("konkur_role") || "student";
+    /* تم */
+    const THEME_KEY = "konkur_theme";
+    const themeToggleBtn = document.getElementById("themeToggle");
 
-    const userBadge = document.getElementById("userBadge");
-    const fieldCards = document.querySelectorAll(".field-card");
-    const selectedBox = document.getElementById("selectedBox");
-    const selectedName = document.getElementById("selectedName");
-    const nextBtn = document.getElementById("nextBtn");
-    const backBtn = document.getElementById("backBtn");
-
-    // اگر مستقیم این صفحه رو باز کنه و لاگین نکرده باشه → برگرد به index
-    if (!username) {
-        window.location.href = "index.html";
-    } else {
-        userBadge.textContent = role === "admin"
-            ? `ورود به عنوان مدیر (${username})`
-            : `کاربر: ${username}`;
+    function applyTheme(theme) {
+        document.body.setAttribute("data-theme", theme);
+        themeToggleBtn.textContent =
+            theme === "light" ? "🌙 حالت تیره" : "☀️ حالت روشن";
     }
 
-    let currentField = null;
+    const savedTheme = localStorage.getItem(THEME_KEY) || "dark";
+    applyTheme(savedTheme);
 
-    function persianName(field){
-        if (field === "ensani") return "انسانی";
-        if (field === "tajrobi") return "تجربی";
-        if (field === "riazi") return "ریاضی";
-        return "";
-    }
+    themeToggleBtn.addEventListener("click", () => {
+        const current = document.body.getAttribute("data-theme") || "dark";
+        const next = current === "dark" ? "light" : "dark";
+        localStorage.setItem(THEME_KEY, next);
+        applyTheme(next);
+    });
 
-    fieldCards.forEach(card=>{
-        card.addEventListener("click", ()=>{
-            fieldCards.forEach(c=>c.classList.remove("selected"));
-            card.classList.add("selected");
-            currentField = card.dataset.field;
-            const fa = persianName(currentField);
-            selectedName.textContent = fa;
-            selectedBox.style.display = "inline-flex";
-            nextBtn.style.display = "inline-flex";
+    /* انتخاب رشته */
+    const items = document.querySelectorAll(".field-item");
 
-            // ذخیره برای مراحل بعد
-            localStorage.setItem("konkur_field", currentField);
+    items.forEach(item => {
+        item.addEventListener("click", () => {
+            const field = item.getAttribute("data-field");
+            localStorage.setItem("konkur_field", field);
+            window.location.href = "exam-type.html";
         });
     });
-
-    nextBtn.addEventListener("click", ()=>{
-        if (!currentField) return;
-        // صفحه بعدی رو بعداً می‌سازیم: exam-type.html
-        window.location.href = "exam-type.html";
-    });
-
-    backBtn.addEventListener("click", ()=>{
-        window.location.href = "index.html";
-    });
 </script>
+
 </body>
 </html>
