@@ -16,20 +16,22 @@
             --bg-body: radial-gradient(circle at top, #222, #050509 50%, #000 100%);
             --text-main: #f6f6f6;
             --card-bg: linear-gradient(145deg, #0d0d12, #050509);
-            --card-shadow: 0 18px 60px rgba(0,0,0,.9);
+            --card-shadow: 0 35px 90px rgba(0,0,0,.9);
             --item-bg: #111;
             --item-border: rgba(255,255,255,.08);
             --item-hover: rgba(245,200,66,.12);
+            --gold: #f5c842;
         }
 
         body[data-theme="light"] {
-            --bg-body: radial-gradient(circle at top, #ffffff, #f4f4f4 55%, #e0e0e0 100%);
+            --bg-body: radial-gradient(circle at top, #ffffff, #f4f4f4 55%, #e0e0e0);
             --text-main: #222;
             --card-bg: #ffffff;
-            --card-shadow: 0 14px 40px rgba(0,0,0,.12);
+            --card-shadow: 0 22px 60px rgba(0,0,0,.15);
             --item-bg: #f7f7f7;
             --item-border: rgba(0,0,0,.08);
             --item-hover: rgba(255,225,140,.25);
+            --gold: #c59500;
         }
 
         body {
@@ -39,9 +41,10 @@
             background: var(--bg-body);
             color: var(--text-main);
             display: flex;
-            align-items: center;
             justify-content: center;
+            align-items: center;
             padding: 20px;
+            overflow-x: hidden;
             transition: background .3s ease, color .3s ease;
         }
 
@@ -49,98 +52,136 @@
             width: 100%;
             max-width: 1000px;
             background: var(--card-bg);
-            border-radius: 24px;
-            padding: 26px 22px;
-            box-shadow: var(--card-shadow);
+            border-radius: 28px;
+            padding: 30px 26px;
             position: relative;
             overflow: hidden;
+            box-shadow: var(--card-shadow);
+            opacity: 0;
+            transform: translateY(20px);
+            animation: cardIn .8s ease forwards;
         }
+
+        @keyframes cardIn { to { opacity: 1; transform: translateY(0); } }
 
         .card::before {
             content: "";
             position: absolute;
-            inset: -40%;
-            background:
-                radial-gradient(circle at 0 0, rgba(245,200,66,.08), transparent 55%),
-                radial-gradient(circle at 100% 100%, rgba(255,255,255,.06), transparent 55%);
-            opacity: .6;
+            width: 450px;
+            height: 450px;
+            top: -200px;
+            left: -200px;
+            background: radial-gradient(circle, rgba(245,200,66,.17), transparent 70%);
+            animation: glowMove 7s infinite alternate ease-in-out;
         }
 
-        .inside {
-            position: relative;
-            z-index: 2;
+        @keyframes glowMove {
+            0%   { transform: translate(0,0) scale(1); }
+            100% { transform: translate(40px,40px) scale(1.25); }
         }
+
+        .inside { position: relative; z-index: 2; }
 
         .top-row {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 18px;
+            margin-bottom: 24px;
         }
 
         h1 {
             margin: 0;
-            font-size: 22px;
-            color: #f5c842;
+            font-size: 26px;
+            color: var(--gold);
         }
-
-        body[data-theme="light"] h1 { color: #c59500; }
 
         .theme-toggle {
             border: 1px solid var(--item-border);
             background: transparent;
-            color: inherit;
+            padding: 6px 14px;
             border-radius: 999px;
-            padding: 6px 12px;
+            font-size: 12px;
             cursor: pointer;
-            font-size: 11px;
+            transition: .2s;
         }
+        .theme-toggle:hover { background: var(--item-hover); }
 
+        /* grid */
         .subjects-container {
-            margin-top: 16px;
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 16px;
+            gap: 18px;
         }
 
-        @media (max-width: 768px) {
-            .subjects-container {
-                grid-template-columns: repeat(1, 1fr);
-            }
+        @media (max-width:768px) {
+            .subjects-container { grid-template-columns: 1fr; }
         }
 
         .subject-item {
             background: var(--item-bg);
-            padding: 20px;
-            border-radius: 18px;
+            padding: 22px;
+            border-radius: 20px;
             border: 1px solid var(--item-border);
             cursor: pointer;
-            transition: .2s ease;
+            transition: .25s ease;
             text-align: center;
+            opacity: 0;
+            transform: translateY(25px);
+            animation: subjectIn .75s ease forwards;
         }
+
+        @keyframes subjectIn { to { opacity: 1; transform: translateY(0); } }
 
         .subject-item:hover {
-            transform: translateY(-4px);
+            transform: translateY(-6px) scale(1.03);
             background: var(--item-hover);
+            box-shadow: 0 18px 40px rgba(0,0,0,.4);
         }
 
+        /* SVG */
         .subject-item svg {
             width: 58px;
             height: 58px;
+            stroke: var(--gold);
+            fill: none;
+            stroke-width: 4;
+            stroke-linecap: round;
+            stroke-linejoin: round;
             margin-bottom: 12px;
-            stroke: #f5c842;
+            stroke-dasharray: 200;
+            stroke-dashoffset: 200;
+            animation: drawSvg 1.8s ease forwards;
         }
 
-        body[data-theme="light"] .subject-item svg { stroke: #c59500; }
+        @keyframes drawSvg { to { stroke-dashoffset: 0; } }
+
+        .subject-item:hover svg {
+            filter: drop-shadow(0 0 10px var(--gold));
+            transform: scale(1.07);
+        }
 
         .subject-label {
             font-size: 16px;
             font-weight: 600;
         }
 
+        /* صفحه‌ ترنزیشن */
+        .page-transition {
+            position: fixed;
+            inset: 0;
+            background: black;
+            opacity: 0;
+            pointer-events: none;
+            transition: .4s ease;
+            z-index: 9999;
+        }
+        .page-transition.active { opacity: 1; pointer-events: all; }
+
     </style>
 </head>
 
 <body>
+
+<div id="transitionLayer" class="page-transition"></div>
 
 <div class="card">
     <div class="inside">
@@ -158,33 +199,25 @@
 <script>
     /* تم */
     const THEME_KEY = "konkur_theme";
-    const themeToggleBtn = document.getElementById("themeToggle");
+    const themeToggle = document.getElementById("themeToggle");
 
-    function applyTheme(theme) {
-        document.body.setAttribute("data-theme", theme);
-        themeToggleBtn.textContent =
-            theme === "light" ? "🌙 حالت تیره" : "☀️ حالت روشن";
+    function setTheme(t) {
+        document.body.setAttribute("data-theme", t);
+        themeToggle.textContent = t === "light" ? "🌙 حالت تیره" : "☀️ حالت روشن";
     }
+    setTheme(localStorage.getItem(THEME_KEY) || "dark");
 
-    const savedTheme = localStorage.getItem(THEME_KEY) || "dark";
-    applyTheme(savedTheme);
-
-    themeToggleBtn.addEventListener("click", () => {
-        const current = document.body.getAttribute("data-theme") || "dark";
-        const next = current === "dark" ? "light" : "dark";
+    themeToggle.onclick = () => {
+        const now = document.body.getAttribute("data-theme");
+        const next = now === "dark" ? "light" : "dark";
         localStorage.setItem(THEME_KEY, next);
-        applyTheme(next);
-    });
+        setTheme(next);
+    };
 
-    /* دریافت رشته و نوع کنکور */
+    /* داده‌ها */
     const field = localStorage.getItem("konkur_field");
     const examType = localStorage.getItem("konkur_examType");
 
-    if (!field || !examType) {
-        window.location.href = "field.html";
-    }
-
-    /* لیست دروس هر رشته */
     const subjects = {
         ensani: [
             { id: "adabiat", label: "ادبیات" },
@@ -197,7 +230,6 @@
             { id: "falsafe", label: "فلسفه" },
             { id: "ravanshenasi", label: "روانشناسی" }
         ],
-
         tajrobi: [
             { id: "zist", label: "زیست‌شناسی" },
             { id: "riazi", label: "ریاضی" },
@@ -207,7 +239,6 @@
             { id: "zaban", label: "زبان انگلیسی" },
             { id: "din_va_zendegi", label: "دین و زندگی" }
         ],
-
         riazi: [
             { id: "riazi", label: "ریاضی" },
             { id: "fizic", label: "فیزیک" },
@@ -218,39 +249,46 @@
         ]
     };
 
-    /* اگر فرهنگیان بود → درس اضافه */
     if (examType === "farhangian") {
-        subjects[field].push({
-            id: "farhangian_info",
-            label: "اطلاعات عمومی فرهنگیان"
-        });
+        subjects[field].push({ id: "farhangian_info", label: "اطلاعات عمومی فرهنگیان" });
     }
 
-    /* SVG پیش‌فرض برای همه دروس */
-    function getSubjectSVG() {
+    /* SVG برای همه کارت‌ها */
+    function getSVG() {
         return `
         <svg viewBox="0 0 100 100">
-            <rect x="20" y="28" width="60" height="44" rx="6" fill="none" stroke-width="4"/>
-            <path d="M30 40 H70" stroke-width="4"/>
-            <path d="M30 52 H70" stroke-width="4"/>
+            <rect x="24" y="28" width="52" height="42" rx="6"/>
+            <path d="M32 40 H68"/>
+            <path d="M32 52 H68"/>
         </svg>`;
     }
 
-    /* ساخت کارت‌های درس */
+    /* ترنزیشن صفحه */
+    const layer = document.getElementById("transitionLayer");
+    function go(url) {
+        layer.classList.add("active");
+        setTimeout(() => window.location.href = url, 400);
+    }
+
+    /* ساخت کارت‌ها */
     const box = document.getElementById("subjectsBox");
 
-    subjects[field].forEach(sub => {
-        const item = document.createElement("div");
-        item.className = "subject-item";
-        item.innerHTML = `
-            ${getSubjectSVG()}
+    subjects[field].forEach((sub, i) => {
+        const div = document.createElement("div");
+        div.className = "subject-item";
+        div.style.animationDelay = `${i * 0.12}s`;
+
+        div.innerHTML = `
+            ${getSVG()}
             <div class="subject-label">${sub.label}</div>
         `;
-        item.addEventListener("click", () => {
+
+        div.onclick = () => {
             localStorage.setItem("konkur_subject", sub.id);
-            window.location.href = "questions-count.html";
-        });
-        box.appendChild(item);
+            go("questions-count.html");
+        };
+
+        box.appendChild(div);
     });
 </script>
 
