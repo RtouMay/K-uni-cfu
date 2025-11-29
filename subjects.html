@@ -2,241 +2,255 @@
 <html lang="fa" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>انتخاب درس‌ها</title>
+    <title>انتخاب درس</title>
+
     <style>
         @font-face {
             font-family: "YekanBakh";
             src: url("YekanBakh.woff2") format("woff2");
         }
-        *{box-sizing:border-box}
-        body{
-            margin:0;
-            min-height:100vh;
-            font-family:"YekanBakh",sans-serif;
-            background:radial-gradient(circle at top,#222 0,#050509 45%,#000 100%);
-            color:#f5f5f5;
-            display:flex;
-            align-items:center;
-            justify-content:center;
+
+        * { box-sizing: border-box; }
+
+        :root {
+            --bg-body: radial-gradient(circle at top, #222, #050509 50%, #000 100%);
+            --text-main: #f6f6f6;
+            --card-bg: linear-gradient(145deg, #0d0d12, #050509);
+            --card-shadow: 0 18px 60px rgba(0,0,0,.9);
+            --item-bg: #111;
+            --item-border: rgba(255,255,255,.08);
+            --item-hover: rgba(245,200,66,.12);
         }
-        .wrapper{width:100%;max-width:900px;padding:20px;}
-        .card{
-            background:linear-gradient(145deg,#0d0d12,#050509);
-            border-radius:24px;
-            padding:26px 24px 20px;
-            box-shadow:0 18px 60px rgba(0,0,0,.9);
-            position:relative;overflow:hidden;
+
+        body[data-theme="light"] {
+            --bg-body: radial-gradient(circle at top, #ffffff, #f4f4f4 55%, #e0e0e0 100%);
+            --text-main: #222;
+            --card-bg: #ffffff;
+            --card-shadow: 0 14px 40px rgba(0,0,0,.12);
+            --item-bg: #f7f7f7;
+            --item-border: rgba(0,0,0,.08);
+            --item-hover: rgba(255,225,140,.25);
         }
-        .card::before{
-            content:"";position:absolute;inset:-40%;
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: "YekanBakh", sans-serif;
+            background: var(--bg-body);
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            transition: background .3s ease, color .3s ease;
+        }
+
+        .card {
+            width: 100%;
+            max-width: 1000px;
+            background: var(--card-bg);
+            border-radius: 24px;
+            padding: 26px 22px;
+            box-shadow: var(--card-shadow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: "";
+            position: absolute;
+            inset: -40%;
             background:
-                radial-gradient(circle at 10% 0,rgba(245,200,66,.08),transparent 55%),
-                radial-gradient(circle at 90% 100%,rgba(255,255,255,.05),transparent 55%);
-            opacity:.7;
-        }
-        .inner{position:relative;z-index:1}
-        header{
-            display:flex;align-items:center;justify-content:space-between;
-            gap:16px;margin-bottom:18px;
-        }
-        .logo-img{width:40px;height:auto;}
-        .badge{
-            font-size:11px;
-            padding:4px 10px;
-            border-radius:999px;
-            border:1px solid rgba(255,255,255,.16);
-        }
-        h1{margin:0 0 6px;font-size:19px;}
-        .subtitle{font-size:13px;opacity:.85;margin-bottom:18px;}
-
-        .subjects-grid{
-            display:flex;
-            flex-wrap:wrap;
-            gap:16px;
-            justify-content:center;
+                radial-gradient(circle at 0 0, rgba(245,200,66,.08), transparent 55%),
+                radial-gradient(circle at 100% 100%, rgba(255,255,255,.06), transparent 55%);
+            opacity: .6;
         }
 
-        .subject-card{
-            width:180px;
-            padding:20px 12px;
-            height:90px;
-            border-radius:16px;
-            background:radial-gradient(circle at top,#1b1b25,#050509);
-            border:1px solid rgba(255,255,255,.08);
-            display:flex;
-            align-items:center;
-            justify-content:center;
-            cursor:pointer;
-            font-size:15px;
-            font-weight:600;
-            color:#f0f0f0;
-            text-align:center;
-            transition:.2s;
-        }
-        .subject-card:hover{
-            transform:translateY(-6px);
-            box-shadow:0 14px 32px rgba(0,0,0,.8);
-            border-color:rgba(245,200,66,.8);
-            color:#ffe88c;
+        .inside {
+            position: relative;
+            z-index: 2;
         }
 
-        .btn-secondary{
-            background:transparent;color:#ddd;font-size:11px;
-            margin-top:18px;border:none;cursor:pointer;
+        .top-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 18px;
         }
-        .bottom-meta{
-            margin-top:18px;font-size:11px;text-align:center;opacity:.7;
+
+        h1 {
+            margin: 0;
+            font-size: 22px;
+            color: #f5c842;
         }
-        .designer{margin-top:4px;font-weight:600;}
+
+        body[data-theme="light"] h1 { color: #c59500; }
+
+        .theme-toggle {
+            border: 1px solid var(--item-border);
+            background: transparent;
+            color: inherit;
+            border-radius: 999px;
+            padding: 6px 12px;
+            cursor: pointer;
+            font-size: 11px;
+        }
+
+        .subjects-container {
+            margin-top: 16px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+        }
+
+        @media (max-width: 768px) {
+            .subjects-container {
+                grid-template-columns: repeat(1, 1fr);
+            }
+        }
+
+        .subject-item {
+            background: var(--item-bg);
+            padding: 20px;
+            border-radius: 18px;
+            border: 1px solid var(--item-border);
+            cursor: pointer;
+            transition: .2s ease;
+            text-align: center;
+        }
+
+        .subject-item:hover {
+            transform: translateY(-4px);
+            background: var(--item-hover);
+        }
+
+        .subject-item svg {
+            width: 58px;
+            height: 58px;
+            margin-bottom: 12px;
+            stroke: #f5c842;
+        }
+
+        body[data-theme="light"] .subject-item svg { stroke: #c59500; }
+
+        .subject-label {
+            font-size: 16px;
+            font-weight: 600;
+        }
+
     </style>
 </head>
+
 <body>
 
-<div class="wrapper">
-    <div class="card">
-        <div class="inner">
+<div class="card">
+    <div class="inside">
 
-            <header>
-                <div style="display:flex;align-items:center;gap:10px;">
-                    <img src="Farhangian_Uni.png" class="logo-img">
-                    <div>
-                        <div style="font-size:15px;font-weight:700;">انتخاب درس</div>
-                        <div style="font-size:11px;opacity:.8;">مرحله چهارم</div>
-                    </div>
-                </div>
-                <div id="badge" class="badge"></div>
-            </header>
-
-            <h1>درس مورد نظرت رو انتخاب کن</h1>
-            <div class="subtitle">
-                دروسی که می‌بینی کاملاً بر اساس رشته و نوع کنکورت نشون داده می‌شن.
-            </div>
-
-            <div class="subjects-grid" id="subjectsGrid"></div>
-
-            <button id="backBtn" class="btn-secondary">برگشت به انتخاب نوع کنکور</button>
-
-            <div class="bottom-meta">
-                <div>بعد از انتخاب درس، وارد مرحله تعیین تعداد تست می‌شی.</div>
-                <div class="designer">طراح: محمدمهدی دیناروند</div>
-            </div>
-
+        <div class="top-row">
+            <h1>انتخاب درس</h1>
+            <button id="themeToggle" class="theme-toggle">☀️ حالت روشن</button>
         </div>
+
+        <div id="subjectsBox" class="subjects-container"></div>
+
     </div>
 </div>
 
 <script>
-    const username = localStorage.getItem("konkur_username");
-    const role = localStorage.getItem("konkur_role");
+    /* تم */
+    const THEME_KEY = "konkur_theme";
+    const themeToggleBtn = document.getElementById("themeToggle");
+
+    function applyTheme(theme) {
+        document.body.setAttribute("data-theme", theme);
+        themeToggleBtn.textContent =
+            theme === "light" ? "🌙 حالت تیره" : "☀️ حالت روشن";
+    }
+
+    const savedTheme = localStorage.getItem(THEME_KEY) || "dark";
+    applyTheme(savedTheme);
+
+    themeToggleBtn.addEventListener("click", () => {
+        const current = document.body.getAttribute("data-theme") || "dark";
+        const next = current === "dark" ? "light" : "dark";
+        localStorage.setItem(THEME_KEY, next);
+        applyTheme(next);
+    });
+
+    /* دریافت رشته و نوع کنکور */
     const field = localStorage.getItem("konkur_field");
     const examType = localStorage.getItem("konkur_examType");
 
-    const subjectsGrid = document.getElementById("subjectsGrid");
-    const backBtn = document.getElementById("backBtn");
-    const badge = document.getElementById("badge");
-
-    // اگر کاربر مستقیم وارد صفحه شود و مراحل قبل را نرفته → برگرد
-    if (!username || !field || !examType) {
-        window.location.href = "index.html";
+    if (!field || !examType) {
+        window.location.href = "field.html";
     }
 
-    badge.textContent = role === "admin"
-        ? `مدیر: ${username}`
-        : `کاربر: ${username}`;
+    /* لیست دروس هر رشته */
+    const subjects = {
+        ensani: [
+            { id: "adabiat", label: "ادبیات" },
+            { id: "din_va_zendegi", label: "دین و زندگی" },
+            { id: "arabi", label: "عربی" },
+            { id: "zaban", label: "زبان انگلیسی" },
+            { id: "riazi_ensani", label: "ریاضی انسانی" },
+            { id: "eqtesad", label: "اقتصاد" },
+            { id: "ejtemaei", label: "علوم اجتماعی" },
+            { id: "falsafe", label: "فلسفه" },
+            { id: "ravanshenasi", label: "روانشناسی" }
+        ],
 
-    /*------------------------------------
-      لیست دروس بر اساس رشته + نوع کنکور
-    --------------------------------------*/
+        tajrobi: [
+            { id: "zist", label: "زیست‌شناسی" },
+            { id: "riazi", label: "ریاضی" },
+            { id: "fizic", label: "فیزیک" },
+            { id: "shimi", label: "شیمی" },
+            { id: "arabi", label: "عربی" },
+            { id: "zaban", label: "زبان انگلیسی" },
+            { id: "din_va_zendegi", label: "دین و زندگی" }
+        ],
 
-    const SUBJECTS = {
-        ensani: {
-            normal: [
-                "ادبیات",
-                "دین و زندگی",
-                "عربی",
-                "زبان انگلیسی",
-                "ریاضی انسانی",
-                "اقتصاد",
-                "علوم اجتماعی",
-                "فلسفه و منطق",
-                "روانشناسی"
-            ],
-            farhangian: [
-                "ادبیات",
-                "دین و زندگی",
-                "عربی",
-                "زبان انگلیسی",
-                "ریاضی انسانی",
-                "اطلاعات عمومی فرهنگیان"
-            ]
-        },
-
-        tajrobi: {
-            normal: [
-                "ادبیات",
-                "دین و زندگی",
-                "زبان انگلیسی",
-                "عربی",
-                "زیست‌شناسی",
-                "ریاضی",
-                "فیزیک",
-                "شیمی"
-            ],
-            farhangian: [
-                "ادبیات",
-                "دین و زندگی",
-                "زبان انگلیسی",
-                "عربی",
-                "اطلاعات عمومی فرهنگیان",
-                "زیست‌شناسی",
-                "ریاضی"
-            ]
-        },
-
-        riazi: {
-            normal: [
-                "ادبیات",
-                "دین و زندگی",
-                "زبان انگلیسی",
-                "عربی",
-                "ریاضی",
-                "فیزیک",
-                "شیمی"
-            ],
-            farhangian: [
-                "ادبیات",
-                "دین و زندگی",
-                "زبان انگلیسی",
-                "عربی",
-                "اطلاعات عمومی فرهنگیان",
-                "ریاضی"
-            ]
-        }
+        riazi: [
+            { id: "riazi", label: "ریاضی" },
+            { id: "fizic", label: "فیزیک" },
+            { id: "shimi", label: "شیمی" },
+            { id: "arabi", label: "عربی" },
+            { id: "zaban", label: "زبان انگلیسی" },
+            { id: "din_va_zendegi", label: "دین و زندگی" }
+        ]
     };
 
-    /*------------------------------------
-        نمایش لیست دروس
-    --------------------------------------*/
+    /* اگر فرهنگیان بود → درس اضافه */
+    if (examType === "farhangian") {
+        subjects[field].push({
+            id: "farhangian_info",
+            label: "اطلاعات عمومی فرهنگیان"
+        });
+    }
 
-    const list = SUBJECTS[field][examType];
+    /* SVG پیش‌فرض برای همه دروس */
+    function getSubjectSVG() {
+        return `
+        <svg viewBox="0 0 100 100">
+            <rect x="20" y="28" width="60" height="44" rx="6" fill="none" stroke-width="4"/>
+            <path d="M30 40 H70" stroke-width="4"/>
+            <path d="M30 52 H70" stroke-width="4"/>
+        </svg>`;
+    }
 
-    list.forEach(sub => {
-        const div = document.createElement("div");
-        div.className = "subject-card";
-        div.textContent = sub;
+    /* ساخت کارت‌های درس */
+    const box = document.getElementById("subjectsBox");
 
-        div.addEventListener("click", () => {
-            localStorage.setItem("konkur_subject", sub);
-
-            // مرحله ۵ → انتخاب تعداد تست
+    subjects[field].forEach(sub => {
+        const item = document.createElement("div");
+        item.className = "subject-item";
+        item.innerHTML = `
+            ${getSubjectSVG()}
+            <div class="subject-label">${sub.label}</div>
+        `;
+        item.addEventListener("click", () => {
+            localStorage.setItem("konkur_subject", sub.id);
             window.location.href = "questions-count.html";
         });
-
-        subjectsGrid.appendChild(div);
-    });
-
-    backBtn.addEventListener("click", ()=>{
-        window.location.href = "exam-type.html";
+        box.appendChild(item);
     });
 </script>
 
