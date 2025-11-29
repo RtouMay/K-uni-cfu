@@ -12,27 +12,52 @@
 
         * { box-sizing: border-box; }
 
+        :root {
+            /* پیش‌فرض: تاریک */
+            --bg-body: radial-gradient(circle at top, #222, #050509 50%, #000 100%);
+            --text-main: #f5f5f5;
+            --card-bg: linear-gradient(145deg, #0d0d12, #050509);
+            --card-shadow: 0 18px 60px rgba(0, 0, 0, .9);
+            --question-bg: #111;
+            --option-bg: #1a1a1a;
+            --border-soft: rgba(255, 255, 255, .08);
+            --timer-border: rgba(245, 200, 66, 0.4);
+        }
+
+        body[data-theme="light"] {
+            --bg-body: radial-gradient(circle at top, #ffffff, #f0f0f0 55%, #e0e0e0 100%);
+            --text-main: #222;
+            --card-bg: #ffffff;
+            --card-shadow: 0 14px 40px rgba(0, 0, 0, 0.15);
+            --question-bg: #f7f7f7;
+            --option-bg: #fbfbfb;
+            --border-soft: rgba(0, 0, 0, 0.08);
+            --timer-border: rgba(245, 200, 66, 0.6);
+        }
+
         body {
             margin: 0;
             min-height: 100vh;
             font-family: "YekanBakh", sans-serif;
-            background: radial-gradient(circle at top, #222, #050509 50%, #000 100%);
-            color: #f5f5f5;
+            background: var(--bg-body);
+            color: var(--text-main);
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 20px;
+            transition: background .3s ease, color .3s ease;
         }
 
         .card {
             width: 100%;
             max-width: 900px;
-            background: linear-gradient(145deg, #0d0d12, #050509);
+            background: var(--card-bg);
             border-radius: 24px;
-            padding: 22px 20px 26px;
-            box-shadow: 0 18px 60px rgba(0, 0, 0, .9);
+            padding: 18px 18px 22px;
+            box-shadow: var(--card-shadow);
             position: relative;
             overflow: hidden;
+            transition: background .3s ease, box-shadow .3s ease;
         }
 
         .card::before {
@@ -43,6 +68,7 @@
                 radial-gradient(circle at 0 0, rgba(245, 200, 66, .08), transparent 55%),
                 radial-gradient(circle at 100% 100%, rgba(255, 255, 255, .06), transparent 55%);
             opacity: .6;
+            pointer-events: none;
         }
 
         .inside {
@@ -50,24 +76,28 @@
             z-index: 2;
         }
 
+        .top-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            margin-bottom: 6px;
+        }
+
         h1 {
-            margin: 0 0 10px;
-            text-align: center;
+            margin: 0;
             font-size: 20px;
         }
 
-        /* تایمر بالا */
-        .timer {
-            font-size: 16px;
-            text-align: center;
-            margin: 0 auto 16px;
-            color: #f5c842;
-            font-weight: 600;
-            padding: 6px 12px;
+        .theme-toggle {
+            border: 1px solid var(--border-soft);
+            background: transparent;
+            color: inherit;
             border-radius: 999px;
-            border: 1px solid rgba(245, 200, 66, 0.4);
-            display: inline-block;
-            min-width: 90px;
+            padding: 6px 12px;
+            font-family: inherit;
+            font-size: 11px;
+            cursor: pointer;
         }
 
         .timer-row {
@@ -76,19 +106,32 @@
             margin-bottom: 10px;
         }
 
+        .timer {
+            font-size: 16px;
+            text-align: center;
+            margin: 0 auto 6px;
+            color: #f5c842;
+            font-weight: 600;
+            padding: 6px 12px;
+            border-radius: 999px;
+            border: 1px solid var(--timer-border);
+            display: inline-block;
+            min-width: 90px;
+        }
+
         .question-box {
-            background: #111;
+            background: var(--question-bg);
             border-radius: 18px;
-            padding: 18px 16px 20px;
-            margin-top: 6px;
-            border: 1px solid rgba(255, 255, 255, .05);
+            padding: 16px 14px 18px;
+            margin-top: 4px;
+            border: 1px solid var(--border-soft);
             animation: fadeInUp 0.4s ease;
         }
 
         .question-text {
             font-size: 17px;
             line-height: 1.8;
-            margin-bottom: 18px;
+            margin-bottom: 16px;
             text-align: right;
             min-height: 52px;
         }
@@ -101,14 +144,19 @@
 
         .option {
             padding: 10px 12px;
-            background: #1a1a1a;
+            background: var(--option-bg);
             border-radius: 14px;
             cursor: pointer;
-            border: 1px solid rgba(255, 255, 255, .08);
+            border: 1px solid var(--border-soft);
             display: flex;
             align-items: center;
             gap: 10px;
-            transition: transform .18s ease, box-shadow .18s ease, border .18s ease, background .18s ease, color .18s ease;
+            transition:
+                transform .18s ease,
+                box-shadow .18s ease,
+                border .18s ease,
+                background .18s ease,
+                color .18s ease;
             position: relative;
             overflow: hidden;
         }
@@ -120,9 +168,14 @@
             color: #ffe88c;
         }
 
+        body[data-theme="light"] .option:hover {
+            box-shadow: 0 10px 18px rgba(0, 0, 0, 0.08);
+            color: #c28a00;
+        }
+
         .option.disabled {
             pointer-events: none;
-            opacity: .8;
+            opacity: .9;
         }
 
         .option-svg {
@@ -136,18 +189,23 @@
             font-size: 15px;
         }
 
-        /* حالت انتخاب شده */
         .option.selected {
             border-color: #f5c842;
             background: radial-gradient(circle at top, #3b320a, #111);
         }
+        body[data-theme="light"] .option.selected {
+            background: #fff7dd;
+        }
 
-        /* درست / غلط */
         .option.correct {
             border-color: #66bb6a;
             background: radial-gradient(circle at top, #224422, #111);
             color: #c8f7c5;
             animation: pulseCorrect .4s ease;
+        }
+        body[data-theme="light"] .option.correct {
+            background: #e5f7e5;
+            color: #145c1f;
         }
 
         .option.wrong {
@@ -156,15 +214,18 @@
             color: #ffdede;
             animation: shakeWrong .35s ease;
         }
+        body[data-theme="light"] .option.wrong {
+            background: #fde4e4;
+            color: #a02020;
+        }
 
-        /* دکمه سوال بعد */
         .btn {
             padding: 10px 18px;
             border-radius: 999px;
             border: none;
             cursor: pointer;
             font-family: inherit;
-            margin-top: 22px;
+            margin-top: 18px;
             font-size: 14px;
         }
 
@@ -173,11 +234,9 @@
             color: #1d1203;
             font-weight: 700;
             display: block;
-            margin: 22px auto 0;
+            margin: 18px auto 0;
             box-shadow: 0 8px 22px rgba(0, 0, 0, 0.7);
         }
-
-        /* انیمیشن‌ها */
 
         @keyframes fadeInUp {
             from {
@@ -205,14 +264,17 @@
             100% { transform: translateX(0); }
         }
 
-        /* موبایل */
         @media (max-width: 768px) {
             body {
                 padding: 10px;
             }
             .card {
-                padding: 18px 14px 20px;
+                padding: 14px 12px 18px;
                 border-radius: 18px;
+            }
+            .top-row {
+                flex-direction: row;
+                align-items: center;
             }
             .question-text {
                 font-size: 15px;
@@ -236,7 +298,10 @@
 <div class="card">
     <div class="inside">
 
-        <h1>آزمون</h1>
+        <div class="top-row">
+            <h1>آزمون</h1>
+            <button id="themeToggle" class="theme-toggle">☀️ حالت روشن</button>
+        </div>
 
         <div class="timer-row">
             <div class="timer" id="timerBox">00:00</div>
@@ -247,12 +312,34 @@
             <div id="optionsBox" class="options"></div>
         </div>
 
-        <button id="nextBtn" class="btn btn-next">سوال بعد</button>
+        <button id="nextBtn" class="btn btn-next">سوال بعد (بدون پاسخ)</button>
 
     </div>
 </div>
 
 <script>
+    /* -------------------------
+       مدیریت تم (تاریک/روشن)
+    ------------------------- */
+    const THEME_KEY = "konkur_theme";
+    const themeToggleBtn = document.getElementById("themeToggle");
+
+    function applyTheme(theme) {
+        document.body.setAttribute("data-theme", theme);
+        themeToggleBtn.textContent =
+            theme === "light" ? "🌙 حالت تیره" : "☀️ حالت روشن";
+    }
+
+    const savedTheme = localStorage.getItem(THEME_KEY) || "dark";
+    applyTheme(savedTheme);
+
+    themeToggleBtn.addEventListener("click", () => {
+        const current = document.body.getAttribute("data-theme") || "dark";
+        const next = current === "dark" ? "light" : "dark";
+        localStorage.setItem(THEME_KEY, next);
+        applyTheme(next);
+    });
+
     /* -------------------------
        لود اطلاعات از localStorage
     ------------------------- */
@@ -266,14 +353,10 @@
         window.location.href = "index.html";
     }
 
-    /* -------------------------
-         مسیر فایل سوالات
-    ------------------------- */
+    const reviewMode = localStorage.getItem("review_wrong_mode") === "yes";
+
     const questionFile = `data/${field}/${examType}/${subject}.json`;
 
-    /* -------------------------
-            متغیرهای آزمون
-    ------------------------- */
     let questions = [];
     let selectedQuestions = [];
     let currentIndex = 0;
@@ -281,9 +364,6 @@
     let wrong = 0;
     let answeringLocked = false;
 
-    /* -------------------------
-           تایمر آزمون
-    ------------------------- */
     let totalSeconds = 0;
     const timerBox = document.getElementById("timerBox");
 
@@ -294,9 +374,6 @@
         timerBox.textContent = `${m}:${s}`;
     }, 1000);
 
-    /* -------------------------
-       انتخاب سوالات (لود JSON)
-    ------------------------- */
     fetch(questionFile)
         .then(res => res.json())
         .then(data => {
@@ -307,8 +384,22 @@
                 return;
             }
 
-            shuffleArray(questions);
-            selectedQuestions = questions.slice(0, questionCount);
+            if (reviewMode) {
+                const key = `wrong_${username}_${field}_${examType}_${subject}`;
+                const wrongIds = JSON.parse(localStorage.getItem(key) || "[]");
+                const filtered = questions.filter(q => wrongIds.includes(q.id));
+                if (!filtered.length) {
+                    alert("سوالی برای مرور غلط‌ها یافت نشد.");
+                    localStorage.removeItem("review_wrong_mode");
+                    window.location.href = "subjects.html";
+                    return;
+                }
+                selectedQuestions = filtered;
+            } else {
+                shuffleArray(questions);
+                selectedQuestions = questions.slice(0, questionCount);
+            }
+
             showQuestion();
         })
         .catch(err => {
@@ -316,41 +407,29 @@
             console.error(err);
         });
 
-    /* -------------------------
-        عناصر DOM
-    ------------------------- */
     const questionTextEl = document.getElementById("questionText");
     const optionsBox = document.getElementById("optionsBox");
     const nextBtn = document.getElementById("nextBtn");
 
     let typingIntervalId = null;
 
-    /* -------------------------
-        نمایش سوال
-    ------------------------- */
     function showQuestion() {
         answeringLocked = false;
 
         const q = selectedQuestions[currentIndex];
-
-        // متن سوال با شماره و تعداد کل
         const fullText = `(${currentIndex + 1} از ${selectedQuestions.length}) ` + q.text;
 
-        // تایپ افکت سوال
         typeQuestion(fullText);
 
-        // ساخت گزینه‌ها
         optionsBox.innerHTML = "";
         q.options.forEach((op, i) => {
             const optionDiv = document.createElement("div");
             optionDiv.className = "option";
 
-            // SVG کوچک برای هر گزینه
-            const svgWrapper = document.createElementNS("http://www.w3.org/2000/svg","svg");
-            svgWrapper.setAttribute("class","option-svg");
-            svgWrapper.setAttribute("viewBox","0 0 40 40");
+            const svgWrapper = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+            svgWrapper.setAttribute("class", "option-svg");
+            svgWrapper.setAttribute("viewBox", "0 0 40 40");
 
-            // شکل متفاوت برای هر اندیس
             let shape;
             if (i === 0) {
                 shape = document.createElementNS("http://www.w3.org/2000/svg","circle");
@@ -376,7 +455,6 @@
             shape.setAttribute("stroke","#f5c842");
             shape.setAttribute("stroke-width","2");
 
-            // هاله نور
             const glow = document.createElementNS("http://www.w3.org/2000/svg","circle");
             glow.setAttribute("cx","20");
             glow.setAttribute("cy","20");
@@ -418,13 +496,8 @@
         }
     }
 
-    /* -------------------------
-        تایپ افکت سوال
-    ------------------------- */
     function typeQuestion(text) {
-        if (typingIntervalId) {
-            clearInterval(typingIntervalId);
-        }
+        if (typingIntervalId) clearInterval(typingIntervalId);
         questionTextEl.textContent = "";
         let index = 0;
         typingIntervalId = setInterval(() => {
@@ -437,16 +510,12 @@
         }, 20);
     }
 
-    /* -------------------------
-        بررسی پاسخ
-    ------------------------- */
     function handleAnswer(selectedIndex, optionDiv) {
         answeringLocked = true;
 
         const q = selectedQuestions[currentIndex];
         const optionsDivs = Array.from(document.querySelectorAll(".option"));
 
-        // غیرفعال کردن کلیک‌ها
         optionsDivs.forEach(o => o.classList.add("disabled"));
 
         if (selectedIndex === q.correctIndex) {
@@ -456,14 +525,11 @@
             wrong++;
             optionDiv.classList.add("wrong");
             saveWrongQuestion(q.id);
-
-            // نمایش گزینه صحیح
             if (q.correctIndex != null && optionsDivs[q.correctIndex]) {
                 optionsDivs[q.correctIndex].classList.add("correct");
             }
         }
 
-        // رفتن به سوال بعد بعد از انیمیشن
         setTimeout(() => {
             currentIndex++;
             if (currentIndex >= selectedQuestions.length) {
@@ -474,9 +540,6 @@
         }, 700);
     }
 
-    /* -------------------------
-        دکمه "سوال بعد" (بدون پاسخ)
-    ------------------------- */
     nextBtn.addEventListener("click", () => {
         if (currentIndex >= selectedQuestions.length) {
             finishQuiz();
@@ -485,9 +548,7 @@
 
         const q = selectedQuestions[currentIndex];
         wrong++;
-        if (q && q.id) {
-            saveWrongQuestion(q.id);
-        }
+        if (q && q.id) saveWrongQuestion(q.id);
 
         currentIndex++;
         if (currentIndex >= selectedQuestions.length) {
@@ -497,9 +558,6 @@
         }
     });
 
-    /* -------------------------
-        ذخیره سوال غلط
-    ------------------------- */
     function saveWrongQuestion(id) {
         if (!id) return;
         const key = `wrong_${username}_${field}_${examType}_${subject}`;
@@ -508,15 +566,11 @@
         localStorage.setItem(key, JSON.stringify(arr));
     }
 
-    /* -------------------------
-         پایان آزمون
-    ------------------------- */
     function finishQuiz() {
         localStorage.setItem("quiz_correct", String(correct));
         localStorage.setItem("quiz_wrong", String(wrong));
         localStorage.setItem("quiz_time", String(totalSeconds));
 
-        // جمع‌زدن تعداد کل تست‌های حل‌شده
         const totalSoFarKey = `total_tests_${username}`;
         const prevTotal = Number(localStorage.getItem(totalSoFarKey) || "0");
         const thisTotal = correct + wrong;
@@ -525,9 +579,6 @@
         window.location.href = "result.html";
     }
 
-    /* -------------------------
-        تابع شافل
-    ------------------------- */
     function shuffleArray(array) {
         for (let i = array.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
