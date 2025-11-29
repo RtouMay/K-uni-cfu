@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>داشبورد</title>
+
+<style>
+@font-face{
+    font-family:"YekanBakh";
+    src:url("YekanBakh.woff2") format("woff2");
+}
+
+*{box-sizing:border-box;}
+
+:root{
+    --bg:radial-gradient(circle at top,#1d1d27,#050509 60%,#000);
+    --text:#f6f6f6;
+    --card:#0f0f15;
+    --gold:#f5c842;
+    --border:rgba(255,255,255,.12);
+    --box:#111;
+    --soft:#ccc;
+}
+
+body[data-theme="light"]{
+    --bg:radial-gradient(circle at top,#ffffff,#eaeaea 60%,#dcdcdc);
+    --text:#222;
+    --card:#ffffff;
+    --gold:#c59500;
+    --box:#f5f5f5;
+    --border:rgba(0,0,0,.12);
+    --soft:#555;
+}
+
+body{
+    margin:0;
+    font-family:"YekanBakh";
+    background:var(--bg);
+    color:var(--text);
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:20px;
+    overflow:hidden;
+    transition:background .3s,color .3s;
+}
+
+/* نور طلایی */
+body::before{
+    content:"";
+    position:absolute;
+    width:620px;height:620px;
+    top:-260px;left:-260px;
+    background:radial-gradient(circle,rgba(245,200,66,.18),transparent 70%);
+    animation:glow 8s infinite alternate ease-in-out;
+}
+@keyframes glow{
+    0%{transform:scale(1) translate(0,0);}
+    100%{transform:scale(1.25) translate(45px,45px);}
+}
+
+/* کارت اصلی */
+.card{
+    width:100%;
+    max-width:900px;
+    background:var(--card);
+    border-radius:30px;
+    padding:30px 26px;
+    border:1px solid var(--border);
+    box-shadow:0 35px 95px rgba(0,0,0,.75);
+    position:relative;
+    z-index:10;
+    opacity:0;
+    transform:translateY(25px);
+    animation:cardIn .9s forwards;
+}
+@keyframes cardIn{
+    to{opacity:1;transform:translateY(0);}
+}
+
+/* بخش بالایی */
+.top{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:22px;
+}
+h1{
+    margin:0;
+    font-size:26px;
+    color:var(--gold);
+}
+.theme-toggle{
+    padding:6px 14px;
+    border-radius:999px;
+    border:1px solid var(--border);
+    background:transparent;
+    cursor:pointer;
+    font-size:12px;
+}
+
+/* خوش‌آمد */
+.welcome{
+    font-size:22px;
+    margin-bottom:10px;
+    font-weight:600;
+}
+
+/* آواتار */
+.avatar-box{
+    display:flex;
+    align-items:center;
+    gap:16px;
+    margin-bottom:20px;
+}
+.avatar{
+    width:85px;height:85px;
+    border-radius:50%;
+    background:var(--box);
+    border:2px solid var(--gold);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:42px;
+    font-weight:700;
+    animation:avatarPop .9s ease;
+}
+@keyframes avatarPop{
+    0%{transform:scale(.7);opacity:0;}
+    80%{transform:scale(1.15);opacity:1;}
+    100%{transform:scale(1);}
+}
+.rank{
+    font-size:16px;
+    color:var(--gold);
+    margin-top:4px;
+}
+
+/* آمار */
+.stats{
+    display:flex;
+    gap:12px;
+    margin-bottom:20px;
+    flex-wrap:wrap;
+}
+.stat-box{
+    flex:1;
+    background:var(--box);
+    padding:16px;
+    border-radius:16px;
+    border:1px solid var(--border);
+    min-width:170px;
+}
+.stat-label{
+    font-size:14px;
+    opacity:.8;
+}
+.stat-value{
+    margin-top:6px;
+    font-size:20px;
+    font-weight:700;
+}
+
+/* مدال‌ها */
+.medals-title{
+    margin-bottom:10px;
+    font-size:17px;
+    font-weight:600;
+}
+.medals{
+    display:flex;
+    overflow-x:auto;
+    gap:14px;
+    padding-bottom:6px;
+}
+.medal{
+    flex-shrink:0;
+    width:100px;
+    background:var(--box);
+    border:1px solid var(--border);
+    border-radius:16px;
+    padding:10px;
+    text-align:center;
+    transition:.2s;
+}
+.medal:hover{
+    transform:translateY(-4px);
+}
+.medal svg{
+    width:40px;height:40px;
+    stroke:var(--gold);
+    fill:none;
+    stroke-width:4;
+    margin-bottom:6px;
+}
+
+/* دکمه‌ها */
+.btn-area{
+    text-align:center;
+    margin-top:25px;
+}
+.btn{
+    padding:13px 24px;
+    border-radius:20px;
+    cursor:pointer;
+    border:none;
+    font-size:15px;
+    font-weight:700;
+    position:relative;
+    overflow:hidden;
+}
+.btn-primary{
+    background:linear-gradient(135deg,var(--gold),#c79a00);
+    color:#1d1203;
+}
+.btn-secondary{
+    background:#222;
+    color:#eee;
+}
+body[data-theme="light"] .btn-secondary{
+    background:#e5e5e5;
+    color:#222;
+}
+
+/* Ripple */
+.btn::after{
+    content:"";
+    position:absolute;
+    width:22px;height:22px;
+    background:rgba(255,255,255,.45);
+    border-radius:50%;
+    transform:scale(0);
+    opacity:0;
+    left:var(--x);
+    top:var(--y);
+    transition:transform .5s,opacity .9s;
+}
+.btn.ripple::after{
+    transform:scale(10);
+    opacity:0;
+}
+
+/* صفحه ترنزیشن */
+.page-transition{
+    position:fixed;
+    inset:0;
+    background:black;
+    opacity:0;
+    pointer-events:none;
+    transition:.4s;
+    z-index:9999;
+}
+.page-transition.active{
+    opacity:1;
+    pointer-events:all;
+}
+
+</style>
+</head>
+<body>
+
+<div id="transitionLayer" class="page-transition"></div>
+
+<div class="card">
+    <div class="top">
+        <h1>داشبورد</h1>
+        <button id="themeToggle" class="theme-toggle">☀️ روشن</button>
+    </div>
+
+    <div class="welcome" id="welcomeText">سلام...</div>
+
+    <div class="avatar-box">
+        <div id="avatar" class="avatar">?</div>
+        <div>
+            <div id="username" class="username"></div>
+            <div id="rank" class="rank"></div>
+        </div>
+    </div>
+
+    <div class="stats">
+        <div class="stat-box">
+            <div class="stat-label">تعداد کل تست‌ها</div>
+            <div id="statTotal" class="stat-value">0</div>
+        </div>
+        <div class="stat-box">
+            <div class="stat-label">بهترین درصد</div>
+            <div id="statBest" class="stat-value">0%</div>
+        </div>
+    </div>
+
+    <div class="medals-title">مدال‌های مهم تو</div>
+
+    <div id="medalsRow" class="medals"></div>
+
+    <div class="btn-area">
+        <button id="goTests" class="btn btn-primary">شروع تست‌ها</button>
+        <button id="goProfile" class="btn btn-secondary">پروفایل کامل</button>
+    </div>
+
+</div>
+
+<script>
+/* تم */
+const themeKey="konkur_theme";
+const themeBtn=document.getElementById("themeToggle");
+
+function applyTheme(t){
+    document.body.setAttribute("data-theme",t);
+    themeBtn.textContent = t==="light" ? "🌙 تیره" : "☀️ روشن";
+}
+applyTheme(localStorage.getItem(themeKey)||"dark");
+
+themeBtn.onclick=()=>{
+    const now=document.body.getAttribute("data-theme");
+    const next=now==="dark"?"light":"dark";
+    localStorage.setItem(themeKey,next);
+    applyTheme(next);
+};
+
+/* داده‌ها */
+const username=localStorage.getItem("konkur_username");
+if(!username) window.location.href="login.html";
+
+document.getElementById("username").textContent=username;
+document.getElementById("avatar").textContent=username[0].toUpperCase();
+document.getElementById("welcomeText").textContent="سلام " + username + " 👋";
+
+/* آمار */
+const totalTests=Number(localStorage.getItem("total_tests_"+username)||"0");
+const bestPercent=Number(localStorage.getItem("best_percent_"+username)||"0");
+
+document.getElementById("statTotal").textContent=totalTests;
+document.getElementById("statBest").textContent=bestPercent+"%";
+
+/* لقب */
+function getRank(t){
+    if(t>=600) return "بزرگ تست‌زن 💛";
+    if(t>=400) return "تست‌زن قهار ⚡";
+    if(t>=200) return "تست‌زن حرفه‌ای 🎯";
+    if(t>=100) return "تست‌زن فعال 🚀";
+    if(t>=50)  return "در مسیر پیشرفت ✨";
+    if(t>=20)  return "شروع قدرتمند 💪";
+    return "تازه‌وارد تست‌زن 🌱";
+}
+document.getElementById("rank").textContent=getRank(totalTests);
+
+/* مدال‌ها */
+const medals=[
+    {name:"اولین قدم",cond:totalTests>=1},
+    {name:"دهتایی",cond:totalTests>=10},
+    {name:"فعال",cond:totalTests>=50},
+    {name:"جدی",cond:totalTests>=100},
+    {name:"عالی",cond:bestPercent>=85}
+];
+
+const medalsRow=document.getElementById("medalsRow");
+
+medals.forEach(m=>{
+    if(!m.cond) return;
+
+    const div=document.createElement("div");
+    div.className="medal";
+    div.innerHTML=`
+        <svg viewBox="0 0 100 100">
+            <circle cx="50" cy="35" r="18"/>
+            <path d="M38 54 L30 80"/>
+            <path d="M62 54 L70 80"/>
+        </svg>
+        <div>${m.name}</div>
+    `;
+    medalsRow.appendChild(div);
+});
+
+/* Ripple + انتقال */
+const layer=document.getElementById("transitionLayer");
+
+function ripple(btn,e){
+    const x=e.clientX - btn.getBoundingClientRect().left;
+    const y=e.clientY - btn.getBoundingClientRect().top;
+    btn.style.setProperty("--x",x+"px");
+    btn.style.setProperty("--y",y+"px");
+    btn.classList.add("ripple");
+    setTimeout(()=>btn.classList.remove("ripple"),500);
+}
+
+function go(url){
+    layer.classList.add("active");
+    setTimeout(()=>window.location.href=url,400);
+}
+
+document.getElementById("goTests").onclick = e=>{
+    ripple(e.target,e);
+    go("field.html");
+};
+
+document.getElementById("goProfile").onclick = e=>{
+    ripple(e.target,e);
+    go("profile.html");
+};
+</script>
+
+</body>
+</html>
