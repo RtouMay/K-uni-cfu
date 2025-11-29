@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
+
 <head>
     <meta charset="UTF-8">
     <title>نتیجه آزمون</title>
@@ -10,32 +11,37 @@
             src: url("YekanBakh.woff2") format("woff2");
         }
 
-        * { box-sizing: border-box; }
+        * {
+            box-sizing: border-box;
+        }
 
         :root {
-            --bg-body: radial-gradient(circle at top, #222, #050509 50%, #000 100%);
+            --bg-body: radial-gradient(circle at top, #1d1d27, #050509 60%, #000);
             --text-main: #f6f6f6;
-            --card-bg: linear-gradient(145deg, #0d0d12, #050509);
-            --card-shadow: 0 18px 60px rgba(0,0,0,.9);
+            --card-bg: #0f0f15;
+            --card-shadow: 0 40px 95px rgba(0, 0, 0, .8);
             --box-bg: #111;
-            --soft-border: rgba(255,255,255,.06);
+            --border: rgba(255, 255, 255, .1);
+            --gold: #f5c842;
+            --green: #4ad56c;
         }
 
         body[data-theme="light"] {
-            --bg-body: radial-gradient(circle at top, #ffffff, #f4f4f4 55%, #e0e0e0 100%);
+            --bg-body: radial-gradient(circle at top, #ffffff, #e9e9e9 60%, #dcdcdc);
             --text-main: #222;
             --card-bg: #ffffff;
-            --card-shadow: 0 14px 40px rgba(0,0,0,.12);
+            --card-shadow: 0 28px 60px rgba(0, 0, 0, .14);
             --box-bg: #f7f7f7;
-            --soft-border: rgba(0,0,0,.06);
+            --border: rgba(0, 0, 0, .1);
+            --gold: #c59500;
         }
 
         body {
             margin: 0;
-            min-height: 100vh;
-            font-family: "YekanBakh", sans-serif;
+            font-family: "YekanBakh";
             background: var(--bg-body);
             color: var(--text-main);
+            min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -44,183 +50,242 @@
         }
 
         .card {
-            max-width: 900px;
             width: 100%;
+            max-width: 900px;
             background: var(--card-bg);
-            border-radius: 24px;
-            padding: 24px 20px;
+            border-radius: 28px;
+            padding: 30px 26px;
             box-shadow: var(--card-shadow);
             position: relative;
             overflow: hidden;
-            transition: background .3s ease, box-shadow .3s ease;
+            opacity: 0;
+            transform: translateY(16px);
+            animation: cardFade .8s forwards;
         }
 
+        @keyframes cardFade {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* نور پشتی */
         .card::before {
             content: "";
             position: absolute;
-            inset: -40%;
-            background:
-                radial-gradient(circle at 0 0, rgba(245,200,66,.08), transparent 55%),
-                radial-gradient(circle at 100% 100%, rgba(255,255,255,.06), transparent 55%);
-            opacity: .6;
+            width: 470px;
+            height: 470px;
+            top: -210px;
+            left: -210px;
+            background: radial-gradient(circle, rgba(245, 200, 66, .16), transparent 70%);
+            animation: glowMove 8s infinite alternate ease-in-out;
+        }
+
+        @keyframes glowMove {
+            0% {
+                transform: translate(0, 0) scale(1);
+            }
+
+            100% {
+                transform: translate(40px, 40px) scale(1.25);
+            }
         }
 
         .inside {
             position: relative;
-            z-index: 2;
+            z-index: 10;
         }
 
         .top-row {
             display: flex;
-            align-items: center;
             justify-content: space-between;
-            gap: 10px;
-            margin-bottom: 12px;
+            margin-bottom: 20px;
         }
 
         h1 {
-            text-align: left;
             margin: 0;
-            font-size: 20px;
-            color: #f5c842;
-        }
-
-        body[data-theme="light"] h1 {
-            color: #c59500;
+            font-size: 26px;
+            color: var(--gold);
         }
 
         .theme-toggle {
-            border: 1px solid var(--soft-border);
-            background: transparent;
-            color: inherit;
+            padding: 6px 14px;
             border-radius: 999px;
-            padding: 6px 12px;
-            font-family: inherit;
-            font-size: 11px;
+            border: 1px solid var(--border);
+            background: transparent;
+            font-size: 12px;
             cursor: pointer;
         }
 
+        /* بخش خلاصه */
         .summary {
             background: var(--box-bg);
-            padding: 16px;
-            border-radius: 16px;
-            border: 1px solid var(--soft-border);
-            margin-bottom: 18px;
+            padding: 20px;
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            margin-bottom: 16px;
+            opacity: 0;
+            transform: translateY(16px);
+            animation: fadeUp .8s forwards .15s;
+        }
+
+        @keyframes fadeUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .summary-item {
-            font-size: 14px;
-            margin: 6px 0;
+            font-size: 15px;
+            margin: 8px 0;
         }
 
+        /* درصد */
         .percent {
-            font-size: 42px;
-            font-weight: 700;
             text-align: center;
-            margin: 14px 0 16px;
-            color: #f5c842;
+            font-size: 52px;
+            font-weight: 700;
+            color: var(--gold);
+            margin: 20px 0 6px;
             opacity: 0;
             transform: scale(.8);
+            animation: percentPop .9s forwards .25s;
         }
 
-        body[data-theme="light"] .percent {
-            color: #c59500;
+        @keyframes percentPop {
+            0% {
+                opacity: 0;
+                transform: scale(.8);
+            }
+
+            60% {
+                opacity: 1;
+                transform: scale(1.1);
+            }
+
+            100% {
+                transform: scale(1);
+            }
         }
 
-        .badge-box {
-            margin-top: 6px;
+        /* لقب */
+        .rank-box {
             background: var(--box-bg);
-            padding: 12px 16px;
-            border-radius: 14px;
-            border: 1px solid var(--soft-border);
+            padding: 16px;
+            border-radius: 16px;
+            border: 1px solid var(--border);
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 14px;
+            margin-top: 12px;
+            opacity: 0;
+            transform: translateY(12px);
+            animation: fadeUp .8s forwards .35s;
         }
 
-        .badge-icon {
-            font-size: 26px;
+        .rank-icon {
+            font-size: 30px;
         }
 
-        .badge-title {
+        .rank-label {
             font-size: 16px;
-            font-weight: 600;
-            color: #ffd86b;
+            color: var(--gold);
         }
 
-        body[data-theme="light"] .badge-title {
-            color: #c28a00;
-        }
-
+        /* تحلیل روانشناسی */
         .psychology {
-            margin-top: 16px;
-            padding: 14px;
             background: var(--box-bg);
-            border-radius: 14px;
-            border: 1px solid var(--soft-border);
-            font-size: 14px;
-            line-height: 1.8;
+            border: 1px solid var(--border);
+            padding: 18px;
+            margin-top: 16px;
+            border-radius: 16px;
+            line-height: 1.9;
+            font-size: 15px;
+            opacity: 0;
+            transform: translateY(14px);
+            animation: fadeUp .9s forwards .45s;
         }
 
-        .buttons-center {
+        /* دکمه‌ها */
+        .btn-area {
             text-align: center;
-            margin-top: 20px;
+            margin-top: 22px;
         }
 
         .btn {
-            padding: 9px 16px;
+            padding: 12px 18px;
             border-radius: 999px;
+            font-size: 14px;
             border: none;
             cursor: pointer;
-            font-family: inherit;
-            margin: 8px 5px;
-            font-size: 13px;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, #f5c842, #f0a900);
+            margin: 6px 4px;
+            position: relative;
+            overflow: hidden;
+            background: var(--gold);
             color: #1d1203;
             font-weight: 700;
         }
 
+        /* Ripple */
+        .btn::after {
+            content: "";
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: rgba(255, 255, 255, .5);
+            border-radius: 50%;
+            transform: scale(0);
+            opacity: 0;
+            left: var(--x);
+            top: var(--y);
+            transition: transform .5s, opacity .8s;
+        }
+
+        .btn.ripple::after {
+            transform: scale(10);
+            opacity: 0;
+        }
+
         .btn-secondary {
             background: #222;
-            color: #ddd;
+            color: #eee;
         }
 
         body[data-theme="light"] .btn-secondary {
-            background: #f0f0f0;
+            background: #ebebeb;
             color: #222;
         }
 
-        .btn-tertiary {
-            background: transparent;
-            color: #bbb;
-            font-size: 12px;
+        /* صفحه ترنزیشن */
+        .page-transition {
+            position: fixed;
+            inset: 0;
+            background: black;
+            opacity: 0;
+            transition: .4s ease;
+            pointer-events: none;
+            z-index: 9999;
         }
 
-        @media (max-width: 768px) {
-            body {
-                padding: 10px;
-            }
-            .card {
-                padding: 18px 14px;
-                border-radius: 18px;
-            }
-            h1 {
-                font-size: 18px;
-            }
+        .page-transition.active {
+            opacity: 1;
+            pointer-events: all;
         }
     </style>
 </head>
+
 <body>
+
+<div id="transitionLayer" class="page-transition"></div>
 
 <div class="card">
     <div class="inside">
 
         <div class="top-row">
             <h1>نتیجه آزمون</h1>
-            <button id="themeToggle" class="theme-toggle">☀️ حالت روشن</button>
+            <button id="themeToggle" class="theme-toggle">☀️ روشن</button>
         </div>
 
         <div class="summary">
@@ -229,141 +294,135 @@
             <div class="summary-item">زمان آزمون: <span id="timeBox"></span></div>
         </div>
 
-        <div id="percentBox" class="percent">0%</div>
+        <div id="percent" class="percent">0%</div>
 
-        <div class="badge-box">
-            <div class="badge-icon">🏅</div>
-            <div class="badge-title" id="userRank">...</div>
+        <div class="rank-box">
+            <div class="rank-icon">🏅</div>
+            <div id="rankLabel" class="rank-label">...</div>
         </div>
 
-        <div class="psychology" id="psychologyBox"></div>
+        <div id="psychology" class="psychology"></div>
 
-        <div class="buttons-center">
-            <button id="retryBtn" class="btn btn-primary">دوباره آزمون همین درس</button>
-            <button id="wrongBtn" class="btn btn-secondary">فقط سوالات غلط</button>
-            <button id="profileBtn" class="btn btn-secondary">مشاهده پروفایل</button>
-            <button id="backBtn" class="btn btn-tertiary">بازگشت به درس‌ها</button>
+        <div class="btn-area">
+            <button id="retry" class="btn">دوباره آزمون همین درس</button>
+            <button id="wrong" class="btn-secondary btn">فقط سوالات غلط</button>
+            <button id="profile" class="btn-secondary btn">مشاهده پروفایل</button>
+            <button id="back" class="btn-secondary btn">بازگشت به درس‌ها</button>
         </div>
 
     </div>
 </div>
 
 <script>
-    /* تم تاریک / روشن */
-    const THEME_KEY = "konkur_theme";
-    const themeToggleBtn = document.getElementById("themeToggle");
+/* تم */
+const themeKey = "konkur_theme";
+const themeBtn = document.getElementById("themeToggle");
 
-    function applyTheme(theme) {
-        document.body.setAttribute("data-theme", theme);
-        themeToggleBtn.textContent =
-            theme === "light" ? "🌙 حالت تیره" : "☀️ حالت روشن";
-    }
+function applyTheme(t){
+    document.body.setAttribute("data-theme",t);
+    themeBtn.textContent = t === "light" ? "🌙 تیره" : "☀️ روشن";
+}
 
-    const savedTheme = localStorage.getItem(THEME_KEY) || "dark";
-    applyTheme(savedTheme);
+const savedTheme = localStorage.getItem(themeKey) || "dark";
+applyTheme(savedTheme);
 
-    themeToggleBtn.addEventListener("click", () => {
-        const current = document.body.getAttribute("data-theme") || "dark";
-        const next = current === "dark" ? "light" : "dark";
-        localStorage.setItem(THEME_KEY, next);
-        applyTheme(next);
-    });
+themeBtn.onclick = () => {
+    const now = document.body.getAttribute("data-theme");
+    const next = now === "dark" ? "light" : "dark";
+    localStorage.setItem(themeKey,next);
+    applyTheme(next);
+};
 
-    /* داده‌های آزمون */
-    const username = localStorage.getItem("konkur_username");
-    const correct = Number(localStorage.getItem("quiz_correct"));
-    const wrong = Number(localStorage.getItem("quiz_wrong"));
-    const time = Number(localStorage.getItem("quiz_time"));
+/* داده آزمون */
+const correct = Number(localStorage.getItem("quiz_correct"));
+const wrong   = Number(localStorage.getItem("quiz_wrong"));
+const total   = correct + wrong;
 
-    document.getElementById("correctBox").textContent = correct;
-    document.getElementById("wrongBox").textContent = wrong;
+document.getElementById("correctBox").textContent = correct;
+document.getElementById("wrongBox").textContent   = wrong;
 
-    let m = String(Math.floor(time / 60)).padStart(2,"0");
-    let s = String(time % 60).padStart(2,"0");
-    document.getElementById("timeBox").textContent = `${m}:${s}`;
+/* زمان — فعلاً تستی */
+document.getElementById("timeBox").textContent = "—";
 
-    const totalQuestions = correct + wrong;
-    const percent = totalQuestions > 0
-        ? Math.round((correct / totalQuestions) * 100)
-        : 0;
+/* درصد */
+let percentValue = total > 0 ? Math.round((correct / total) * 100) : 0;
+const percent = document.getElementById("percent");
 
-    const percentBox = document.getElementById("percentBox");
-    let p = 0;
-    const anim = setInterval(() => {
-        p++;
-        if (p > percent) p = percent;
-        percentBox.textContent = p + "%";
-        percentBox.style.opacity = "1";
-        percentBox.style.transform = "scale(1)";
-        if (p >= percent) clearInterval(anim);
-    }, 15);
+let counterAnim = 0;
+const animation = setInterval(() => {
+    counterAnim++;
+    percent.textContent = counterAnim + "%";
+    if(counterAnim >= percentValue) clearInterval(animation);
+}, 15);
 
-    /* ذخیره رکورد بهترین درصد */
-    if (username) {
-        const bestKey = `best_percent_${username}`;
-        const prevBest = Number(localStorage.getItem(bestKey) || "0");
-        if (percent > prevBest) {
-            localStorage.setItem(bestKey, String(percent));
-        }
-    }
+/* لقب‌ها */
+const username = localStorage.getItem("konkur_username");
+const totalKey = `total_tests_${username}`;
+const userTests = Number(localStorage.getItem(totalKey) || "0");
 
-    /* لقب‌ها */
-    const totalKey = `total_tests_${username}`;
-    const totalTests = Number(localStorage.getItem(totalKey) || "0");
+function getRank(t){
+    if(t >= 600) return "بزرگ تست‌زن 💛";
+    if(t >= 400) return "تست‌زن قهار ⚡";
+    if(t >= 200) return "تست‌زن حرفه‌ای 🎯";
+    if(t >= 100) return "تست‌زن فعال 🚀";
+    if(t >= 50) return "در مسیر پیشرفت ✨";
+    if(t >= 20) return "شروع قدرتمند 💪";
+    return "تازه‌وارد تست‌زن 🌱";
+}
 
-    function getRank(t) {
-        if (t >= 1000) return "افسانه تست‌زنی 🔥";
-        if (t >= 600) return "بزرگ تست‌زن 💛";
-        if (t >= 400) return "تست‌زن قهار ⚡";
-        if (t >= 200) return "تست‌زن حرفه‌ای 🎯";
-        if (t >= 100) return "تست‌زن فعال 🚀";
-        if (t >= 50)  return "در مسیر تست‌زنی ✨";
-        if (t >= 20)  return "شروع قدرتمند 💪";
-        return "تازه‌وارد تست‌زن 🌱";
-    }
+document.getElementById("rankLabel").textContent = getRank(userTests);
 
-    const rankName = getRank(totalTests);
-    document.getElementById("userRank").textContent = rankName;
+/* تحلیل روانشناسی */
+function psycho(p){
+    if(p >= 85)
+        return "عملکردت واقعاً عالی بوده 👏 تسلط خوبی روی مباحث داری. حفظ این روند می‌تونه نتیجه‌ت رو فوق‌العاده کنه.";
+    if(p >= 60)
+        return "خیلی خوبه 🙂 پایه‌ی مناسبی داری. با کمی تمرین بیشتر نتیجه‌ت بهتر هم میشه.";
+    if(p >= 40)
+        return "نتیجه‌ت متوسطه، اما نشونه‌های پیشرفت دیده میشه. با تمرین منظم رو به رشد خواهی بود 🌱";
+    return "این بار نتیجه‌ت کمتر از توان واقعیته، اما جای نگرانی نیست. هر آزمون یک قدم به جلوئه. آروم و پیوسته ادامه بده 🙌";
+}
 
-    /* تحلیل روانشناسی مهربان + نیمه‌ رسمی */
-    const psychologyBox = document.getElementById("psychologyBox");
+document.getElementById("psychology").textContent = psycho(percentValue);
 
-    function psychText(percent) {
-        if (!Number.isFinite(percent)) {
-            return "آزمون به درستی ثبت نشده است، لطفاً یک آزمون جدید اجرا کن.";
-        }
-        if (percent >= 85) {
-            return "عملکردت بسیار عالی بوده است 👏 تسلط خوبی روی این درس داری. ادامه‌ی همین روند می‌تواند تو را به نتایج بسیار خوبی برساند.";
-        }
-        if (percent >= 60) {
-            return "عملکردت خوب و امیدوارکننده است 🙂 پایه‌ی مناسبی داری و با کمی تمرین و مرور بیشتر، می‌توانی سطح خودت را بالاتر ببری.";
-        }
-        if (percent >= 40) {
-            return "عملکردت در حد متوسط است، اما نشانه‌های پیشرفت در کارت دیده می‌شود. با تکرار تست‌ها و تمرین منظم، به‌مرور نتیجه‌هایت بهتر می‌شود 🌱";
-        }
-        return "این بار نتیجه‌ات کمتر از چیزی است که توان واقعی‌ات نشان می‌دهد، اما جای نگرانی نیست. هر آزمون یک قدم به سمت پیشرفت است. با تمرین بیشتر و مرور آرام، به‌تدریج پیشرفت را حس می‌کنی 🙌";
-    }
+/* دکمه‌ها + Ripple + Transition */
+const layer = document.getElementById("transitionLayer");
 
-    psychologyBox.textContent = psychText(percent);
+function ripple(btn,e){
+    const x = e.clientX - btn.getBoundingClientRect().left;
+    const y = e.clientY - btn.getBoundingClientRect().top;
+    btn.style.setProperty("--x", x+"px");
+    btn.style.setProperty("--y", y+"px");
+    btn.classList.add("ripple");
+    setTimeout(()=>btn.classList.remove("ripple"),500);
+}
 
-    /* دکمه‌ها */
-    document.getElementById("retryBtn").addEventListener("click", () => {
-        localStorage.removeItem("review_wrong_mode");
-        window.location.href = "questions-count.html";
-    });
+function go(url){
+    layer.classList.add("active");
+    setTimeout(()=>window.location.href = url, 400);
+}
 
-    document.getElementById("wrongBtn").addEventListener("click", () => {
-        localStorage.setItem("review_wrong_mode", "yes");
-        window.location.href = "quiz.html";
-    });
+document.getElementById("retry").onclick = e => {
+    ripple(e.target,e);
+    localStorage.removeItem("review_wrong_mode");
+    go("questions-count.html");
+};
 
-    document.getElementById("profileBtn").addEventListener("click", () => {
-        window.location.href = "profile.html";
-    });
+document.getElementById("wrong").onclick = e => {
+    ripple(e.target,e);
+    localStorage.setItem("review_wrong_mode","yes");
+    go("quiz.html");
+};
 
-    document.getElementById("backBtn").addEventListener("click", () => {
-        window.location.href = "subjects.html";
-    });
+document.getElementById("profile").onclick = e => {
+    ripple(e.target,e);
+    go("profile.html");
+};
+
+document.getElementById("back").onclick = e => {
+    ripple(e.target,e);
+    go("subjects.html");
+};
 </script>
 
 </body>
