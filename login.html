@@ -4,11 +4,14 @@
 <meta charset="UTF-8">
 <title>ورود</title>
 
+<link rel="stylesheet" href="header.css">
+
 <style>
 @font-face{
     font-family:"YekanBakh";
     src:url("YekanBakh.woff2") format("woff2");
 }
+
 *{box-sizing:border-box;}
 
 :root{
@@ -28,25 +31,11 @@ body{
     display:flex;
     justify-content:center;
     align-items:center;
-    overflow:hidden;
-    padding:20px;
+    overflow-x:hidden;
+    padding:140px 20px 20px; /* فاصله برای هدر */
 }
 
-/* نور پس زمینه */
-body::before{
-    content:"";
-    position:absolute;
-    width:620px;height:620px;
-    top:-260px;left:-260px;
-    background:radial-gradient(circle,rgba(245,200,66,.18),transparent 70%);
-    animation:glow 8s infinite alternate ease-in-out;
-}
-@keyframes glow{
-    0%{transform:scale(1) translate(0,0);}
-    100%{transform:scale(1.25) translate(50px,50px);}
-}
-
-/* کارت */
+/* کارت اصلی */
 .card{
     width:100%;
     max-width:450px;
@@ -57,26 +46,25 @@ body::before{
     box-shadow:0 30px 80px rgba(0,0,0,.65);
     position:relative;
     opacity:0;
-    transform:translateY(18px);
-    animation:show .9s ease forwards;
+    transform:translateY(20px);
+    animation:fadeIn .8s forwards;
 }
-@keyframes show{
-    to{opacity:1;transform:translateY(0);}
+@keyframes fadeIn{
+    to{opacity:1; transform:translateY(0);}
 }
 
-/* لوگو */
 .logo{
     width:110px;
-    margin:0 auto 20px auto;
     display:block;
+    margin:0 auto 20px auto;
     filter:drop-shadow(0 0 14px rgba(245,200,66,.35));
 }
 
 /* عنوان */
 .title{
     font-size:22px;
-    color:var(--gold);
     text-align:center;
+    color:var(--gold);
     margin-bottom:18px;
 }
 
@@ -95,7 +83,6 @@ body::before{
     outline:none;
     color:var(--text);
     font-size:15px;
-    font-family:"YekanBakh";
 }
 .input-box:focus-within{
     border-color:var(--gold);
@@ -109,30 +96,28 @@ body::before{
     display:none;
 }
 
-/* دکمه */
+/* دکمه ورود */
 .btn{
     width:100%;
     padding:13px;
     border-radius:20px;
     background:linear-gradient(135deg,var(--gold),#c79a00);
     border:none;
+    cursor:pointer;
     font-size:16px;
     font-weight:700;
-    color:#1d1203;
-    cursor:pointer;
-    box-shadow:0 18px 35px rgba(0,0,0,.45);
     position:relative;
     overflow:hidden;
+    color:#1d1203;
 }
 
-/* ripple */
+/* Ripple */
 .btn::after{
     content:"";
     position:absolute;
-    width:22px;
-    height:22px;
-    border-radius:50%;
+    width:22px;height:22px;
     background:rgba(255,255,255,.45);
+    border-radius:50%;
     transform:scale(0);
     opacity:0;
     left:var(--x);
@@ -143,11 +128,13 @@ body::before{
     transform:scale(10);
     opacity:0;
 }
-
 </style>
 </head>
 
 <body>
+
+<!-- هدر -->
+<div id="header"></div>
 
 <div class="card">
 
@@ -159,11 +146,12 @@ body::before{
         <input id="usernameInput" placeholder="نام کاربری را وارد کنید...">
     </div>
 
-    <div id="error">نام کاربری نباید خالی باشد.</div>
+    <div id="error">نام کاربری نمی‌تواند خالی باشد.</div>
 
     <button id="loginBtn" class="btn">ورود</button>
-
 </div>
+
+<script src="header.js"></script>
 
 <script>
 const input=document.getElementById("usernameInput");
@@ -174,8 +162,8 @@ const error=document.getElementById("error");
 function ripple(e){
     const x=e.clientX - btn.getBoundingClientRect().left;
     const y=e.clientY - btn.getBoundingClientRect().top;
-    btn.style.setProperty("--x",x+"px");
-    btn.style.setProperty("--y",y+"px");
+    btn.style.setProperty("--x", x+"px");
+    btn.style.setProperty("--y", y+"px");
     btn.classList.add("ripple");
     setTimeout(()=>btn.classList.remove("ripple"),600);
 }
@@ -189,20 +177,16 @@ btn.onclick = e=>{
         return;
     }
 
-    /* ذخیره نام کاربری */
     localStorage.setItem("konkur_username",username);
 
-    /* تنظیم مقادیر اولیه */
+    /* اگر کاربر جدید باشد */
     if(!localStorage.getItem("total_tests_"+username)){
         localStorage.setItem("total_tests_"+username,"0");
-    }
-    if(!localStorage.getItem("best_percent_"+username)){
         localStorage.setItem("best_percent_"+username,"0");
     }
 
-    /* رفتن به صفحه انتخاب رشته */
     setTimeout(()=>{
-        window.location.href="field.html";
+        window.location.href="dashboard.html";
     },350);
 };
 </script>
