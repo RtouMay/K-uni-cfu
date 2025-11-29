@@ -2,171 +2,228 @@
 <html lang="fa" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>انتخاب تعداد تست</title>
+    <title>تعداد سوالات</title>
+
     <style>
         @font-face {
             font-family: "YekanBakh";
             src: url("YekanBakh.woff2") format("woff2");
         }
-        *{box-sizing:border-box}
-        body{
-            margin:0;
-            min-height:100vh;
-            font-family:"YekanBakh",sans-serif;
-            background:radial-gradient(circle at top,#222 0,#050509 45%,#000 100%);
-            color:#f5f5f5;
-            display:flex;
-            align-items:center;
-            justify-content:center;
+
+        * { box-sizing: border-box; }
+
+        :root {
+            --bg-body: radial-gradient(circle at top, #222, #050509 50%, #000 100%);
+            --text-main: #f6f6f6;
+            --card-bg: linear-gradient(145deg, #0d0d12, #050509);
+            --card-shadow: 0 18px 60px rgba(0,0,0,.9);
+
+            --input-bg: #111;
+            --input-border: rgba(255,255,255,.15);
+
+            --btn-bg: linear-gradient(135deg, #f5c842, #f0a900);
+            --btn-text: #1d1203;
         }
-        .wrapper{width:100%;max-width:900px;padding:20px;}
-        .card{
-            background:linear-gradient(145deg,#0d0d12,#050509);
-            border-radius:24px;
-            padding:28px 24px 20px;
-            box-shadow:0 18px 60px rgba(0,0,0,.9);
-            position:relative;overflow:hidden;
+
+        body[data-theme="light"] {
+            --bg-body: radial-gradient(circle at top, #ffffff, #f4f4f4 55%, #e0e0e0 100%);
+            --text-main: #222;
+            --card-bg: #ffffff;
+            --card-shadow: 0 14px 40px rgba(0,0,0,.12);
+
+            --input-bg: #f0f0f0;
+            --input-border: rgba(0,0,0,.10);
+
+            --btn-bg: linear-gradient(135deg, #ffe178, #e5b200);
+            --btn-text: #222;
         }
-        .card::before{
-            content:"";position:absolute;inset:-40%;
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: "YekanBakh", sans-serif;
+            background: var(--bg-body);
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            transition: background .3s ease, color .3s ease;
+        }
+
+        .card {
+            width: 100%;
+            max-width: 500px;
+            background: var(--card-bg);
+            border-radius: 24px;
+            padding: 26px 22px;
+            box-shadow: var(--card-shadow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: "";
+            position: absolute;
+            inset: -40%;
             background:
-                radial-gradient(circle at 10% 0,rgba(245,200,66,.08),transparent 55%),
-                radial-gradient(circle at 90% 100%,rgba(255,255,255,.05),transparent 55%);
-            opacity:.7;
-        }
-        .inner{position:relative;z-index:1}
-        header{
-            display:flex;align-items:center;justify-content:space-between;
-            gap:16px;margin-bottom:18px;
-        }
-        .logo-img{width:40px;height:auto;}
-        .badge{
-            font-size:11px;
-            padding:4px 10px;
-            border-radius:999px;
-            border:1px solid rgba(255,255,255,.16);
-        }
-        h1{margin:0 0 6px;font-size:20px;}
-        .subtitle{font-size:13px;opacity:.85;margin-bottom:18px;}
-
-        .range-box{
-            margin-top:20px;
-            text-align:center;
-        }
-        .range-value{
-            font-size:32px;
-            color:#f5c842;
-            font-weight:700;
-            margin-bottom:12px;
-        }
-        input[type=range]{
-            width:90%;
-            accent-color:#f5c842;
-            cursor:pointer;
+                radial-gradient(circle at 0 0, rgba(245,200,66,.08), transparent 55%),
+                radial-gradient(circle at 100% 100%, rgba(255,255,255,.06), transparent 55%);
+            opacity: .5;
         }
 
-        .btn{
-            border:none;border-radius:999px;padding:10px 18px;
-            font-size:14px;cursor:pointer;font-family:inherit;margin-top:22px;
-        }
-        .btn-primary{
-            background:linear-gradient(135deg,#f5c842,#f0a900);
-            color:#17130a;font-weight:700;
-        }
-        .btn-secondary{
-            background:transparent;color:#ddd;font-size:11px;margin-right:8px;
+        .inside {
+            position: relative;
+            z-index: 2;
         }
 
-        .bottom-meta{
-            margin-top:20px;font-size:11px;text-align:center;opacity:.7;
+        .top-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 18px;
         }
-        .designer{margin-top:4px;font-weight:600;}
+
+        .theme-toggle {
+            border: 1px solid var(--input-border);
+            background: transparent;
+            color: inherit;
+            border-radius: 999px;
+            padding: 6px 12px;
+            cursor: pointer;
+            font-size: 11px;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 21px;
+            color: #f5c842;
+        }
+
+        body[data-theme="light"] h1 {
+            color: #c59500;
+        }
+
+        .box {
+            background: var(--input-bg);
+            border-radius: 16px;
+            padding: 20px;
+            border: 1px solid var(--input-border);
+        }
+
+        .label {
+            font-size: 14px;
+            margin-bottom: 12px;
+            opacity: .9;
+        }
+
+        /* اسلایدر */
+        input[type=range] {
+            width: 100%;
+            margin-top: 10px;
+            -webkit-appearance: none;
+            background: transparent;
+        }
+
+        input[type=range]::-webkit-slider-runnable-track {
+            height: 8px;
+            background: #888;
+            border-radius: 5px;
+        }
+
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 22px;
+            height: 22px;
+            background: #f5c842;
+            border-radius: 50%;
+            cursor: pointer;
+            margin-top: -7px;
+        }
+
+        body[data-theme="light"] input[type=range]::-webkit-slider-thumb {
+            background: #c59500;
+        }
+
+        .value {
+            margin-top: 14px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 16px;
+            color: #f5c842;
+        }
+
+        .btn {
+            width: 100%;
+            margin-top: 16px;
+            padding: 12px 14px;
+            border-radius: 16px;
+            border: none;
+            background: var(--btn-bg);
+            color: var(--btn-text);
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 15px;
+            font-weight: 700;
+            box-shadow: 0 8px 22px rgba(0,0,0,.4);
+        }
 
     </style>
 </head>
+
 <body>
 
-<div class="wrapper">
-    <div class="card">
-        <div class="inner">
+<div class="card">
+    <div class="inside">
 
-            <header>
-                <div style="display:flex;align-items:center;gap:10px;">
-                    <img src="Farhangian_Uni.png" class="logo-img">
-                    <div>
-                        <div style="font-size:15px;font-weight:700;">انتخاب تعداد تست</div>
-                        <div style="font-size:11px;opacity:.8;">مرحله پنجم</div>
-                    </div>
-                </div>
-                <div id="badge" class="badge"></div>
-            </header>
-
-            <h1>چندتا تست می‌خوای بزنی؟</h1>
-            <div class="subtitle">
-                از ۱ تا ۳۰ تست می‌تونی انتخاب کنی.  
-                تعداد تست‌ها روی تحلیل نتیجه هم تاثیر داره.
-            </div>
-
-            <div class="range-box">
-                <div id="rangeValue" class="range-value">15</div>
-                <input id="rangeInput" type="range" min="1" max="30" value="15">
-            </div>
-
-            <button id="nextBtn" class="btn btn-primary">
-                تایید و شروع آزمون
-            </button>
-
-            <button id="backBtn" class="btn btn-secondary">
-                برگشت به انتخاب درس
-            </button>
-
-            <div class="bottom-meta">
-                <div>در مرحله بعد آزمون واقعی شروع می‌شود.</div>
-                <div class="designer">طراح: محمدمهدی دیناروند</div>
-            </div>
-
+        <div class="top-row">
+            <h1>تعداد سوال</h1>
+            <button id="themeToggle" class="theme-toggle">☀️ حالت روشن</button>
         </div>
+
+        <div class="box">
+            <div class="label">تعداد تست مورد نظر خود را انتخاب کنید:</div>
+
+            <input id="rangeInput" type="range" min="5" max="30" value="10">
+            <div id="valueBox" class="value">10 تست</div>
+
+            <button id="goBtn" class="btn">شروع آزمون</button>
+        </div>
+
     </div>
 </div>
 
 <script>
-    const username = localStorage.getItem("konkur_username");
-    const role = localStorage.getItem("konkur_role");
-    const field = localStorage.getItem("konkur_field");
-    const examType = localStorage.getItem("konkur_examType");
-    const subject = localStorage.getItem("konkur_subject");
+    /* تم */
+    const THEME_KEY = "konkur_theme";
+    const themeToggleBtn = document.getElementById("themeToggle");
 
-    const badge = document.getElementById("badge");
-    const rangeInput = document.getElementById("rangeInput");
-    const rangeValue = document.getElementById("rangeValue");
-    const nextBtn = document.getElementById("nextBtn");
-    const backBtn = document.getElementById("backBtn");
-
-    // چک کردن اینکه مراحل قبل طی شده
-    if (!username || !field || !examType || !subject) {
-        window.location.href = "index.html";
+    function applyTheme(theme) {
+        document.body.setAttribute("data-theme", theme);
+        themeToggleBtn.textContent =
+            theme === "light" ? "🌙 حالت تیره" : "☀️ حالت روشن";
     }
 
-    badge.textContent = role === "admin"
-        ? `مدیر: ${username}`
-        : `کاربر: ${username}`;
+    const savedTheme = localStorage.getItem(THEME_KEY) || "dark";
+    applyTheme(savedTheme);
 
-    // نمایش مقدار اسلایدر
-    rangeInput.addEventListener("input", ()=>{
-        rangeValue.textContent = rangeInput.value;
+    themeToggleBtn.addEventListener("click", () => {
+        const current = document.body.getAttribute("data-theme") || "dark";
+        const next = current === "dark" ? "light" : "dark";
+        localStorage.setItem(THEME_KEY, next);
+        applyTheme(next);
     });
 
-    // تایید و رفتن به آزمون
-    nextBtn.addEventListener("click", ()=>{
-        const count = rangeInput.value;
-        localStorage.setItem("konkur_questionCount", count);
+    /* اسلایدر */
+    const range = document.getElementById("rangeInput");
+    const valueBox = document.getElementById("valueBox");
 
-        // مرحله بعد → فایل: quiz.html
+    range.addEventListener("input", () => {
+        valueBox.textContent = range.value + " تست";
+    });
+
+    document.getElementById("goBtn").addEventListener("click", () => {
+        localStorage.setItem("konkur_questionCount", range.value);
         window.location.href = "quiz.html";
-    });
-
-    backBtn.addEventListener("click", ()=>{
-        window.location.href = "subjects.html";
     });
 </script>
 
