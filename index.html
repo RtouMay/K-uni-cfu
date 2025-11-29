@@ -2,205 +2,200 @@
 <html lang="fa" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>سامانه تمرین کنکور - ورود</title>
+    <title>ورود</title>
+
     <style>
         @font-face {
             font-family: "YekanBakh";
             src: url("YekanBakh.woff2") format("woff2");
         }
-        *{box-sizing:border-box}
-        body{
-            margin:0;
-            min-height:100vh;
-            font-family:"YekanBakh",sans-serif;
-            background:radial-gradient(circle at top,#222 0,#050509 45%,#000 100%);
-            color:#f5f5f5;
-            display:flex;
-            align-items:center;
-            justify-content:center;
+
+        * { box-sizing: border-box; }
+
+        :root {
+            --bg-body: radial-gradient(circle at top, #222, #050509 50%, #000 100%);
+            --text-main: #f6f6f6;
+            --card-bg: linear-gradient(145deg, #0d0d12, #050509);
+            --card-shadow: 0 18px 60px rgba(0,0,0,.9);
+            --input-bg: #111;
+            --input-border: rgba(255,255,255,.10);
+            --btn-bg: linear-gradient(135deg, #f5c842, #f0a900);
+            --btn-text: #1d1203;
         }
-        .wrapper{
-            width:100%;
-            max-width:900px;
-            padding:20px;
+
+        body[data-theme="light"] {
+            --bg-body: radial-gradient(circle at top, #ffffff, #f4f4f4 55%, #e0e0e0 100%);
+            --text-main: #222;
+            --card-bg: #ffffff;
+            --card-shadow: 0 14px 40px rgba(0,0,0,.12);
+            --input-bg: #f7f7f7;
+            --input-border: rgba(0,0,0,.15);
+            --btn-bg: linear-gradient(135deg, #f7d65c, #f0b700);
+            --btn-text: #222;
         }
-        .card{
-            background:linear-gradient(145deg,#0d0d12,#050509);
-            border-radius:24px;
-            padding:28px 22px 18px;
-            box-shadow:0 18px 60px rgba(0,0,0,.9);
-            position:relative;
-            overflow:hidden;
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: "YekanBakh", sans-serif;
+            background: var(--bg-body);
+            color: var(--text-main);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            transition: background .3s ease, color .3s ease;
         }
-        .card::before{
-            content:"";
-            position:absolute;
-            inset:-40%;
+
+        .card {
+            width: 100%;
+            max-width: 420px;
+            background: var(--card-bg);
+            padding: 26px 22px;
+            border-radius: 24px;
+            box-shadow: var(--card-shadow);
+            position: relative;
+            overflow: hidden;
+            transition: all .3s ease;
+        }
+
+        .card::before {
+            content: "";
+            position: absolute;
+            inset: -40%;
             background:
-                radial-gradient(circle at 10% 0,rgba(245,200,66,.08),transparent 55%),
-                radial-gradient(circle at 90% 100%,rgba(255,255,255,.05),transparent 55%);
-            opacity:.7;
+                radial-gradient(circle at 0 0, rgba(245,200,66,.10), transparent 55%),
+                radial-gradient(circle at 100% 100%, rgba(255,255,255,.08), transparent 55%);
+            opacity: .5;
         }
-        .inner{position:relative;z-index:1}
-        header{
-            display:flex;
-            align-items:center;
-            justify-content:space-between;
-            gap:16px;
-            margin-bottom:18px;
+
+        .inside {
+            position: relative;
+            z-index: 2;
         }
-        .logo-area{display:flex;align-items:center;gap:10px;}
-        .logo-img{width:46px;height:auto;}
-        .logo-text-main{font-size:15px;font-weight:700;}
-        .logo-text-sub{font-size:11px;opacity:.8;}
-        .badge{
-            padding:4px 10px;
-            border-radius:999px;
-            border:1px solid rgba(245,200,66,.5);
-            font-size:11px;
-            display:inline-flex;
-            align-items:center;
-            gap:6px;
+
+        .top-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 14px;
         }
-        .badge-dot{
-            width:6px;height:6px;border-radius:999px;
-            background:#f5c842;box-shadow:0 0 8px rgba(245,200,66,.9);
+
+        .theme-toggle {
+            border: 1px solid var(--input-border);
+            background: transparent;
+            color: inherit;
+            border-radius: 999px;
+            padding: 6px 12px;
+            cursor: pointer;
+            font-size: 11px;
         }
-        h1{margin:0 0 6px;font-size:20px;}
-        .subtitle{font-size:13px;opacity:.8;margin-bottom:16px;}
-        label{display:block;font-size:13px;margin-bottom:6px;}
-        input[type=text]{
-            width:100%;padding:9px 11px;border-radius:999px;
-            border:1px solid rgba(255,255,255,.18);
-            background:rgba(10,10,15,.9);color:#f5f5f5;
-            outline:none;font-size:13px;
+
+        h1 {
+            margin: 0 0 12px;
+            font-size: 20px;
+            text-align: right;
+            color: var(--text-main);
         }
-        input[type=text]:focus{
-            border-color:#f5c842;
-            box-shadow:0 0 0 1px rgba(245,200,66,.4);
+
+        .input-group {
+            margin-bottom: 16px;
         }
-        .helper{font-size:11px;opacity:.7;margin-top:4px;}
-        .error{font-size:11px;color:#ff6e6e;margin-top:6px;display:none;}
-        .actions{margin-top:14px;}
-        .btn{
-            border:none;border-radius:999px;padding:9px 18px;
-            font-size:13px;cursor:pointer;font-family:inherit;
-            display:inline-flex;align-items:center;gap:8px;
+
+        input {
+            width: 100%;
+            padding: 12px 14px;
+            border-radius: 12px;
+            border: 1px solid var(--input-border);
+            background: var(--input-bg);
+            color: var(--text-main);
+            font-family: inherit;
+            outline: none;
+            font-size: 14px;
         }
-        .btn-primary{
-            background:linear-gradient(135deg,#f5c842,#f0a900);
-            color:#17130a;font-weight:700;
-            box-shadow:0 8px 22px rgba(0,0,0,.7),
-                       0 0 14px rgba(245,200,66,.7);
+
+        input::placeholder {
+            color: #aaa;
         }
-        .status{font-size:12px;margin-top:8px;min-height:18px;}
-        .status.ok{color:#8bc34a;}
-        .bottom-meta{
-            margin-top:20px;font-size:11px;text-align:center;opacity:.7;
+
+        .btn {
+            width: 100%;
+            padding: 12px 14px;
+            border-radius: 16px;
+            border: none;
+            cursor: pointer;
+            background: var(--btn-bg);
+            color: var(--btn-text);
+            font-family: inherit;
+            font-size: 15px;
+            font-weight: 700;
+            margin-top: 10px;
+            box-shadow: 0 8px 22px rgba(0,0,0,.4);
         }
-        .designer{margin-top:4px;font-weight:600;}
-        @media (max-width:768px){
-            .card{padding:22px 16px;}
-            header{flex-direction:column;align-items:flex-start;}
+
+        .footer {
+            margin-top: 18px;
+            text-align: center;
+            font-size: 12px;
+            opacity: .8;
         }
+
     </style>
 </head>
 <body>
-<div class="wrapper">
-    <div class="card">
-        <div class="inner">
-            <header>
-                <div class="logo-area">
-                    <!-- فایل farhangian-logo.png رو کنار index.html بذار -->
-                    <img src="Farhangian_Uni.png" alt="دانشگاه فرهنگیان" class="logo-img">
-                    <div>
-                        <div class="logo-text-main">سامانه تمرین کنکور</div>
-                        <div class="logo-text-sub">برای بچه‌هایی که آرزوهاشون بزرگه، نه جیب‌شون 🌱</div>
-                    </div>
-                </div>
-                <div class="badge">
-                    <span class="badge-dot"></span>
-                    نسخه آزمایشی • ورود
-                </div>
-            </header>
 
-            <h1>ورود به سامانه</h1>
-            <div class="subtitle">
-                نام کاربری‌ای که بهت دادن رو وارد کن. اولین نام کاربری تعریف شده: <strong>admin</strong>
-            </div>
+<div class="card">
+    <div class="inside">
 
-            <label for="username">نام کاربری</label>
-            <input id="username" type="text" placeholder="مثلاً: admin">
-            <div class="helper">بعداً می‌تونی نام‌کاربری‌های بیشتر رو داخل کد اضافه کنی.</div>
-            <div id="error" class="error"></div>
-
-            <div class="actions">
-                <button id="loginBtn" class="btn btn-primary">ورود و رفتن به انتخاب رشته</button>
-            </div>
-
-            <div id="status" class="status"></div>
-
-            <div class="bottom-meta">
-                <div>این سامانه برای حمایت از دانش‌آموزان کم‌برخوردار طراحی شده است.</div>
-                <div class="designer">طراح: محمدمهدی دیناروند</div>
-            </div>
+        <div class="top-row">
+            <div></div>
+            <button id="themeToggle" class="theme-toggle">☀️ حالت روشن</button>
         </div>
+
+        <h1>ورود</h1>
+
+        <div class="input-group">
+            <input id="usernameInput" type="text" placeholder="نام کاربری را وارد کنید">
+        </div>
+
+        <button id="startBtn" class="btn">ادامه</button>
+
+        <div class="footer">
+            طراح: محمدمهدی دیناروند
+        </div>
+
     </div>
 </div>
 
 <script>
-    const usernameInput = document.getElementById("username");
-    const loginBtn = document.getElementById("loginBtn");
-    const errorBox = document.getElementById("error");
-    const statusBox = document.getElementById("status");
+    const THEME_KEY = "konkur_theme";
+    const themeToggleBtn = document.getElementById("themeToggle");
 
-    // اینجا لیست یوزرنیم‌ها رو نگه می‌داریم
-    // فعلاً فقط admin هست. بعداً خودت اینجا اضافه می‌کنی.
-    const USERS = {
-        "admin": { role: "admin" }
-        // مثلا بعداً:
-        // "student1401": { role: "student" },
-        // "fatemeh": { role: "student" }
-    };
-
-    function login() {
-        const username = usernameInput.value.trim();
-        errorBox.style.display = "none";
-        errorBox.textContent = "";
-        statusBox.textContent = "";
-
-        if (!username) {
-            errorBox.textContent = "نام کاربری رو خالی نذار 🙂";
-            errorBox.style.display = "block";
-            return;
-        }
-
-        let role = "student";
-        if (USERS[username]) {
-            role = USERS[username].role || "student";
-        } else if (username !== "admin") {
-            // فعلاً فقط admin مجازه؛ بقیه رد می‌شن
-            errorBox.textContent = "این نام کاربری هنوز ثبت نشده. فعلاً فقط admin فعاله.";
-            errorBox.style.display = "block";
-            return;
-        }
-
-        // ذخیره در localStorage برای صفحات بعد
-        localStorage.setItem("konkur_username", username);
-        localStorage.setItem("konkur_role", role);
-
-        statusBox.classList.add("ok");
-        statusBox.textContent = "ورود موفق ✅ در حال انتقال به صفحه انتخاب رشته...";
-
-        setTimeout(() => {
-            window.location.href = "field.html";
-        }, 700);
+    function applyTheme(theme) {
+        document.body.setAttribute("data-theme", theme);
+        themeToggleBtn.textContent =
+            theme === "light" ? "🌙 حالت تیره" : "☀️ حالت روشن";
     }
 
-    loginBtn.addEventListener("click", login);
-    usernameInput.addEventListener("keydown", e => {
-        if (e.key === "Enter") login();
+    const savedTheme = localStorage.getItem(THEME_KEY) || "dark";
+    applyTheme(savedTheme);
+
+    themeToggleBtn.addEventListener("click", () => {
+        const current = document.body.getAttribute("data-theme") || "dark";
+        const next = current === "dark" ? "light" : "dark";
+        localStorage.setItem(THEME_KEY, next);
+        applyTheme(next);
+    });
+
+    document.getElementById("startBtn").addEventListener("click", () => {
+        const username = document.getElementById("usernameInput").value.trim();
+        if (!username) {
+            alert("لطفاً نام کاربری را وارد کنید.");
+            return;
+        }
+        localStorage.setItem("konkur_username", username);
+        window.location.href = "field.html";
     });
 </script>
+
 </body>
 </html>
