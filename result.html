@@ -9,169 +9,271 @@
             font-family: "YekanBakh";
             src: url("YekanBakh.woff2") format("woff2");
         }
-        *{box-sizing:border-box}
-        body{
-            margin:0;
-            min-height:100vh;
-            font-family:"YekanBakh",sans-serif;
-            background:radial-gradient(circle at top,#222,#050509 50%,#000 100%);
-            color:#f5f5f5;
-            display:flex;justify-content:center;align-items:center;
-            padding:20px;
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: "YekanBakh", sans-serif;
+            background: radial-gradient(circle at top, #222, #050509 50%, #000 100%);
+            color: #f6f6f6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
         }
 
-        .card{
-            max-width:900px;
-            width:100%;
-            background:linear-gradient(145deg,#0d0d12,#050509);
-            border-radius:24px;
-            padding:30px 24px;
-            box-shadow:0 18px 60px rgba(0,0,0,.9);
-            position:relative;overflow:hidden;
+        .card {
+            max-width: 900px;
+            width: 100%;
+            background: linear-gradient(145deg, #0d0d12, #050509);
+            border-radius: 24px;
+            padding: 30px 24px;
+            box-shadow: 0 18px 60px rgba(0,0,0,.9);
+            position: relative;
+            overflow: hidden;
         }
-        .card::before{
-            content:"";position:absolute;inset:-40%;
+
+        .card::before {
+            content: "";
+            position: absolute;
+            inset: -40%;
             background:
-                radial-gradient(circle at 0 0,rgba(245,200,66,.08),transparent 55%),
-                radial-gradient(circle at 100% 100%,rgba(255,255,255,.06),transparent 55%);
-            opacity:.6;
+                radial-gradient(circle at 0 0, rgba(245,200,66,.08), transparent 55%),
+                radial-gradient(circle at 100% 100%, rgba(255,255,255,.06), transparent 55%);
+            opacity: .6;
         }
 
-        .inside{position:relative;z-index:2}
-        h1{text-align:center;margin:0 0 20px;font-size:22px;color:#f5c842;}
-
-        .summary{
-            background:#111;padding:20px;border-radius:18px;
-            border:1px solid rgba(255,255,255,.06);
-            margin-bottom:20px;
-        }
-        .summary-item{font-size:15px;margin:8px 0;}
-
-        .percent{
-            font-size:45px;
-            font-weight:700;
-            text-align:center;
-            margin:15px 0;
-            color:#f5c842;
+        .inside {
+            position: relative;
+            z-index: 2;
         }
 
-        .analysis{
-            margin-top:20px;padding:18px;
-            background:#1a1a1a;border-radius:18px;
-            border:1px solid rgba(255,255,255,.08);
-            font-size:14px;line-height:1.9;
+        h1 {
+            text-align: center;
+            margin: 0 0 18px;
+            font-size: 22px;
+            color: #f5c842;
         }
 
-        .btn{
-            border:none;border-radius:999px;
-            padding:10px 18px;font-size:14px;
-            font-family:inherit;cursor:pointer;
-            margin:10px 5px;
-        }
-        .btn-primary{
-            background:linear-gradient(135deg,#f5c842,#f0a900);
-            color:#1d1203;font-weight:700;
-        }
-        .btn-secondary{
-            background:#222;color:#ddd;
-        }
-        .btn-tertiary{
-            background:transparent;color:#bbb;font-size:12px;
+        .summary {
+            background: #111;
+            padding: 20px;
+            border-radius: 16px;
+            border: 1px solid rgba(255,255,255,.06);
+            margin-bottom: 20px;
         }
 
-        .bottom-meta{text-align:center;margin-top:18px;font-size:12px;opacity:.7;}
-        .designer{margin-top:5px;font-weight:600;}
+        .summary-item {
+            font-size: 15px;
+            margin: 8px 0;
+        }
 
+        .percent {
+            font-size: 48px;
+            font-weight: 700;
+            text-align: center;
+            margin: 20px 0;
+            color: #f5c842;
+            opacity: 0;          /* برای انیمیشن */
+            transform: scale(0.8);
+        }
+
+        .psychology {
+            margin-top: 20px;
+            padding: 18px;
+            background: #1a1a1a;
+            border-radius: 14px;
+            border: 1px solid rgba(255,255,255,.08);
+            font-size: 15px;
+            line-height: 1.8;
+        }
+
+        .title-small {
+            font-size: 15px;
+            font-weight: 600;
+            margin: 0 0 8px;
+        }
+
+        .badge-box {
+            margin-top: 20px;
+            background: #151515;
+            padding: 14px 20px;
+            border-radius: 14px;
+            border: 1px solid rgba(255,255,255,.08);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .badge-icon {
+            font-size: 28px;
+        }
+
+        .badge-title {
+            font-size: 17px;
+            font-weight: 600;
+            color: #ffd86b;
+        }
+
+        .btn {
+            padding: 10px 18px;
+            border-radius: 999px;
+            border: none;
+            cursor: pointer;
+            font-family: inherit;
+            margin: 10px 5px;
+            font-size: 14px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #f5c842, #f0a900);
+            color: #1d1203;
+            font-weight: 700;
+        }
+
+        .btn-secondary {
+            background: #222;
+            color: #ddd;
+        }
+
+        .btn-tertiary {
+            background: transparent;
+            color: #bbb;
+            font-size: 12px;
+        }
+
+        .buttons-center {
+            text-align: center;
+            margin-top: 20px;
+        }
     </style>
-
 </head>
+
 <body>
 
 <div class="card">
     <div class="inside">
 
-        <h1>نتیجه آزمون شما</h1>
+        <h1>نتیجه آزمون</h1>
 
         <div class="summary">
-            <div class="summary-item">تعداد درست: <span id="correctCount"></span></div>
-            <div class="summary-item">تعداد غلط: <span id="wrongCount"></span></div>
-            <div class="summary-item">زمان آزمون: <span id="timeSpent"></span></div>
+            <div class="summary-item">تعداد درست: <span id="correctBox"></span></div>
+            <div class="summary-item">تعداد غلط: <span id="wrongBox"></span></div>
+            <div class="summary-item">زمان آزمون: <span id="timeBox"></span></div>
         </div>
 
-        <div class="percent" id="percentBox">0%</div>
+        <div id="percentBox" class="percent">0%</div>
 
-        <div class="analysis" id="analysisBox"></div>
+        <!-- لقب -->
+        <div class="badge-box">
+            <div class="badge-icon">🏅</div>
+            <div class="badge-title" id="userRank">...</div>
+        </div>
 
-        <div style="text-align:center;">
+        <!-- تحلیل روانشناسی -->
+        <div class="psychology" id="psychologyBox"></div>
+
+        <!-- دکمه‌ها -->
+        <div class="buttons-center">
             <button id="retryBtn" class="btn btn-primary">دوباره آزمون همین درس</button>
             <button id="wrongBtn" class="btn btn-secondary">فقط سوالات غلط</button>
-            <button id="backBtn" class="btn btn-tertiary">برگشت به لیست درس‌ها</button>
-        </div>
-
-        <div class="bottom-meta">
-            <div>نتایج آزمون ذخیره شده و برای تحلیل‌های بعدی استفاده می‌شود.</div>
-            <div class="designer">طراح: محمدمهدی دیناروند</div>
+            <button id="backBtn" class="btn btn-tertiary">بازگشت به درس‌ها</button>
         </div>
 
     </div>
 </div>
 
-
 <script>
-
     const username = localStorage.getItem("konkur_username");
-    const field = localStorage.getItem("konkur_field");
-    const examType = localStorage.getItem("konkur_examType");
-    const subject = localStorage.getItem("konkur_subject");
 
     const correct = Number(localStorage.getItem("quiz_correct"));
     const wrong = Number(localStorage.getItem("quiz_wrong"));
     const time = Number(localStorage.getItem("quiz_time"));
 
-    if (!username || subject === null){
-        window.location.href = "index.html";
-    }
-
-    document.getElementById("correctCount").textContent = correct;
-    document.getElementById("wrongCount").textContent = wrong;
+    document.getElementById("correctBox").textContent = correct;
+    document.getElementById("wrongBox").textContent = wrong;
 
     // تبدیل زمان
-    let m = String(Math.floor(time / 60)).padStart(2, "0");
-    let s = String(time % 60).padStart(2, "0");
-    document.getElementById("timeSpent").textContent = `${m}:${s}`;
+    let m = String(Math.floor(time / 60)).padStart(2,"0");
+    let s = String(time % 60).padStart(2,"0");
+    document.getElementById("timeBox").textContent = `${m}:${s}`;
 
-    // محاسبه درصد
-    const total = correct + wrong;
-    const percent = Math.round((correct / total) * 100);
+    const percent = Math.round((correct / (correct + wrong)) * 100);
+    const percentBox = document.getElementById("percentBox");
 
-    document.getElementById("percentBox").textContent = percent + "%";
+    // انیمیشن درصد
+    let p = 0;
+    let anim = setInterval(() => {
+        p++;
+        percentBox.textContent = p + "%";
+        percentBox.style.opacity = "1";
+        percentBox.style.transform = "scale(1)";
+        if (p >= percent) clearInterval(anim);
+    }, 15);
 
+    /* ------------------------------------
+       لقب‌ها — بر اساس تعداد کل تست‌ها
+    ------------------------------------ */
+    const totalKey = `total_tests_${username}`;
+    const totalTests = Number(localStorage.getItem(totalKey) || "0");
 
-    /* -----------------------
-       تحلیل سطح عملکرد
-    ----------------------- */
-
-    const analysisBox = document.getElementById("analysisBox");
-
-    let analysis = "";
-
-    if (percent >= 85) {
-        analysis += "عالی! 👏 عملکردت نشون می‌ده کاملاً روی این درس مسلطی. ";
-        analysis += "فقط ادامه بده و همین روند رو نگه دار. ";
-    } 
-    else if (percent >= 60) {
-        analysis += "خوب بود! 🤝 تو مسیر درستی هستی. ";
-        analysis += "چندتا نکته کوچیک داری که با مرور دوباره حل میشه. ";
-    } 
-    else if (percent >= 40) {
-        analysis += "متوسط. بهتر از این‌ها می‌تونی بزنی. ";
-        analysis += "یه مقدار روی نکات پایه‌ای وقت بذار و تست‌های ساده‌تر رو اول بزن. ";
-    } 
-    else {
-        analysis += "نیاز به کار بیشتری داری. ولی ناامید نشو! ";
-        analysis += "این نتایج اول راه هست و با تمرین درست بهتر میشی. ";
+    function getRank(t) {
+        if (t >= 1000) return "افسانه تست‌زنی 🔥";
+        if (t >= 600) return "بزرگ تست‌زن 💛";
+        if (t >= 400) return "تست‌زن قهار ⚡";
+        if (t >= 200) return "تست‌زن حرفه‌ای 🎯";
+        if (t >= 100) return "تست‌زن فعال 🚀";
+        if (t >= 50)  return "در مسیر تست‌زنی ✨";
+        if (t >= 20)  return "شروع قدرتمند 💪";
+        return "تازه‌وارد تست‌زن 🌱";
     }
 
-    // تحلیل اضافه بر اساس تعداد غلط
-    if (wrong >= total * 0.5) {
-        analysis += "به نظر می‌رسه مدیریت زمان و تحلیل گزینه‌ها می‌تونه کمکت
+    const rankName = getRank(totalTests);
+    document.getElementById("userRank").textContent = rankName;
+
+    /* ------------------------------------
+       تحلیل روانشناسی مهربان + نیمه رسمی
+    ------------------------------------ */
+    const psychologyBox = document.getElementById("psychologyBox");
+
+    function psychText(percent) {
+        if (percent >= 85) {
+            return "عملکردت فوق‌العاده‌س! 👏 تسلط خوبی روی این درس داری. ادامه همین روند باعث می‌شه نتیجه‌های خیلی بهتری بگیری.";
+        }
+        if (percent >= 60) {
+            return "خیلی خوب بود! 🙂 پایه‌ت قویه و فقط کمی تمرین بیشتر می‌تونه تو رو به سطح بالاتر برسونه. همین مسیر رو برو.";
+        }
+        if (percent >= 40) {
+            return "عملکردت متوسطه ولی نشونه‌های خوبی دیده می‌شه. با تکرار تست‌ها و مرور نکات، خیلی سریع رشد می‌کنی. ناامید نشو 🌱";
+        }
+        return "نتیجه‌ت قابل بهتر شدنه، ولی جای نگرانی نیست. هر آزمون یک قدمه به سمت پیشرفت. با تمرین‌های منظم خیلی سریع بهتر می‌شی 🙌";
+    }
+
+    psychologyBox.textContent = psychText(percent);
+
+    /* ------------------------------------
+         دکمه‌ها
+    ------------------------------------ */
+
+    // دوباره آزمون
+    document.getElementById("retryBtn").addEventListener("click", () => {
+        localStorage.removeItem("review_wrong_mode");
+        window.location.href = "questions-count.html";
+    });
+
+    // فقط غلط‌ها
+    document.getElementById("wrongBtn").addEventListener("click", () => {
+        localStorage.setItem("review_wrong_mode", "yes");
+        window.location.href = "quiz.html";
+    });
+
+    // بازگشت به درس‌ها
+    document.getElementById("backBtn").addEventListener("click", () => {
+        window.location.href = "subjects.html";
+    });
+</script>
+
+</body>
+</html>
