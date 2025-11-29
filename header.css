@@ -3,37 +3,31 @@
     src: url("YekanBakh.woff2") format("woff2");
 }
 
-/* ================================
-   هدر اصلی (کاملاً بالاتر از همه)
-================================ */
+/* ===== هدر شیشه‌ای ===== */
 .main-header {
     width: 100%;
     position: fixed;
     top: 0;
     left: 0;
-
-    /* هدر همیشه روی همه عناصر باشد */
-    z-index: 999999999 !important;
+    z-index: 99999999;
 
     backdrop-filter: blur(14px);
-    background: rgba(0,0,0,0.25);
-    border-bottom: 1px solid rgba(255,255,255,0.08);
+    background: rgba(0, 0, 0, 0.28);
+    border-bottom: 1px solid rgba(255,255,255,0.09);
 
-    padding: 20px 30px;
+    padding: 22px 32px;
     display: flex;
     flex-direction: column;
     align-items: center;
 
-    transition: padding 0.35s ease, background 0.35s ease;
+    transition: padding .35s ease, background .35s ease;
 }
 
-/* هدر کوچک هنگام اسکرول */
 .main-header.shrink {
-    padding: 10px 30px;
-    background: rgba(0,0,0,0.45);
+    padding: 10px 32px;
+    background: rgba(0,0,0,0.5);
 }
 
-/* ساختار داخلی هدر */
 .header-inner {
     width: 100%;
     max-width: 1100px;
@@ -42,14 +36,14 @@
     align-items: center;
 }
 
-/* لوگوی مرکزی */
+/* لوگوی وسط */
 .header-logo {
     width: 95px;
+    filter: drop-shadow(0 0 12px rgba(245,200,66,.45));
     transition: width .35s ease;
-    filter: drop-shadow(0 0 12px rgba(245,200,66,.4));
 }
 .main-header.shrink .header-logo {
-    width: 65px;
+    width: 60px;
 }
 
 /* آیکون‌ها */
@@ -58,25 +52,27 @@
     width: 38px;
     height: 38px;
     border-radius: 50%;
-    background: rgba(255,255,255,0.08);
+    background: rgba(255,255,255,0.10);
     display: flex;
     justify-content: center;
     align-items: center;
     color: #f5c842;
-    transition: background .3s;
+    transition: background .25s;
 }
+
 .header-icon:hover {
-    background: rgba(245,200,66,0.18);
+    background: rgba(245,200,66,0.22);
 }
+
 .header-icon svg {
     width: 26px;
     height: 26px;
     stroke: #f5c842;
-    fill: none;
     stroke-width: 5;
+    fill: none;
 }
 
-/* عنوان صفحه */
+/* عنوان زیر هدر */
 .header-title {
     margin-top: 6px;
     font-size: 17px;
@@ -87,16 +83,9 @@
 
 /* موبایل */
 @media (max-width: 768px) {
-    .main-header {
-        padding: 14px 16px;
-    }
-    .main-header.shrink {
-        padding: 8px 16px;
-    }
-    .header-logo {
-        width: 80px;
-    }
-    .main-header.shrink .header-logo {
-        width: 60px;
-    }
+    .main-header { padding: 14px 14px; }
+    .main-header.shrink { padding: 7px 14px; }
+
+    .header-logo { width: 78px; }
+    .main-header.shrink .header-logo { width: 52px; }
 }
