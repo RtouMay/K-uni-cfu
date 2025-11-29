@@ -28,29 +28,26 @@
         background:var(--bg);
         color:var(--text);
         min-height:100vh;
-        display:flex;
-        justify-content:center;
-        align-items:flex-start;
         overflow-x:hidden;
-        padding:150px 20px 30px; /* جا برای هدر */
+        padding:170px 20px 40px; /* فاصله برای هدر */
     }
 
     .card{
         width:100%;
         max-width:450px;
         background:var(--box);
-        padding:28px 24px;
+        padding:28px;
         border-radius:26px;
         border:1px solid var(--border);
         box-shadow:0 30px 80px rgba(0,0,0,.65);
         position:relative;
         z-index:10;
+        animation:fadeIn .7s forwards;
         opacity:0;
-        transform:translateY(20px);
-        animation:fadeIn .8s forwards;
+        transform:translateY(25px);
     }
     @keyframes fadeIn{
-        to{opacity:1; transform:translateY(0);}
+        to{opacity:1;transform:translateY(0);}
     }
 
     .logo{
@@ -82,9 +79,6 @@
         color:var(--text);
         font-size:15px;
     }
-    .input-box:focus-within{
-        border-color:var(--gold);
-    }
 
     #error{
         font-size:13px;
@@ -106,22 +100,6 @@
         overflow:hidden;
         color:#1d1203;
     }
-    .btn::after{
-        content:"";
-        position:absolute;
-        width:22px;height:22px;
-        background:rgba(255,255,255,.45);
-        border-radius:50%;
-        transform:scale(0);
-        opacity:0;
-        left:var(--x);
-        top:var(--y);
-        transition:transform .5s,opacity .8s;
-    }
-    .btn.ripple::after{
-        transform:scale(10);
-        opacity:0;
-    }
 
     .designer{
         margin-top:14px;
@@ -134,10 +112,11 @@
 
 <body>
 
-    <!-- 🔥 هدر شیشه‌ای -->
+    <!-- 🔥 هدر -->
     <div class="main-header">
         <div class="header-inner">
 
+            <!-- پروفایل -->
             <div id="headerProfile" class="header-icon">
                 <svg viewBox="0 0 100 100">
                     <circle cx="50" cy="35" r="20" />
@@ -145,18 +124,21 @@
                 </svg>
             </div>
 
-            <img src="Farhangian_Uni.png" class="header-logo" alt="دانشگاه فرهنگیان">
+            <!-- لوگو -->
+            <img src="Farhangian_Uni.png" class="header-logo" alt="logo">
 
+            <!-- تم -->
             <div id="headerTheme" class="header-icon">☀️</div>
         </div>
 
         <div id="headerTitle" class="header-title"></div>
     </div>
 
-    <!-- کارت ورود -->
+
+    <!-- کارت -->
     <div class="card">
 
-        <img src="Farhangian_Uni.png" class="logo" alt="دانشگاه فرهنگیان">
+        <img src="Farhangian_Uni.png" class="logo">
 
         <div class="title">ورود به حساب کاربری</div>
 
@@ -171,41 +153,31 @@
         <div class="designer">طراح: محمدمهدی دیناروند</div>
     </div>
 
-    <script src="header.js"></script>
+<script src="header.js"></script>
 
-    <script>
-    const input = document.getElementById("usernameInput");
-    const btn   = document.getElementById("loginBtn");
-    const err   = document.getElementById("error");
+<script>
+const input=document.getElementById("usernameInput");
+const btn=document.getElementById("loginBtn");
+const err=document.getElementById("error");
 
-    function ripple(e){
-        const x = e.clientX - btn.getBoundingClientRect().left;
-        const y = e.clientY - btn.getBoundingClientRect().top;
-        btn.style.setProperty("--x", x+"px");
-        btn.style.setProperty("--y", y+"px");
-        btn.classList.add("ripple");
-        setTimeout(()=>btn.classList.remove("ripple"),600);
+btn.onclick = e=>{
+    const username=input.value.trim();
+    if(username===""){
+        err.style.display="block";
+        return;
     }
 
-    btn.onclick = e => {
-        ripple(e);
-        const username = input.value.trim();
+    localStorage.setItem("konkur_username",username);
 
-        if(username === ""){
-            err.style.display = "block";
-            return;
-        }
+    if(!localStorage.getItem("total_tests_"+username))
+        localStorage.setItem("total_tests_"+username,"0");
 
-        localStorage.setItem("konkur_username", username);
+    if(!localStorage.getItem("best_percent_"+username))
+        localStorage.setItem("best_percent_"+username,"0");
 
-        if(!localStorage.getItem("total_tests_"+username))
-            localStorage.setItem("total_tests_"+username,"0");
-        if(!localStorage.getItem("best_percent_"+username))
-            localStorage.setItem("best_percent_"+username,"0");
-
-        setTimeout(()=>{ window.location.href = "dashboard.html"; }, 350);
-    };
-    </script>
+    window.location.href="dashboard.html";
+};
+</script>
 
 </body>
 </html>
