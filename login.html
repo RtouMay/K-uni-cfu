@@ -1,199 +1,211 @@
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<title>ورود</title>
+    <meta charset="UTF-8">
+    <title>ورود</title>
 
-<link rel="stylesheet" href="header.css">
+    <link rel="stylesheet" href="header.css">
 
-<style>
-@font-face{
-    font-family:"YekanBakh";
-    src:url("YekanBakh.woff2") format("woff2");
-}
+    <style>
+    @font-face{
+        font-family:"YekanBakh";
+        src:url("YekanBakh.woff2") format("woff2");
+    }
 
-*{box-sizing:border-box;}
+    *{box-sizing:border-box;}
 
-:root{
-    --gold:#f5c842;
-    --bg:radial-gradient(circle at top,#1d1d27,#050509 60%,#000);
-    --text:#fff;
-    --box:#111;
-    --border:rgba(255,255,255,.12);
-}
+    :root{
+        --gold:#f5c842;
+        --bg:radial-gradient(circle at top,#1d1d27,#050509 60%,#000);
+        --text:#fff;
+        --box:#111;
+        --border:rgba(255,255,255,.12);
+    }
 
-body{
-    margin:0;
-    font-family:"YekanBakh";
-    background:var(--bg);
-    color:var(--text);
-    padding:150px 20px 20px; /* فاصله برای هدر */
-    min-height:100vh;
-    display:flex;
-    justify-content:center;
-    align-items:flex-start;
-    overflow-x:hidden;
-}
+    body{
+        margin:0;
+        font-family:"YekanBakh";
+        background:var(--bg);
+        color:var(--text);
+        min-height:100vh;
+        display:flex;
+        justify-content:center;
+        align-items:flex-start;
+        overflow-x:hidden;
+        padding:150px 20px 30px; /* جا برای هدر */
+    }
 
-/* کارت اصلی */
-.card{
-    width:100%;
-    max-width:450px;
-    background:var(--box);
-    padding:28px 24px;
-    border-radius:26px;
-    border:1px solid var(--border);
-    box-shadow:0 30px 80px rgba(0,0,0,.65);
-    position:relative;
-    opacity:0;
-    transform:translateY(20px);
-    animation:fadeIn .8s forwards;
-}
+    .card{
+        width:100%;
+        max-width:450px;
+        background:var(--box);
+        padding:28px 24px;
+        border-radius:26px;
+        border:1px solid var(--border);
+        box-shadow:0 30px 80px rgba(0,0,0,.65);
+        position:relative;
+        z-index:10;
+        opacity:0;
+        transform:translateY(20px);
+        animation:fadeIn .8s forwards;
+    }
+    @keyframes fadeIn{
+        to{opacity:1; transform:translateY(0);}
+    }
 
-@keyframes fadeIn{
-    to{opacity:1; transform:translateY(0);}
-}
+    .logo{
+        width:110px;
+        display:block;
+        margin:0 auto 20px auto;
+        filter:drop-shadow(0 0 14px rgba(245,200,66,.35));
+    }
 
-.logo{
-    width:110px;
-    display:block;
-    margin:0 auto 20px auto;
-    filter:drop-shadow(0 0 14px rgba(245,200,66,.35));
-}
+    .title{
+        font-size:22px;
+        text-align:center;
+        color:var(--gold);
+        margin-bottom:18px;
+    }
 
-/* عنوان */
-.title{
-    font-size:22px;
-    text-align:center;
-    color:var(--gold);
-    margin-bottom:18px;
-}
+    .input-box{
+        background:#00000033;
+        padding:14px;
+        border-radius:14px;
+        border:1px solid var(--border);
+        margin-bottom:16px;
+    }
+    .input-box input{
+        width:100%;
+        background:transparent;
+        border:none;
+        outline:none;
+        color:var(--text);
+        font-size:15px;
+    }
+    .input-box:focus-within{
+        border-color:var(--gold);
+    }
 
-/* اینپوت */
-.input-box{
-    background:#00000033;
-    padding:14px;
-    border-radius:14px;
-    border:1px solid var(--border);
-    margin-bottom:16px;
-}
+    #error{
+        font-size:13px;
+        color:#ff4a4a;
+        margin-bottom:12px;
+        display:none;
+    }
 
-.input-box input{
-    width:100%;
-    background:transparent;
-    border:none;
-    outline:none;
-    color:var(--text);
-    font-size:15px;
-}
+    .btn{
+        width:100%;
+        padding:13px;
+        border-radius:20px;
+        background:linear-gradient(135deg,var(--gold),#c79a00);
+        border:none;
+        cursor:pointer;
+        font-size:16px;
+        font-weight:700;
+        position:relative;
+        overflow:hidden;
+        color:#1d1203;
+    }
+    .btn::after{
+        content:"";
+        position:absolute;
+        width:22px;height:22px;
+        background:rgba(255,255,255,.45);
+        border-radius:50%;
+        transform:scale(0);
+        opacity:0;
+        left:var(--x);
+        top:var(--y);
+        transition:transform .5s,opacity .8s;
+    }
+    .btn.ripple::after{
+        transform:scale(10);
+        opacity:0;
+    }
 
-.input-box:focus-within{
-    border-color:var(--gold);
-}
-
-/* ارور */
-#error{
-    font-size:13px;
-    color:#ff4a4a;
-    margin-bottom:12px;
-    display:none;
-}
-
-/* دکمه ورود */
-.btn{
-    width:100%;
-    padding:13px;
-    border-radius:20px;
-    background:linear-gradient(135deg,var(--gold),#c79a00);
-    border:none;
-    cursor:pointer;
-    font-size:16px;
-    font-weight:700;
-    position:relative;
-    overflow:hidden;
-    color:#1d1203;
-}
-
-/* Ripple */
-.btn::after{
-    content:"";
-    position:absolute;
-    width:22px;
-    height:22px;
-    background:rgba(255,255,255,.45);
-    border-radius:50%;
-    transform:scale(0);
-    opacity:0;
-    left:var(--x);
-    top:var(--y);
-    transition:transform .5s,opacity .8s;
-}
-
-.btn.ripple::after{
-    transform:scale(10);
-    opacity:0;
-}
-</style>
+    .designer{
+        margin-top:14px;
+        text-align:center;
+        font-size:12px;
+        opacity:.7;
+    }
+    </style>
 </head>
 
 <body>
 
-<!-- 🔥 هدر باید همیشه بالاترین بخش body باشد -->
-<div id="header"></div>
-<script src="header.js"></script>
+    <!-- 🔥 هدر شیشه‌ای -->
+    <div class="main-header">
+        <div class="header-inner">
 
-<div class="card">
+            <div id="headerProfile" class="header-icon">
+                <svg viewBox="0 0 100 100">
+                    <circle cx="50" cy="35" r="20" />
+                    <path d="M20 85 Q50 60 80 85" />
+                </svg>
+            </div>
 
-    <img src="Farhangian_Uni.png" class="logo">
+            <img src="Farhangian_Uni.png" class="header-logo" alt="دانشگاه فرهنگیان">
 
-    <div class="title">ورود به حساب کاربری</div>
+            <div id="headerTheme" class="header-icon">☀️</div>
+        </div>
 
-    <div class="input-box">
-        <input id="usernameInput" placeholder="نام کاربری را وارد کنید...">
+        <div id="headerTitle" class="header-title"></div>
     </div>
 
-    <div id="error">نام کاربری نمی‌تواند خالی باشد.</div>
+    <!-- کارت ورود -->
+    <div class="card">
 
-    <button id="loginBtn" class="btn">ورود</button>
-</div>
+        <img src="Farhangian_Uni.png" class="logo" alt="دانشگاه فرهنگیان">
 
+        <div class="title">ورود به حساب کاربری</div>
 
-<script>
-const input=document.getElementById("usernameInput");
-const btn=document.getElementById("loginBtn");
-const err=document.getElementById("error");
+        <div class="input-box">
+            <input id="usernameInput" placeholder="نام کاربری را وارد کنید...">
+        </div>
 
-function ripple(e){
-    const x=e.clientX - btn.getBoundingClientRect().left;
-    const y=e.clientY - btn.getBoundingClientRect().top;
-    btn.style.setProperty("--x",x+"px");
-    btn.style.setProperty("--y",y+"px");
-    btn.classList.add("ripple");
-    setTimeout(()=>btn.classList.remove("ripple"),600);
-}
+        <div id="error">نام کاربری نمی‌تواند خالی باشد.</div>
 
-btn.onclick = e=>{
-    ripple(e);
+        <button id="loginBtn" class="btn">ادامه</button>
 
-    const username = input.value.trim();
-    if(username===""){
-        err.style.display="block";
-        return;
+        <div class="designer">طراح: محمدمهدی دیناروند</div>
+    </div>
+
+    <script src="header.js"></script>
+
+    <script>
+    const input = document.getElementById("usernameInput");
+    const btn   = document.getElementById("loginBtn");
+    const err   = document.getElementById("error");
+
+    function ripple(e){
+        const x = e.clientX - btn.getBoundingClientRect().left;
+        const y = e.clientY - btn.getBoundingClientRect().top;
+        btn.style.setProperty("--x", x+"px");
+        btn.style.setProperty("--y", y+"px");
+        btn.classList.add("ripple");
+        setTimeout(()=>btn.classList.remove("ripple"),600);
     }
 
-    localStorage.setItem("konkur_username", username);
+    btn.onclick = e => {
+        ripple(e);
+        const username = input.value.trim();
 
-    if(!localStorage.getItem("total_tests_"+username))
-        localStorage.setItem("total_tests_"+username,"0");
+        if(username === ""){
+            err.style.display = "block";
+            return;
+        }
 
-    if(!localStorage.getItem("best_percent_"+username))
-        localStorage.setItem("best_percent_"+username,"0");
+        localStorage.setItem("konkur_username", username);
 
-    setTimeout(()=>{
-        window.location.href="dashboard.html";
-    },350);
-};
-</script>
+        if(!localStorage.getItem("total_tests_"+username))
+            localStorage.setItem("total_tests_"+username,"0");
+        if(!localStorage.getItem("best_percent_"+username))
+            localStorage.setItem("best_percent_"+username,"0");
+
+        setTimeout(()=>{ window.location.href = "dashboard.html"; }, 350);
+    };
+    </script>
 
 </body>
 </html>
