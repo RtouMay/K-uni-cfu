@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>ورود</title>
 
+    <!-- استایل هدر -->
     <link rel="stylesheet" href="header.css">
 
     <style>
@@ -29,7 +30,10 @@
         color:var(--text);
         min-height:100vh;
         overflow-x:hidden;
-        padding:170px 20px 40px; /* فاصله برای هدر */
+        padding-top:160px; /* فضای هدر */
+        display:flex;
+        justify-content:center;
+        align-items:flex-start;
     }
 
     .card{
@@ -54,7 +58,6 @@
         width:110px;
         display:block;
         margin:0 auto 20px auto;
-        filter:drop-shadow(0 0 14px rgba(245,200,66,.35));
     }
 
     .title{
@@ -96,9 +99,6 @@
         cursor:pointer;
         font-size:16px;
         font-weight:700;
-        position:relative;
-        overflow:hidden;
-        color:#1d1203;
     }
 
     .designer{
@@ -112,20 +112,20 @@
 
 <body>
 
-    <!-- 🔥 هدر -->
+    <!-- 🎯 هدر (ثابت) -->
     <div class="main-header">
         <div class="header-inner">
 
             <!-- پروفایل -->
             <div id="headerProfile" class="header-icon">
                 <svg viewBox="0 0 100 100">
-                    <circle cx="50" cy="35" r="20" />
-                    <path d="M20 85 Q50 60 80 85" />
+                    <circle cx="50" cy="35" r="20"></circle>
+                    <path d="M20 85 Q50 60 80 85"></path>
                 </svg>
             </div>
 
             <!-- لوگو -->
-            <img src="Farhangian_Uni.png" class="header-logo" alt="logo">
+            <img src="Farhangian_Uni.png" class="header-logo">
 
             <!-- تم -->
             <div id="headerTheme" class="header-icon">☀️</div>
@@ -135,7 +135,7 @@
     </div>
 
 
-    <!-- کارت -->
+    <!-- کارت ورود -->
     <div class="card">
 
         <img src="Farhangian_Uni.png" class="logo">
@@ -160,7 +160,7 @@ const input=document.getElementById("usernameInput");
 const btn=document.getElementById("loginBtn");
 const err=document.getElementById("error");
 
-btn.onclick = e=>{
+btn.onclick = ()=>{
     const username=input.value.trim();
     if(username===""){
         err.style.display="block";
